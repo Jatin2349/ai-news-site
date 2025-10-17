@@ -1,0 +1,14 @@
+[
+  {
+    "term": "RAG",
+    "definition": "Retrieval-Augmented Generation: combine external knowledge with LLM outputs."
+  },
+  {
+    "term": "Agent",
+    "definition": "An LLM system that plans and acts using tools or memory."
+  },
+  {
+    "term": "Prompt Engineering",
+    "definition": "Structuring inputs to get reliable outputs from LLMs."
+  }
+]

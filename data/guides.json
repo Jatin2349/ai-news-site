@@ -1,0 +1,16 @@
+[
+  {
+    "slug": "how-llms-work",
+    "title": "How LLMs Work",
+    "level": "beginner",
+    "excerpt": "A simple explanation of transformers, tokens, attention and training.",
+    "body": "## How LLMs Work\\n\\nThis is a placeholder guide. Later you will move guides to Sanity CMS.\\n\\n- Tokens and embeddings\\n- Attention mechanism\\n- Training and inference"
+  },
+  {
+    "slug": "rag-explained",
+    "title": "RAG Explained",
+    "level": "intermediate",
+    "excerpt": "Retrieval-Augmented Generation basics.",
+    "body": "## RAG Explained\\n\\nThis is a placeholder guide. Later move to Sanity."
+  }
+]
