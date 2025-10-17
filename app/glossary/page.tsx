@@ -1,4 +1,4 @@
-import items from '@/data/glossary.json'
+import items from '../../data/glossary.json'
 
 export default function GlossaryPage() {
   return (

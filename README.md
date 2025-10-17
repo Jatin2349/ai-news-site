@@ -1,18 +1,14 @@
-# AI Briefings – Phase 0 (No-backend Static)
+# AI Briefings – Phase 0 (No-backend Static, Relative Imports)
 
-**Goal:** Get a site online without installing anything locally. Vercel will build it server-side.
+Deploy on Vercel with no local install. Edit content via GitHub.
 
-## Deploy (no local install)
-1. Create a new GitHub repo and upload these files, **or** import the ZIP directly on Vercel (Add New Project → Import).
-2. Click *Deploy*. That's it.
+## Deploy
+- Import this repo into Vercel (or upload ZIP) → Deploy.
+- Public URL goes live immediately.
 
-## Edit content (no CMS yet)
-- `data/news.json` – add your own links/summaries.
-- `data/guides.json` – add guides (placeholder body).
+## Edit Content
+- `data/news.json` – add your news items.
+- `data/guides.json` – guides with slug/title/level/body.
 - `data/glossary.json` – glossary terms.
 
-## Upgrade path (later)
-- Replace static data with DB (Prisma/Postgres).
-- Add cron ingestion + LLM summaries.
-- Add Sanity CMS for guides/glossary.
-- Add search (Meilisearch) and newsletter double opt-in.
+Upgrade later to DB + cron + LLMs without changing the URL.

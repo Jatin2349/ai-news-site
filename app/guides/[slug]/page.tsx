@@ -1,4 +1,4 @@
-import guides from '@/data/guides.json'
+import guides from '../../../data/guides.json'
 
 export default function GuidePage({ params }: { params: { slug: string } }) {
   const g = guides.find(x => x.slug === params.slug)

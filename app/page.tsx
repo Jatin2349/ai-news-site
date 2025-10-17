@@ -1,4 +1,4 @@
-import data from '@/data/news.json'
+import data from '../data/news.json'
 
 export default function HomePage() {
   const items = data.slice(0, 8)

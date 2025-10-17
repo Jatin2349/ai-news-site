@@ -1,4 +1,4 @@
-import guides from '@/data/guides.json'
+import guides from '../../data/guides.json'
 
 export default function GuidesPage() {
   return (
