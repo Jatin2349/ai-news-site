@@ -1,24 +1,66 @@
 [
   {
-    "title": "Welcome to AI Briefings",
-    "url": "https://example.com",
-    "summary": "Placeholder news summary. Edit data/news.json to add your links.",
-    "date": "2025-10-17",
-    "category": "news",
-    "tags": [
-      "welcome",
-      "phase0"
-    ]
-  },
-  {
-    "title": "How LLMs Work (Guide)",
+    "title": "What Are LLMs? A Fast Primer",
     "url": "/guides/how-llms-work",
-    "summary": "A gentle intro to transformers and large language models.",
+    "summary": "A friendly primer on tokens, attention and why large language models became so powerful.",
     "date": "2025-10-17",
     "category": "guide",
-    "tags": [
-      "llm",
-      "transformer"
-    ]
+    "tags": ["llm","beginners"]
+  },
+  {
+    "title": "RAG in Practice: When to Use It",
+    "url": "/guides/rag-explained",
+    "summary": "Retrieval-Augmented Generation lets models answer with up-to-date, verifiable context. This quick guide shows the core flow.",
+    "date": "2025-10-17",
+    "category": "guide",
+    "tags": ["rag","retrieval"]
+  },
+  {
+    "title": "AI Weekly #01 — Key Launches & Tools",
+    "url": "https://example.com/ai-weekly-01",
+    "summary": "Handpicked highlights of the week: notable model updates, new dev features and a couple of standout tools.",
+    "date": "2025-10-17",
+    "category": "news",
+    "tags": ["weekly","roundup"]
+  },
+  {
+    "title": "Prompt Engineering: A Mini-Checklist",
+    "url": "https://example.com/prompt-checklist",
+    "summary": "Keep prompts simple, set role & goal, show one or two examples, and specify outputs. This mini-checklist keeps things consistent.",
+    "date": "2025-10-17",
+    "category": "education",
+    "tags": ["prompting","how-to"]
+  },
+  {
+    "title": "Agents 101: Planning, Tools, Memory",
+    "url": "https://example.com/agents-101",
+    "summary": "Agents run multi-step plans, call tools and store context. Start with narrow tasks, clear stop criteria and guardrails.",
+    "date": "2025-10-17",
+    "category": "education",
+    "tags": ["agents","planning"]
+  },
+  {
+    "title": "When to Fine-Tune vs. Use RAG",
+    "url": "https://example.com/fine-tune-vs-rag",
+    "summary": "Use RAG when knowledge changes often; fine-tune for stable style/format or domain patterns. Many teams combine both.",
+    "date": "2025-10-17",
+    "category": "education",
+    "tags": ["fine-tuning","rag"]
+  },
+  {
+    "title": "Toolbox: Simple Evaluation for Prompts",
+    "url": "https://example.com/prompt-eval",
+    "summary": "A lightweight approach to evaluate prompts with small test sets and pass/fail checks before you ship.",
+    "date": "2025-10-17",
+    "category": "tools",
+    "tags": ["eval","testing"]
+  },
+  {
+    "title": "Glossary Picks: RAG, Agents, Prompt Engineering",
+    "url": "/glossary",
+    "summary": "Quick definitions you’ll reference often — straight from the built-in glossary.",
+    "date": "2025-10-17",
+    "category": "glossary",
+    "tags": ["glossary"]
   }
 ]
