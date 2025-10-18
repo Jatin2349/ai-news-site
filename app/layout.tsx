@@ -2,8 +2,8 @@ import './globals.css'
 import Nav from '../components/Nav'
 
 export const metadata = {
-  title: 'AI Briefings',
-  description: 'AI News & Education – Phase 0 static site',
+  title: 'AI Mastery Lab',
+  description: 'AI News, Education, Automations, Beginner–advanced guides and an A–Z glossary.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
