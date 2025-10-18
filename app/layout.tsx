@@ -1,20 +1,5 @@
-import type { Metadata } from 'next'
 import './globals.css'
 import Nav from '../components/Nav'
-
-export const metadata: Metadata = {
-  title: {
-    default: 'AI Mastery Lab — News & Guides',
-    template: '%s | AI Mastery Lab',
-  },
-  description:
-    'Daily AI news summaries, practical guides from beginner to advanced, and a concise A–Z glossary.',
-  icons: {
-    icon: [{ url: '/icon-512.png', sizes: '512x512', type: 'image/png' }],
-    shortcut: '/icon-512.png',
-    apple: '/icon-512.png',
-  },
-}
 
 export default function RootLayout({
   children,
