@@ -6,9 +6,13 @@ export const metadata = {
   description:
     'Daily AI news summaries, practical guides from beginner to advanced, and a concise A–Z glossary.',
   icons: {
-    icon: '/icon.png',      // Favicon
-    shortcut: '/icon.png',
-    apple: '/icon.png',     // Apple Touch Icon
+    icon: [
+      { url: '/icon-512.png?v=2', sizes: '512x512', type: 'image/png' },
+      { url: '/icon-32.png?v=2', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico?v=2', type: 'image/x-icon' } // optional, falls du ein .ico hast
+    ],
+    shortcut: '/icon-512.png?v=2',
+    apple: '/icon-512.png?v=2',
   },
 }
 
