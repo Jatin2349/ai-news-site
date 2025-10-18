@@ -1,12 +1,23 @@
+import Image from 'next/image'
 import data from '../data/news.json'
 
 export default function HomePage() {
   const items = data.slice(0, 8)
   return (
     <div>
-      {/* Hero */}
+      {/* Hero mit großem Titel + Logo */}
       <section className="mb-8">
-        <h1 className="text-3xl font-semibold">AI Mastery Lab</h1>
+        <div className="flex items-center gap-3 md:gap-4">
+          <Image
+            src="/icon.png"
+            alt="AI Mastery Lab logo"
+            width={80}            // intrinsic size
+            height={80}
+            className="w-10 h-10 md:w-14 md:h-14 rounded-md"
+            priority
+          />
+          <h1 className="text-3xl md:text-4xl font-semibold">AI Mastery Lab</h1>
+        </div>
         <p className="text-gray-600 mt-2">
           Curated AI news & education. Quick summaries to stay current — deep dives via guides & glossary.
         </p>
