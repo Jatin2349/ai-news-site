@@ -3,6 +3,8 @@ import './globals.css'
 import Nav from '../components/Nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
+import SocialBar from '../components/SocialBar'
+
 
 export const metadata: Metadata = {
   title: {
@@ -49,6 +51,7 @@ export default function RootLayout({
               <a href="/contact">Contact</a>
               <a href="/privacy">Privacy</a>
             </nav>
+            <SocialBar />
           </div>
         </footer>
 
