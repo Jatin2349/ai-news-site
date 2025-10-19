@@ -1,5 +1,33 @@
 [
   {
+    "title": "OpenAI releases new small model for fast tasks",
+    "url": "https://example.com/openai-small-model",
+    "summary": "A lightweight model optimized for speed and low cost. Great for routing, classification and quick utility prompts.",
+    "date": "2025-10-17",
+    "category": "News"
+  },
+  {
+    "title": "Anthropic updates Claude with better tool use",
+    "url": "https://example.com/anthropic-tools",
+    "summary": "Improved function calling with safer defaults and clearer tool schemas for agents.",
+    "date": "2025-10-16",
+    "category": "News"
+  },
+  {
+    "title": "Meta shares paper on long-context training",
+    "url": "https://example.com/meta-long-context",
+    "summary": "Techniques to push context lengths while keeping quality stable; notes on retrieval vs. pure attention.",
+    "date": "2025-10-15",
+    "category": "Research"
+  },
+  {
+    "title": "Google launches AI Studio updates",
+    "url": "https://example.com/google-ai-studio",
+    "summary": "Better evals and prompt versioning to manage changes across environments.",
+    "date": "2025-10-14",
+    "category": "Tools"
+  }
+  {
     "title": "What Are LLMs? A Fast Primer",
     "url": "/guides/how-llms-work",
     "summary": "A friendly primer on tokens, attention and why large language models became so powerful.",
