@@ -4,7 +4,6 @@ import Nav from '../components/Nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
-
 export const metadata: Metadata = {
   title: {
     default: 'AI Mastery Lab — News & Guides',
@@ -41,6 +40,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-white text-gray-900">
         <Nav />
         <main className="mx-auto max-w-6xl px-4 py-8">{children}</main>
+
         <footer className="border-t mt-12 py-8 text-sm text-gray-600">
           <div className="mx-auto max-w-6xl px-4 flex flex-col md:flex-row justify-between gap-3">
             <div>© {new Date().getFullYear()} AI Mastery Lab</div>
@@ -51,6 +51,10 @@ export default function RootLayout({
             </nav>
           </div>
         </footer>
+
+        {/* Analytics & Speed Insights – direkt vor </body> */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
