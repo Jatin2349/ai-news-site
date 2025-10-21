@@ -5,7 +5,7 @@ export const SOCIAL = {
   twitter: '',            // optionaler Alias: 'https://twitter.com/deinprofil'
 
   linkedin: '',           // 'https://www.linkedin.com/in/deinprofil'
-  instagram: '',          // 'https://www.instagram.com/deinprofil'
+  instagram: '',          // 'https://www.instagram.com/picoglobal/?hl=de'
   threads: '',            // 'https://www.threads.net/@deinprofil'
   tiktok: '',             // 'https://www.tiktok.com/@deinprofil'
 
