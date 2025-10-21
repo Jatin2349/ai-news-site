@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Twitter, Linkedin, Instagram, Send } from 'lucide-react'
-import { SOCIAL } from '../lib/site' // <- relativ: /components -> /lib
+import { SOCIAL } from '../lib/site'
 
 // Einfaches TikTok-Icon (SVG)
 function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
@@ -13,37 +13,55 @@ function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
   )
 }
 
-type Item = { href: string; label: string; Icon: React.ComponentType<any> }
+type Item = { href?: string; label: string; Icon: React.ComponentType<any> }
 
 export default function SocialBar() {
-  // baue die Liste ggf. mit nulls...
-  const raw: (Item | null)[] = [
-    SOCIAL.twitter   ? { href: SOCIAL.twitter,   label: 'Twitter/X', Icon: Twitter }     : null,
-    SOCIAL.linkedin  ? { href: SOCIAL.linkedin,  label: 'LinkedIn',  Icon: Linkedin }    : null,
-    SOCIAL.instagram ? { href: SOCIAL.instagram, label: 'Instagram', Icon: Instagram }   : null,
-    SOCIAL.tiktok    ? { href: SOCIAL.tiktok,    label: 'TikTok',    Icon: TikTokIcon }   : null,
-    SOCIAL.newsletter? { href: SOCIAL.newsletter,label: 'Newsletter',Icon: Send }        : null,
+  // Bevorzugt twitter, fallback x; newsletter bevorzugt newsletter, fallback email
+  const twitter = SOCIAL.twitter || SOCIAL.x
+  const newsletter = SOCIAL.newsletter || SOCIAL.email
+
+  const items: Item[] = [
+    { href: twitter,      label: 'Twitter/X', Icon: Twitter },
+    { href: SOCIAL.linkedin,  label: 'LinkedIn',  Icon: Linkedin },
+    { href: SOCIAL.instagram, label: 'Instagram', Icon: Instagram },
+    { href: SOCIAL.threads,   label: 'Threads',   Icon: Instagram },
+    { href: SOCIAL.tiktok,    label: 'TikTok',    Icon: TikTokIcon },
+    { href: newsletter,       label: 'Newsletter / Email', Icon: Send },
   ]
 
-  // ...und filtere nulls mit Typ-Prädikat heraus
-  const items = raw.filter((i): i is Item => Boolean(i))
-
-  if (!items.length) return null
-
   return (
-    <div className="flex items-center gap-4">
-      {items.map((it) => (
-        <a
-          key={it.href}
-          href={it.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={it.label}
-          className="text-gray-600 hover:text-gray-900 transition-colors"
-        >
-          <it.Icon className="h-5 w-5" />
-        </a>
-      ))}
+    <div className="flex flex-wrap items-center gap-2">
+      {items.map(({ href, label, Icon }) => {
+        const available = Boolean(href && href.trim().length > 0)
+        const classBase =
+          'inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors focus:outline-none focus:ring-2 focus:ring-black/10'
+        if (available) {
+          return (
+            <a
+              key={label}
+              href={href}
+              target={href!.startsWith('http') ? '_blank' : undefined}
+              rel="noreferrer"
+              aria-label={label}
+              className={`${classBase} text-gray-700 hover:bg-gray-50`}
+              title={label}
+            >
+              <Icon className="h-4 w-4" />
+            </a>
+          )
+        }
+        // Platzhalter: ausgegraut, ohne Link
+        return (
+          <span
+            key={label}
+            aria-label={`${label} (coming soon)`}
+            title={`${label} (coming soon)`}
+            className={`${classBase} text-gray-400 bg-gray-50/40 cursor-not-allowed`}
+          >
+            <Icon className="h-4 w-4 opacity-60" />
+          </span>
+        )
+      })}
     </div>
   )
 }
