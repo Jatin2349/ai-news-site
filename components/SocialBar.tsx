@@ -1,10 +1,19 @@
 'use client'
 
 import React from 'react'
-import { Twitter, Linkedin, Instagram, Send } from 'lucide-react'
+import { Linkedin, Instagram, Send } from 'lucide-react'
 import { SOCIAL } from '../lib/site'
 
-// Einfaches TikTok-Icon (SVG)
+// Neues X-Logo (schlichtes, neutrales SVG)
+function XIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M3.3 3h3.6l6 7.3L18.7 3h2.9l-7.4 9 7.6 9H18l-6.3-7.7L5 21H2.1l7.8-9L3.3 3z" />
+    </svg>
+  )
+}
+
+// (dein TikTokIcon kann bleiben, falls du es nutzt)
 function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
@@ -16,12 +25,11 @@ function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
 type Item = { href?: string; label: string; Icon: React.ComponentType<any> }
 
 export default function SocialBar() {
-  // Bevorzugt twitter, fallback x; newsletter bevorzugt newsletter, fallback email
-  const twitter = SOCIAL.twitter || SOCIAL.x
+  const xLink = SOCIAL.twitter || SOCIAL.x
   const newsletter = SOCIAL.newsletter || SOCIAL.email
 
   const items: Item[] = [
-    { href: twitter,      label: 'Twitter/X', Icon: Twitter },
+    { href: xLink,            label: 'X',         Icon: XIcon },
     { href: SOCIAL.linkedin,  label: 'LinkedIn',  Icon: Linkedin },
     { href: SOCIAL.instagram, label: 'Instagram', Icon: Instagram },
     { href: SOCIAL.threads,   label: 'Threads',   Icon: Instagram },
@@ -33,30 +41,26 @@ export default function SocialBar() {
     <div className="flex flex-wrap items-center gap-2">
       {items.map(({ href, label, Icon }) => {
         const available = Boolean(href && href.trim().length > 0)
-        const classBase =
+        const base =
           'inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors focus:outline-none focus:ring-2 focus:ring-black/10'
-        if (available) {
-          return (
-            <a
-              key={label}
-              href={href}
-              target={href!.startsWith('http') ? '_blank' : undefined}
-              rel="noreferrer"
-              aria-label={label}
-              className={`${classBase} text-gray-700 hover:bg-gray-50`}
-              title={label}
-            >
-              <Icon className="h-4 w-4" />
-            </a>
-          )
-        }
-        // Platzhalter: ausgegraut, ohne Link
-        return (
+        return available ? (
+          <a
+            key={label}
+            href={href}
+            target={href!.startsWith('http') ? '_blank' : undefined}
+            rel="noreferrer"
+            aria-label={label}
+            title={label}
+            className={`${base} text-gray-700 hover:bg-gray-50`}
+          >
+            <Icon className="h-4 w-4" />
+          </a>
+        ) : (
           <span
             key={label}
             aria-label={`${label} (coming soon)`}
             title={`${label} (coming soon)`}
-            className={`${classBase} text-gray-400 bg-gray-50/40 cursor-not-allowed`}
+            className={`${base} text-gray-400 bg-gray-50/40 cursor-not-allowed`}
           >
             <Icon className="h-4 w-4 opacity-60" />
           </span>
