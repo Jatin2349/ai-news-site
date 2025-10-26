@@ -1,15 +1,22 @@
 import Image from 'next/image'
 import news from '../data/news.json'
+import {
+  Newspaper,        // All News
+  BookOpen,         // Guides
+  GraduationCap,    // Education
+  Wrench,           // Tools
+  BookText,         // Glossary
+  Mail              // Newsletter
+} from 'lucide-react'
 
 export const metadata = {
   title: 'AI Mastery Lab — Latest',
-  description: 'Curated AI news & education: short briefs, guides, and a concise glossary.'
+  description: 'Curated AI news & education: short briefs, guides, and a concise glossary.',
 }
 
 export default function HomePage() {
-  // Neueste 6 Einträge (falls du später mehr Daten hast)
-  const items = [...news]
-    .sort((a: any, b: any) => (a.date < b.date ? 1 : -1))
+  const items = [...(news as any[])]
+    .sort((a, b) => (a.date < b.date ? 1 : -1))
     .slice(0, 6)
 
   return (
@@ -30,8 +37,39 @@ export default function HomePage() {
         <p className="text-gray-600 mt-3 max-w-2xl">
           Curated AI news & education. Short daily briefs, practical guides, and a concise A–Z glossary.
         </p>
-        <div className="mt-4 text-sm">
-          <a href="/news" className="underline underline-offset-4">All news →</a>
+
+        {/* === 6 Pill-Buttons mit Icons === */}
+        <div className="mt-5 flex flex-wrap gap-2">
+          <a href="/news"
+             className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-sm hover:opacity-90">
+            <Newspaper className="h-4 w-4" />
+            All News
+          </a>
+          <a href="/guides"
+             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+            <BookOpen className="h-4 w-4" />
+            Guides
+          </a>
+          <a href="/guides"
+             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+            <GraduationCap className="h-4 w-4" />
+            Education
+          </a>
+          <a href="/tools"
+             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+            <Wrench className="h-4 w-4" />
+            Tools
+          </a>
+          <a href="/glossary"
+             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+            <BookText className="h-4 w-4" />
+            Glossary
+          </a>
+          <a href="/newsletter"
+             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+            <Mail className="h-4 w-4" />
+            Newsletter
+          </a>
         </div>
       </section>
 
@@ -56,7 +94,7 @@ export default function HomePage() {
 
         <div className="mt-4">
           <a href="/news" className="inline-block rounded-md border px-3 py-2 text-sm hover:bg-gray-50">
-            Browse all news
+            All news →
           </a>
         </div>
       </section>
