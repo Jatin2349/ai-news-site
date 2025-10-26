@@ -1,14 +1,27 @@
 [
-  {
-    "term": "RAG",
-    "definition": "Retrieval-Augmented Generation: combine external knowledge with LLM outputs."
-  },
-  {
-    "term": "Agent",
-    "definition": "An LLM system that plans and acts using tools or memory."
-  },
-  {
-    "term": "Prompt Engineering",
-    "definition": "Structuring inputs to get reliable outputs from LLMs."
-  }
+  { "term": "Agent", "definition_md": "A system that can plan multi-step actions, call tools/APIs, and iteratively work toward a goal." },
+  { "term": "Alignment", "definition_md": "Techniques to align model behavior with human values and intent (e.g., safety policies, RLHF)." },
+  { "term": "Attention", "definition_md": "Mechanism that lets a model focus on relevant tokens when generating or understanding text." },
+  { "term": "Autoregressive", "definition_md": "A generation process that predicts the next token step-by-step conditioned on previous tokens." },
+  { "term": "Benchmark", "definition_md": "A standardized evaluation (dataset + metric) to compare models on specific tasks." },
+  { "term": "Chain-of-Thought", "definition_md": "An intermediate reasoning style for step-by-step problem solving; often summarized in production to avoid verbosity." },
+  { "term": "Context Window", "definition_md": "The maximum token length (prompt + output) a model can process at once." },
+  { "term": "Dataset", "definition_md": "A collection of examples used for pretraining, finetuning, or evaluation." },
+  { "term": "Embedding", "definition_md": "Vector representation of text or other data that preserves semantic similarity for search/RAG." },
+  { "term": "Fine-tuning", "definition_md": "Adapting a base model on task-specific examples to improve accuracy, style, or compliance." },
+  { "term": "Generative Model", "definition_md": "A model that creates new content (text, images, code) rather than only classifying or retrieving." },
+  { "term": "Hallucination", "definition_md": "A confident but incorrect or fabricated model output; mitigated with RAG, verification, and constraints." },
+  { "term": "Inference", "definition_md": "Running a trained model to produce outputs; dominated by latency, throughput, and cost concerns." },
+  { "term": "LLM", "definition_md": "Large Language Model; a transformer-based model trained on large text corpora to understand and generate text." },
+  { "term": "Parameter", "definition_md": "A learned weight in a model. More parameters can increase capacity but not always quality." },
+  { "term": "Prompt Engineering", "definition_md": "Structuring inputs (roles, constraints, examples) to get reliable, reproducible model behavior." },
+  { "term": "Quantization", "definition_md": "Compressing model weights/activations to fewer bits (e.g., 8/4-bit) to reduce memory and speed up inference." },
+  { "term": "RAG", "definition_md": "Retrieval-Augmented Generation: fetch relevant context (search/vector DB) and feed it to the model to ground outputs." },
+  { "term": "Safety", "definition_md": "Policies, filters, and training methods that reduce harmful, biased, or privacy-violating outputs." },
+  { "term": "Sampling (top-k / nucleus)", "definition_md": "Strategies to pick the next token from a distribution (top-k: best k tokens; nucleus/top-p: smallest mass ≥ p)." },
+  { "term": "Temperature", "definition_md": "Controls output randomness; higher = more diverse/creative, lower = more deterministic." },
+  { "term": "Token", "definition_md": "Smallest unit a model reads/writes (subword pieces). Billing, context, and length limits use tokens." },
+  { "term": "Transformer", "definition_md": "Neural architecture using attention for parallel training and long-range dependencies." },
+  { "term": "Vector Database", "definition_md": "Stores embeddings for similarity search/filtering; core infra for RAG pipelines." },
+  { "term": "Zero-shot", "definition_md": "Prompting a model to perform a task with no task-specific examples in the prompt." }
 ]
