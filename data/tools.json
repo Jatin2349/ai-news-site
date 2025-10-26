@@ -6,7 +6,7 @@
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "API für leistungsfähige Sprach- und Multimodal-Modelle, inkl. Tool-Use und Moderation."
+    "summary": "API for powerful language and multimodal models, including tool use and safety moderation."
   },
   {
     "name": "Anthropic",
@@ -15,7 +15,7 @@
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "Claude-Modelle mit Fokus auf hilfreiches, harmloses, ehrliches Verhalten und Tool-Verkettung."
+    "summary": "Claude models focused on helpfulness, safety, reliability, and multi-step tool use."
   },
   {
     "name": "Cohere",
@@ -24,7 +24,7 @@
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "LLMs für Unternehmen, mit Klassifikation, Embed­dings und RAG-orientierten Workflows."
+    "summary": "Enterprise-grade LLMs with classification, embeddings, and RAG-friendly workflows."
   },
   {
     "name": "Mistral",
@@ -33,7 +33,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Schnelle, effiziente Modelle (Open & Hosted); gut für kostensensitive Workloads."
+    "summary": "Fast, efficient models (open & hosted) good for cost-sensitive workloads."
   },
   {
     "name": "OpenRouter",
@@ -42,7 +42,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Unified API zu vielen Modell-Anbietern inkl. Routing, Logging und Preis-/Latenzvergleich."
+    "summary": "Unified API for many model providers with routing, logging, and price/latency comparison."
   },
   {
     "name": "Hugging Face",
@@ -51,7 +51,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "Modelle, Datasets, Spaces & Inferenz — das zentrale Open-Source-Ökosystem."
+    "summary": "Models, datasets, Spaces, and inference — the central open-source AI ecosystem."
   },
   {
     "name": "LangChain",
@@ -60,7 +60,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Orchestrierung von LLM-Apps: Chains, Tools, Agents, Memory, Evaluations und Tracing."
+    "summary": "Framework for LLM apps: chains, tools, agents, memory, evaluations, and tracing."
   },
   {
     "name": "LlamaIndex",
@@ -69,7 +69,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "RAG-Bausteine: Daten-Ingestion, Indizes, Router, Evaluations — schnell produktionsreif."
+    "summary": "RAG building blocks: data ingestion, indices, routers, and evaluation utilities."
   },
   {
     "name": "Pinecone",
@@ -78,7 +78,7 @@
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Gemanged, skalierbar und schnell für Vektor-Suche in produktiven RAG-Setups."
+    "summary": "Managed, scalable vector database for production-grade RAG and similarity search."
   },
   {
     "name": "Qdrant",
@@ -87,7 +87,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Open-Source Vector DB mit Cloud-Option, guter Filterung und gängigen SDKs."
+    "summary": "Open-source vector database with a hosted cloud, strong filtering, and popular SDKs."
   },
   {
     "name": "Weaviate",
@@ -96,7 +96,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Vector DB mit modularem Stack, Hybrid-Suche (BM25 + Vektor) und Cloud-Angebot."
+    "summary": "Vector database with modular stack, hybrid search (BM25 + vector), and a managed cloud."
   },
   {
     "name": "Milvus",
@@ -105,6 +105,6 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Hochskalierbare Open-Source Vector DB, geeignet für große Embedding-Mengen."
+    "summary": "Highly scalable open-source vector database for large-scale embeddings."
   }
 ]
