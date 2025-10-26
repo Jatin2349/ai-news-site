@@ -1,0 +1,56 @@
+[
+  {
+    "name": "OpenAI",
+    "url": "https://openai.com",
+    "category": "Models",
+    "pricing": "Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "API for state-of-the-art language and multimodal models."
+  },
+  {
+    "name": "Anthropic",
+    "url": "https://www.anthropic.com",
+    "category": "Models",
+    "pricing": "Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "Claude models focused on helpfulness and safety."
+  },
+  {
+    "name": "Hugging Face",
+    "url": "https://huggingface.co",
+    "category": "Ecosystem",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "Models, datasets, Spaces, and tooling for ML."
+  },
+  {
+    "name": "LangChain",
+    "url": "https://www.langchain.com",
+    "category": "Orchestration",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "Framework to build LLM apps with tools, memory, and chains."
+  },
+  {
+    "name": "LlamaIndex",
+    "url": "https://www.llamaindex.ai",
+    "category": "RAG",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "RAG building blocks: ingestion, indices, routers."
+  },
+  {
+    "name": "Pinecone",
+    "url": "https://www.pinecone.io",
+    "category": "Vector DB",
+    "pricing": "Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "Managed vector database for RAG workloads."
+  }
+]
