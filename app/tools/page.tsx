@@ -18,11 +18,6 @@ const ALL = 'All'
 const categories = [ALL, 'Models', 'RAG', 'Vector DB', 'Orchestration', 'Ecosystem']
 const pricing = [ALL, 'Free', 'Free+Paid', 'Paid']
 
-export const metadata = {
-  title: 'Tools',
-  description: 'Curated AI tools directory with quick filters and search.'
-}
-
 export default function ToolsPage() {
   const [q, setQ] = useState('')
   const [cat, setCat] = useState<string>(ALL)
