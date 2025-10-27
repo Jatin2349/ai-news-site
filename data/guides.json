@@ -1,16 +1,37 @@
 [
   {
-    "slug": "how-llms-work",
-    "title": "How LLMs Work",
-    "level": "beginner",
-    "excerpt": "A simple explanation of transformers, tokens, attention and training.",
-    "body": "## How LLMs Work\\n\\nThis is a placeholder guide. Later you will move guides to Sanity CMS.\\n\\n- Tokens and embeddings\\n- Attention mechanism\\n- Training and inference"
+    "slug": "llms_primer",
+    "title": "What Are LLMs? A Fast Primer",
+    "summary": "Tokens, attention, pretraining vs. finetuning, and why scaling laws matter.",
+    "date": "2025-10-17",
+    "url": "/guides/llms_primer"
   },
   {
-    "slug": "rag-explained",
-    "title": "RAG Explained",
-    "level": "intermediate",
-    "excerpt": "Retrieval-Augmented Generation basics.",
-    "body": "## RAG Explained\\n\\nThis is a placeholder guide. Later move to Sanity."
+    "slug": "rag_when_to_use",
+    "title": "RAG in Practice: When to Use It",
+    "summary": "Use RAG when facts change or must be verifiable; finetune for stable style or private skills.",
+    "date": "2025-10-17",
+    "url": "/guides/rag_when_to_use"
+  },
+  {
+    "slug": "prompt_engineering_checklist",
+    "title": "Prompt Engineering: A Mini-Checklist",
+    "summary": "Keep prompts simple, set role & goal, add 1–2 examples, specify outputs, and test edge cases.",
+    "date": "2025-10-17",
+    "url": "/guides/prompt_engineering_checklist"
+  },
+  {
+    "slug": "agents_101",
+    "title": "Agents 101: Planning, Tools, Memory",
+    "summary": "Start narrow, add tool use carefully, track state, and enforce guardrails.",
+    "date": "2025-10-17",
+    "url": "/guides/agents_101"
+  },
+  {
+    "slug": "evals_quickstart",
+    "title": "Evaluations Quickstart",
+    "summary": "Golden sets, rubrics, pairwise comparisons, and regression dashboards for safe iterations.",
+    "date": "2025-10-17",
+    "url": "/guides/evals_quickstart"
   }
 ]
