@@ -50,7 +50,7 @@ export default function HomePage() {
             <BookOpen className="h-4 w-4" />
             Guides
           </a>
-          <a href="/guides"
+          <a href="/education"
              className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
             <GraduationCap className="h-4 w-4" />
             Education
