@@ -1,44 +1,70 @@
-[
-  {
-    "title": "Open-Source LLM Gets 4× Faster With FlashAttention-3",
-    "summary": "A research team integrated FA-3 kernels into a popular OSS model, reporting 4× speed-ups on long contexts.",
-    "category": "News",
-    "date": "2025-10-17",
-    "url": "https://example.com/flashattention3"
-  },
-  {
-    "title": "Meta Publishes New Long-Context Recipe",
-    "summary": "Technique mixes sliding-window attention with RoPE scaling to reach 256k tokens without major quality loss.",
-    "category": "News",
-    "date": "2025-10-17",
-    "url": "https://example.com/meta-long-context"
-  },
-  {
-    "title": "MLOps: Inference Cost Cuts With Speculative Decoding",
-    "summary": "Production teams report 20–40% latency and cost reductions by pairing a small draft model with a large target model.",
-    "category": "News",
-    "date": "2025-10-17",
-    "url": "https://example.com/speculative-decoding"
-  },
-  {
-    "title": "Vector DBs Add Hybrid Search Defaults",
-    "summary": "Leading vendors now enable hybrid (lexical + vector) search as the out-of-the-box mode for more robust retrieval.",
-    "category": "News",
-    "date": "2025-10-17",
-    "url": "https://example.com/hybrid-search-defaults"
-  },
-  {
-    "title": "Agents: Guardrails Libraries Ship Policy Packs",
-    "summary": "Prebuilt policies for prompt injection, data exfiltration, and tool abuse make it easier to ship safer agents.",
-    "category": "News",
-    "date": "2025-10-17",
-    "url": "https://example.com/agent-guardrails"
-  },
-  {
-    "title": "Eval Suites Standardize RAG Benchmarks",
-    "summary": "New community suites measure retrieval quality, grounding, and hallucination rates on multi-domain corpora.",
-    "category": "News",
-    "date": "2025-10-17",
-    "url": "https://example.com/rag-benchmarks"
-  }
-]
+{
+  "title": "LLMs 101: How Large Language Models Work",
+  "summary": "Large Language Models (LLMs) are neural networks trained on vast corpora to predict the next token. They use the Transformer architecture with self-attention to weigh relevant parts of the input. During pretraining, models learn broad language patterns; during post-training (alignment), they’re steered to follow instructions safely. Key limits include context window size (how much text they can consider) and tokenization quirks (subwords). Despite zero training on your data, LLMs can still perform many tasks via prompting, few-shot examples, and tool use. For private or frequently changing knowledge, Retrieval-Augmented Generation (RAG) or fine-tuning can bridge the gap.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/llms_primer"
+},
+{
+  "title": "Prompt Engineering: Patterns That Actually Work",
+  "summary": "Good prompts are simple, explicit, and testable. Start with: role (“You are a…”), task/goal, constraints (format, length), and a few examples if needed. Prefer structured outputs (JSON or bullet points). Ask for reasoning only when useful—otherwise keep it hidden to reduce verbosity. Use delimiters (``` or ###) to separate instructions from data. Add evaluation rubrics for consistent quality. When prompts become long or brittle, move repeated instructions into a system message and create lightweight, versioned templates. Measure results with small golden sets; adjust temperature/top-p for creativity vs. determinism; and log failures to refine iteratively.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/prompt_engineering_checklist"
+},
+{
+  "title": "RAG Basics: When to Retrieve vs. Memorize",
+  "summary": "Retrieval-Augmented Generation (RAG) fetches relevant documents at answer time and feeds them into the prompt. It’s ideal when facts change, sources must be cited, or content is private. Pipeline: chunk documents, embed chunks, store vectors, retrieve top-k for a user query, then generate an answer grounded in that context. Hybrid search (lexical + vector) improves robustness, while re-ranking sharpens relevance. Guardrails should restrict the model to provided context, and observability helps debug misses. Use fine-tuning for stable style/skills; choose RAG for dynamic knowledge and cost control. Many production systems combine both.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/rag_when_to_use"
+},
+{
+  "title": "Vector Databases: The Backbone of Retrieval",
+  "summary": "Vector databases store embeddings (numeric vectors) for efficient similarity search. You’ll ingest documents, chunk them, compute embeddings, and index them for fast k-NN queries. Important features: filtering (metadata), hybrid search (BM25 + vector), and consistency controls during updates. Choose distance metric (cosine, dot-product) to match your embedding model. Watch for embedding drift when models change; re-index when necessary. Secure your pipeline (PII, access control), and cache hot results to reduce costs. Benchmarks should measure precision/recall and latency under realistic workloads. Popular options: Pinecone, Qdrant, Weaviate, Milvus.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/vector_db_intro"
+},
+{
+  "title": "Agents: Planning, Tools, and Safe Autonomy",
+  "summary": "Agents break tasks into steps, call tools/APIs, and iterate toward goals. Keep initial scope narrow (one tool, one domain) and add capabilities gradually. Core components: planner (choose next action), tool schema (validated inputs/outputs), memory/state (short-term context, optional long-term store), and guardrails (policy checks, rate limits, sandboxing). Observability is essential: trace thoughts, actions, and tool responses. Prefer idempotent tools, and enforce budgets and timeouts to prevent runaway loops. Evaluate with task suites and human-in-the-loop review when impact is high. Start simple; autonomy grows safely with telemetry.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/agents_101"
+},
+{
+  "title": "Function Calling & Tool Use: Reliable Integrations",
+  "summary": "Function calling structures how models request tools. You define functions with strict JSON schemas; the model chooses which function to call and with what arguments. Validating inputs server-side prevents abuse. Typical tools include web search, databases, calculators, email, and internal APIs. Chain tools carefully—fan-out increases latency and cost. Cache deterministic calls, log tool success/failure rates, and surface errors to users meaningfully. For security, strip secrets from model-visible prompts and rotate credentials. Testing with mocked tools and golden scenarios increases reliability before production rollout.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/tool_use_basics"
+},
+{
+  "title": "Fine-Tuning vs. RAG: Picking the Right Lever",
+  "summary": "Fine-tuning adapts a model to your tone, format, or proprietary skills using labeled examples. It’s best for stable behaviors you’ll reuse often. RAG brings fresh or private knowledge at inference time without modifying weights. In practice, use RAG to ground answers and fine-tuning to compress routine instructions or teach domain-specific styles. Evaluate both with the same test sets: accuracy, faithfulness, latency, and cost. Beware overfitting in fine-tuning; keep a clean validation split. For multilingual scenarios, verify that embeddings and base models handle target languages well.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/ft_vs_rag"
+},
+{
+  "title": "Evaluations: How to Measure What Matters",
+  "summary": "Good evals focus on the user outcome: correctness, clarity, and safety. Start with a small golden set and a rubric; expand as you learn. For open-ended tasks, pairwise comparisons and preference models work well; for grounded tasks, verify citations and use exact-match metrics. Track regressions continuously with canary tests and dashboards. Include budget/latency and PII checks. For RAG, measure retrieval quality (nDCG/Recall@k) separately from generation quality to isolate failure points. Close the loop: send misfires back into training data or prompt tweaks.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/evals_quickstart"
+},
+{
+  "title": "Safety & Guardrails: Shipping Responsible AI",
+  "summary": "Safety combines policy, filtering, and product design. Use input/output moderation, prompt-injection checks, and rate limits. Minimize sensitive data in prompts; prefer retrieval over uploading raw documents. Provide users with model disclaimers and clear escalation paths. For agents, fence tool capabilities and validate outputs before side effects (e.g., transactions or emails). Log safety incidents, review them, and retrain or adjust policies accordingly. Document data retention and opt-out controls. Responsible AI isn’t a one-time step—it’s continuous monitoring and improvement as usage grows.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/safety_guardrails"
+},
+{
+  "title": "Automation Playbook: Connect LLMs to Your Stack",
+  "summary": "Combine LLMs with automation platforms (Zapier, Make, n8n) to build real workflows. Pattern: trigger (webhook or schedule) → enrich with RAG/context → call model → postprocess and route outputs. Examples: summarize support tickets to CRM, draft outreach emails, tag content, triage incidents, or fill dashboards. Keep humans in the loop for risky actions; store logs and prompts for auditability. Control cost with caching, batch processing, and smaller draft models. Start with a single high-value task, measure impact, and expand iteratively.",
+  "category": "Education",
+  "date": "2025-10-27",
+  "url": "/guides/automation_playbook"
+}
