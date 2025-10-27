@@ -1,94 +1,44 @@
 [
   {
-    "title": "OpenAI releases new small model for fast tasks",
-    "url": "https://example.com/openai-small-model",
-    "summary": "A lightweight model optimized for speed and low cost. Great for routing, classification and quick utility prompts.",
+    "title": "Open-Source LLM Gets 4× Faster With FlashAttention-3",
+    "summary": "A research team integrated FA-3 kernels into a popular OSS model, reporting 4× speed-ups on long contexts.",
+    "category": "News",
     "date": "2025-10-17",
-    "category": "News"
+    "url": "https://example.com/flashattention3"
   },
   {
-    "title": "Anthropic updates Claude with better tool use",
-    "url": "https://example.com/anthropic-tools",
-    "summary": "Improved function calling with safer defaults and clearer tool schemas for agents.",
-    "date": "2025-10-16",
-    "category": "News"
-  },
-  {
-    "title": "Meta shares paper on long-context training",
-    "url": "https://example.com/meta-long-context",
-    "summary": "Techniques to push context lengths while keeping quality stable; notes on retrieval vs. pure attention.",
-    "date": "2025-10-15",
-    "category": "Research"
-  },
-  {
-    "title": "Google launches AI Studio updates",
-    "url": "https://example.com/google-ai-studio",
-    "summary": "Better evals and prompt versioning to manage changes across environments.",
-    "date": "2025-10-14",
-    "category": "Tools"
-  },
-  {
-    "title": "What Are LLMs? A Fast Primer",
-    "url": "/guides/how-llms-work",
-    "summary": "A friendly primer on tokens, attention and why large language models became so powerful.",
+    "title": "Meta Publishes New Long-Context Recipe",
+    "summary": "Technique mixes sliding-window attention with RoPE scaling to reach 256k tokens without major quality loss.",
+    "category": "News",
     "date": "2025-10-17",
-    "category": "guide",
-    "tags": ["llm","beginners"]
+    "url": "https://example.com/meta-long-context"
   },
   {
-    "title": "RAG in Practice: When to Use It",
-    "url": "/guides/rag-explained",
-    "summary": "Retrieval-Augmented Generation lets models answer with up-to-date, verifiable context. This quick guide shows the core flow.",
+    "title": "MLOps: Inference Cost Cuts With Speculative Decoding",
+    "summary": "Production teams report 20–40% latency and cost reductions by pairing a small draft model with a large target model.",
+    "category": "News",
     "date": "2025-10-17",
-    "category": "guide",
-    "tags": ["rag","retrieval"]
+    "url": "https://example.com/speculative-decoding"
   },
   {
-    "title": "AI Weekly #01 — Key Launches & Tools",
-    "url": "https://example.com/ai-weekly-01",
-    "summary": "Handpicked highlights of the week: notable model updates, new dev features and a couple of standout tools.",
+    "title": "Vector DBs Add Hybrid Search Defaults",
+    "summary": "Leading vendors now enable hybrid (lexical + vector) search as the out-of-the-box mode for more robust retrieval.",
+    "category": "News",
     "date": "2025-10-17",
-    "category": "news",
-    "tags": ["weekly","roundup"]
+    "url": "https://example.com/hybrid-search-defaults"
   },
   {
-    "title": "Prompt Engineering: A Mini-Checklist",
-    "url": "https://example.com/prompt-checklist",
-    "summary": "Keep prompts simple, set role & goal, show one or two examples, and specify outputs. This mini-checklist keeps things consistent.",
+    "title": "Agents: Guardrails Libraries Ship Policy Packs",
+    "summary": "Prebuilt policies for prompt injection, data exfiltration, and tool abuse make it easier to ship safer agents.",
+    "category": "News",
     "date": "2025-10-17",
-    "category": "education",
-    "tags": ["prompting","how-to"]
+    "url": "https://example.com/agent-guardrails"
   },
   {
-    "title": "Agents 101: Planning, Tools, Memory",
-    "url": "https://example.com/agents-101",
-    "summary": "Agents run multi-step plans, call tools and store context. Start with narrow tasks, clear stop criteria and guardrails.",
+    "title": "Eval Suites Standardize RAG Benchmarks",
+    "summary": "New community suites measure retrieval quality, grounding, and hallucination rates on multi-domain corpora.",
+    "category": "News",
     "date": "2025-10-17",
-    "category": "education",
-    "tags": ["agents","planning"]
-  },
-  {
-    "title": "When to Fine-Tune vs. Use RAG",
-    "url": "https://example.com/fine-tune-vs-rag",
-    "summary": "Use RAG when knowledge changes often; fine-tune for stable style/format or domain patterns. Many teams combine both.",
-    "date": "2025-10-17",
-    "category": "education",
-    "tags": ["fine-tuning","rag"]
-  },
-  {
-    "title": "Toolbox: Simple Evaluation for Prompts",
-    "url": "https://example.com/prompt-eval",
-    "summary": "A lightweight approach to evaluate prompts with small test sets and pass/fail checks before you ship.",
-    "date": "2025-10-17",
-    "category": "tools",
-    "tags": ["eval","testing"]
-  },
-  {
-    "title": "Glossary Picks: RAG, Agents, Prompt Engineering",
-    "url": "/glossary",
-    "summary": "Quick definitions you’ll reference often — straight from the built-in glossary.",
-    "date": "2025-10-17",
-    "category": "glossary",
-    "tags": ["glossary"]
+    "url": "https://example.com/rag-benchmarks"
   }
 ]
