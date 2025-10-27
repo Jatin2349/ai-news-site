@@ -1,56 +1,83 @@
-import type { Metadata } from 'next'
+'use client'
+
+import { useMemo, useRef } from 'react'
+import { useState } from 'react'
 import glossary from '../../data/glossary.json'
-import Link from 'next/link'
-import ReactMarkdown from 'react-markdown' 
+import ReactMarkdown from 'react-markdown'
 
+type Term = { term: string; definition_md: string }
 
-export const metadata: Metadata = {
-  title: 'Glossary',
-  description: 'A–Z of core AI terms: concise definitions you can skim fast.',
-}
-
-type Term = {
-  term: string
-  definition_md: string
-}
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
 export default function GlossaryPage() {
-  const items = [...(glossary as Term[])].sort((a, b) =>
-    a.term.localeCompare(b.term, 'en', { sensitivity: 'base' })
-  )
+  const [q, setQ] = useState('')
+  const items = useMemo(() => {
+    const base = [...(glossary as Term[])].sort((a, b) =>
+      a.term.localeCompare(b.term, 'en', { sensitivity: 'base' })
+    )
+    if (!q.trim()) return base
+    const needle = q.trim().toLowerCase()
+    return base.filter(t => (t.term + ' ' + t.definition_md).toLowerCase().includes(needle))
+  }, [q])
+
+  // jump anchors
+  const anchors = useRef<Record<string, HTMLDivElement | null>>({})
 
   return (
-    <section className="max-w-3xl">
+    <div>
       <h1 className="text-2xl font-semibold mb-2">Glossary</h1>
-      <p className="text-gray-600 mb-3">
-        Quick definitions for AI terms you’ll see often.
-      </p>
+      <p className="text-gray-600 mb-4">Quick, practical definitions you’ll reference often.</p>
 
-      {/* HIER den CTA einfügen – im JSX, nicht oben bei der Sortierung */}
-      <div className="mb-6">
-        <Link
-          href="/glossary/suggest"
-          className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50"
-        >
-          Missing a term? Suggest one →
-        </Link>
+      {/* Search */}
+      <div className="mb-4">
+        <input
+          value={q}
+          onChange={e => setQ(e.target.value)}
+          placeholder="Search terms…"
+          className="w-full md:w-96 border rounded-md px-3 py-2"
+        />
       </div>
 
-      <dl>
-        {items.map(t => (
-          <div key={t.term} className="py-3">
-            <dt className="font-semibold">{t.term}</dt>
-            <dd className="prose">
-              {/* Wenn du definition_md nutzt: */}
-              <ReactMarkdown>{t.definition_md}</ReactMarkdown>
-              {/* Falls du ein plain-text Feld „definition“ hast, nimm stattdessen:
-              <p>{t.definition}</p>
-              */}
-            </dd>
-          </div>
+      {/* A–Z jump bar */}
+      <div className="flex flex-wrap gap-2 text-sm mb-6">
+        {LETTERS.map(L => (
+          <button
+            key={L}
+            className="px-2 py-1 rounded border hover:bg-gray-50"
+            onClick={() => {
+              const el = anchors.current[L]
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }}
+          >
+            {L}
+          </button>
         ))}
+      </div>
+
+      {/* List */}
+      <dl className="divide-y">
+        {items.map((t) => {
+          const first = t.term[0]?.toUpperCase() ?? '#'
+          return (
+            <div
+              key={t.term}
+              ref={(el) => {
+                if (!anchors.current[first]) anchors.current[first] = el
+              }}
+              className="py-3"
+            >
+              <dt className="font-semibold">{t.term}</dt>
+              <dd className="prose max-w-none">
+                <ReactMarkdown>{t.definition_md}</ReactMarkdown>
+              </dd>
+            </div>
+          )
+        })}
       </dl>
-    </section>
+
+      {items.length === 0 && (
+        <p className="mt-6 text-sm text-gray-500">No matches. Try a different keyword.</p>
+      )}
+    </div>
   )
 }
-
