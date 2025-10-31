@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import news from '../data/news.json'
+import Image from "next/image";
+import news from "../data/news.json";
 import {
   Newspaper,        // All News
   BookOpen,         // Guides
@@ -7,17 +7,17 @@ import {
   Wrench,           // Tools
   BookText,         // Glossary
   Mail              // Newsletter
-} from 'lucide-react'
+} from "lucide-react";
 
 export const metadata = {
-  title: 'AI Mastery Lab — Latest',
-  description: 'Curated AI news & education: short briefs, guides, and a concise glossary.',
-}
+  title: "AI Mastery Lab — Latest",
+  description: "Curated AI news & education: short briefs, guides, and a concise glossary.",
+};
 
 export default function HomePage() {
   const items = [...(news as any[])]
     .sort((a, b) => (a.date < b.date ? 1 : -1))
-    .slice(0, 6)
+    .slice(0, 6);
 
   return (
     <div className="space-y-8">
@@ -40,33 +40,45 @@ export default function HomePage() {
 
         {/* === 6 Pill-Buttons mit Icons === */}
         <div className="mt-5 flex flex-wrap gap-2">
-          <a href="/news"
-             className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-sm hover:opacity-90">
+          <a
+            href="/news"
+            className="inline-flex items-center gap-2 rounded-full bg-black text-white px-4 py-2 text-sm hover:opacity-90"
+          >
             <Newspaper className="h-4 w-4" />
             All News
           </a>
-          <a href="/guides"
-             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+          <a
+            href="/guides"
+            className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50"
+          >
             <BookOpen className="h-4 w-4" />
             Guides
           </a>
-          <a href="/education"
-             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+          <a
+            href="/education"
+            className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50"
+          >
             <GraduationCap className="h-4 w-4" />
             Education
           </a>
-          <a href="/tools"
-             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+          <a
+            href="/tools"
+            className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50"
+          >
             <Wrench className="h-4 w-4" />
             Tools
           </a>
-          <a href="/glossary"
-             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+          <a
+            href="/glossary"
+            className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50"
+          >
             <BookText className="h-4 w-4" />
             Glossary
           </a>
-          <a href="/newsletter"
-             className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50">
+          <a
+            href="/newsletter"
+            className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm hover:bg-gray-50"
+          >
             <Mail className="h-4 w-4" />
             Newsletter
           </a>
@@ -77,34 +89,43 @@ export default function HomePage() {
       <section>
         <h2 className="text-xl font-semibold mb-4">Latest briefings</h2>
         <div className="grid gap-6 md:grid-cols-2">
-  {items.map((a: any, i: number) => {
-    // 1) Basis-Href aus JSON
-    let href: string = a.url || "#";
+          {items.map((a: any, i: number) => {
+            // Basis-Href aus JSON
+            let href: string = a.url || "#";
 
-    // 2) Falls Education fälschlich auf /guides/... zeigt -> nach /education/... umschreiben
-    const isEducation = String(a.category || "").toLowerCase() === "education";
-    if (isEducation && href.startsWith("/guides/")) {
-      href = href.replace(/^\/guides\//, "/education/");
-    }
+            // Korrektur: Education-Links, die fälschlich auf /guides/... zeigen → /education/...
+            const isEducation = String(a.category || "").toLowerCase() === "education";
+            if (isEducation && href.startsWith("/guides/")) {
+              href = href.replace(/^\/guides\//, "/education/");
+            }
+            // optional: underscores → kebab-case
+            href = href.replace(/_/g, "-");
 
-    // 3) Optional: underscores -> kebab-case Bindestriche (automation_playbook -> automation-playbook)
-    href = href.replace(/_/g, "-");
+            const isExternal = href.startsWith("http");
 
-    const isExternal = href.startsWith("http");
+            return (
+              <a
+                key={i}
+                href={href}
+                className="block rounded-2xl border p-4 hover:shadow"
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noopener noreferrer" : undefined}
+              >
+                <div className="text-xs uppercase tracking-wide text-gray-500">{a.category}</div>
+                <h3 className="mt-1 font-semibold text-lg">{a.title}</h3>
+                <p className="mt-2 text-sm text-gray-700 line-clamp-3">{a.summary}</p>
+                <div className="mt-3 text-xs text-gray-500">{a.date}</div>
+              </a>
+            );
+          })}
+        </div>
 
-    return (
-      <a
-        key={i}
-        href={href}
-        className="block rounded-2xl border p-4 hover:shadow"
-        target={isExternal ? "_blank" : undefined}
-        rel={isExternal ? "noopener noreferrer" : undefined}
-      >
-        <div className="text-xs uppercase tracking-wide text-gray-500">{a.category}</div>
-        <h3 className="mt-1 font-semibold text-lg">{a.title}</h3>
-        <p className="mt-2 text-sm text-gray-700 line-clamp-3">{a.summary}</p>
-        <div className="mt-3 text-xs text-gray-500">{a.date}</div>
-      </a>
-    );
-  })}
-</div>
+        <div className="mt-4">
+          <a href="/news" className="inline-block rounded-md border px-3 py-2 text-sm hover:bg-gray-50">
+            All news →
+          </a>
+        </div>
+      </section>
+    </div>
+  );
+}
