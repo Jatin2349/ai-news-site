@@ -87,19 +87,27 @@ export default function HomePage() {
 
       {/* Neueste 6 */}
       <section>
-        <h2 className="text-xl font-semibold mb-4">Latest briefings</h2>
+                <h2 className="text-xl font-semibold mb-4">Latest briefings</h2>
         <div className="grid gap-6 md:grid-cols-2">
           {items.map((a: any, i: number) => {
-            // Basis-Href aus JSON
-            let href: string = a.url || "#";
+            // utils
+            const normalize = (s: string) =>
+              String(s || "")
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9\s-_]/g, "")
+                .replace(/[\s_]+/g, "-")
+                .replace(/-+/g, "-");
 
-            // Korrektur: Education-Links, die fälschlich auf /guides/... zeigen → /education/...
-            const isEducation = String(a.category || "").toLowerCase() === "education";
-            if (isEducation && href.startsWith("/guides/")) {
-              href = href.replace(/^\/guides\//, "/education/");
-            }
-            // optional: underscores → kebab-case
-            href = href.replace(/_/g, "-");
+            const cat = String(a.category || "").toLowerCase();
+            const slug = a.slug ? normalize(a.slug) : normalize(a.title);
+
+            // interne Ziele NIE aus a.url nehmen → immer deterministisch bauen
+            let href = "#";
+            if (cat === "education") href = `/education/${slug}`;
+            else if (cat === "guides" || cat === "guide") href = `/guides/${slug}`;
+            else if (cat === "news") href = a.url && String(a.url).startsWith("http") ? a.url : `/news/${slug}`;
+            else href = a.url || "#"; // fallback
 
             const isExternal = href.startsWith("http");
 
@@ -119,13 +127,3 @@ export default function HomePage() {
             );
           })}
         </div>
-
-        <div className="mt-4">
-          <a href="/news" className="inline-block rounded-md border px-3 py-2 text-sm hover:bg-gray-50">
-            All news →
-          </a>
-        </div>
-      </section>
-    </div>
-  );
-}
