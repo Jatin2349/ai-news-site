@@ -9,20 +9,17 @@ const normalize = (s: string) =>
     .replace(/[\s_]+/g, "-")
     .replace(/-+/g, "-");
 
-export default async function GuidePage({ params }: { params: { slug: string } }) {
+export default function GuidePage({ params }: { params: { slug: string } }) {
   const req = normalize(params.slug);
 
   // Wenn dieser Slug in den Daten als EDUCATION existiert → redirect
-  const hit = (news as any[]).find((n) => {
+  const asEducation = (news as any[]).some((n) => {
     const cat = String(n.category || "").toLowerCase();
     const slug = n.slug ? normalize(n.slug) : normalize(n.title);
     return cat === "education" && slug === req;
   });
+  if (asEducation) redirect(`/education/${req}`);
 
-  if (hit) {
-    redirect(`/education/${req}`);
-  }
-
-  // TODO: Echte Guide-Render-Logik
+  // TODO: Hier später echte Guide-Logik
   return notFound();
 }
