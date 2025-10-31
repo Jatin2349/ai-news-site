@@ -16,8 +16,10 @@ export const metadata = {
 
 export default function HomePage() {
   const items = [...(news as any[])]
-    .sort((a, b) => (a.date < b.date ? 1 : -1))
-    .slice(0, 6);
+  .filter((n) => String(n.category || "").toLowerCase() === "news") // <- nur NEWS
+  .sort((a, b) => (a.date < b.date ? 1 : -1))
+  .slice(0, 6);
+
 
   // kleine Helfer zum Sluggen
   const normalize = (s: string) =>
