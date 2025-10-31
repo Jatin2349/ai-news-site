@@ -1,35 +1,24 @@
+import news from "../../../data/news.json";
 import { notFound } from "next/navigation";
 
-const educationPosts = [
-  {
-    slug: "automation-playbook",
-    title: "Automation Playbook: Connect LLMs to Your Stack",
-    date: "2025-10-27",
-    content: (
-      <>
-        <p>
-          Combine LLMs with automation platforms (Zapier, Make, n8n) to build real workflows.
-          Pattern: trigger → enrich with context/RAG → call model → postprocess → route outputs.
-        </p>
-      </>
-    ),
-  },
-  {
-    slug: "evaluations",
-    title: "Evaluations: How to Measure What Matters",
-    date: "2025-10-27",
-    content: <p>Start with a small rubric; focus on correctness, clarity, safety.</p>,
-  },
-  {
-    slug: "function-calling",
-    title: "Function Calling & Tool Use: Reliable Integrations",
-    date: "2025-10-27",
-    content: <p>Define clear schemas, handle errors, validate tool IO.</p>,
-  },
-];
+const normalize = (s: string) =>
+  String(s || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-_]/g, "")
+    .replace(/[\s_]+/g, "-")
+    .replace(/-+/g, "-");
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const post = educationPosts.find((p) => p.slug === params.slug);
+export default function EducationDetail({ params }: { params: { slug: string } }) {
+  const slug = normalize(params.slug);
+
+  // Finde den Education-Post aus den JSON-Daten
+  const post = (news as any[]).find((n) => {
+    const isEdu = String(n.category || "").toLowerCase() === "education";
+    const s = n.slug ? normalize(n.slug) : normalize(n.title);
+    return isEdu && s === slug;
+  });
+
   if (!post) return notFound();
 
   return (
@@ -37,7 +26,13 @@ export default function Page({ params }: { params: { slug: string } }) {
       <p className="text-xs uppercase opacity-60">Education</p>
       <h1 className="mt-1 text-3xl font-semibold">{post.title}</h1>
       <div className="mt-1 text-sm opacity-70">{post.date}</div>
-      <article className="prose mt-6">{post.content}</article>
+
+      {/* Inhalt: wir zeigen mindestens die Summary */}
+      <article className="prose mt-6">
+        <p>{post.summary}</p>
+        {/* Falls du später ein Feld `content` in der JSON hast, kannst du es hier rendern */}
+        {/* {post.content && <div dangerouslySetInnerHTML={{ __html: post.content }} />} */}
+      </article>
     </main>
   );
 }
