@@ -1,5 +1,5 @@
 import { redirect, notFound } from "next/navigation";
-import news from "@/data/news.json";
+import news from "../../../data/news.json";
 
 const normalize = (s: string) =>
   String(s || "")
