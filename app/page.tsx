@@ -77,27 +77,34 @@ export default function HomePage() {
       <section>
         <h2 className="text-xl font-semibold mb-4">Latest briefings</h2>
         <div className="grid gap-6 md:grid-cols-2">
-          {items.map((a: any, i: number) => (
-            <a
-              key={i}
-              href={a.url}
-              className="block rounded-2xl border p-4 hover:shadow"
-              target={a.url.startsWith('http') ? '_blank' : undefined}
-            >
-              <div className="text-xs uppercase tracking-wide text-gray-500">{a.category}</div>
-              <h3 className="mt-1 font-semibold text-lg">{a.title}</h3>
-              <p className="mt-2 text-sm text-gray-700 line-clamp-3">{a.summary}</p>
-              <div className="mt-3 text-xs text-gray-500">{a.date}</div>
-            </a>
-          ))}
-        </div>
+  {items.map((a: any, i: number) => {
+    // 1) Basis-Href aus JSON
+    let href: string = a.url || "#";
 
-        <div className="mt-4">
-          <a href="/news" className="inline-block rounded-md border px-3 py-2 text-sm hover:bg-gray-50">
-            All news →
-          </a>
-        </div>
-      </section>
-    </div>
-  )
-}
+    // 2) Falls Education fälschlich auf /guides/... zeigt -> nach /education/... umschreiben
+    const isEducation = String(a.category || "").toLowerCase() === "education";
+    if (isEducation && href.startsWith("/guides/")) {
+      href = href.replace(/^\/guides\//, "/education/");
+    }
+
+    // 3) Optional: underscores -> kebab-case Bindestriche (automation_playbook -> automation-playbook)
+    href = href.replace(/_/g, "-");
+
+    const isExternal = href.startsWith("http");
+
+    return (
+      <a
+        key={i}
+        href={href}
+        className="block rounded-2xl border p-4 hover:shadow"
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+      >
+        <div className="text-xs uppercase tracking-wide text-gray-500">{a.category}</div>
+        <h3 className="mt-1 font-semibold text-lg">{a.title}</h3>
+        <p className="mt-2 text-sm text-gray-700 line-clamp-3">{a.summary}</p>
+        <div className="mt-3 text-xs text-gray-500">{a.date}</div>
+      </a>
+    );
+  })}
+</div>
