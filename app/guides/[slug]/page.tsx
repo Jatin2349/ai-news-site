@@ -12,7 +12,7 @@ const normalize = (s: string) =>
 export default async function GuidePage({ params }: { params: { slug: string } }) {
   const req = normalize(params.slug);
 
-  // Prüfe, ob dieser Slug in news.json als EDUCATION existiert → redirect
+  // Wenn dieser Slug in den Daten als EDUCATION existiert → redirect
   const hit = (news as any[]).find((n) => {
     const cat = String(n.category || "").toLowerCase();
     const slug = n.slug ? normalize(n.slug) : normalize(n.title);
@@ -23,6 +23,6 @@ export default async function GuidePage({ params }: { params: { slug: string } }
     redirect(`/education/${req}`);
   }
 
-  // TODO: hier deine echte Guide-Render-Logik (wenn vorhanden)
+  // TODO: Echte Guide-Render-Logik
   return notFound();
 }
