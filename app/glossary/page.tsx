@@ -1,83 +1,24 @@
-'use client'
+// app/glossary/page.tsx  ← komplette Datei ersetzen
+import { readFile } from "node:fs/promises";
+import path from "node:path";
+import ReactMarkdown from "react-markdown";
 
-import { useMemo, useRef } from 'react'
-import { useState } from 'react'
-import glossary from '../../data/glossary.json'
-import ReactMarkdown from 'react-markdown'
+export const metadata = {
+  title: "Glossary – AI Mastery Lab",
+  description: "A–Z glossary of AI terms.",
+};
 
-type Term = { term: string; definition_md: string }
-
-const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
-
-export default function GlossaryPage() {
-  const [q, setQ] = useState('')
-  const items = useMemo(() => {
-    const base = [...(glossary as Term[])].sort((a, b) =>
-      a.term.localeCompare(b.term, 'en', { sensitivity: 'base' })
-    )
-    if (!q.trim()) return base
-    const needle = q.trim().toLowerCase()
-    return base.filter(t => (t.term + ' ' + t.definition_md).toLowerCase().includes(needle))
-  }, [q])
-
-  // jump anchors
-  const anchors = useRef<Record<string, HTMLDivElement | null>>({})
+export default async function GlossaryPage() {
+  const file = await readFile(path.join(process.cwd(), "data", "glossary.md"), "utf8");
 
   return (
-    <div>
+    <main className="mx-auto max-w-3xl px-4 py-10">
       <h1 className="text-2xl font-semibold mb-2">Glossary</h1>
       <p className="text-gray-600 mb-4">Quick, practical definitions you’ll reference often.</p>
 
-      {/* Search */}
-      <div className="mb-4">
-        <input
-          value={q}
-          onChange={e => setQ(e.target.value)}
-          placeholder="Search terms…"
-          className="w-full md:w-96 border rounded-md px-3 py-2"
-        />
-      </div>
-
-      {/* A–Z jump bar */}
-      <div className="flex flex-wrap gap-2 text-sm mb-6">
-        {LETTERS.map(L => (
-          <button
-            key={L}
-            className="px-2 py-1 rounded border hover:bg-gray-50"
-            onClick={() => {
-              const el = anchors.current[L]
-              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            }}
-          >
-            {L}
-          </button>
-        ))}
-      </div>
-
-      {/* List */}
-      <dl className="divide-y">
-        {items.map((t) => {
-          const first = t.term[0]?.toUpperCase() ?? '#'
-          return (
-            <div
-              key={t.term}
-              ref={(el) => {
-                if (!anchors.current[first]) anchors.current[first] = el
-              }}
-              className="py-3"
-            >
-              <dt className="font-semibold">{t.term}</dt>
-              <dd className="prose max-w-none">
-                <ReactMarkdown>{t.definition_md}</ReactMarkdown>
-              </dd>
-            </div>
-          )
-        })}
-      </dl>
-
-      {items.length === 0 && (
-        <p className="mt-6 text-sm text-gray-500">No matches. Try a different keyword.</p>
-      )}
-    </div>
-  )
+      <article className="prose max-w-none">
+        <ReactMarkdown>{file}</ReactMarkdown>
+      </article>
+    </main>
+  );
 }
