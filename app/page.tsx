@@ -98,40 +98,32 @@ export default function HomePage() {
 
       {/* Neueste 6 */}
       <section>
-        <h2 className="text-xl font-semibold mb-4">Latest briefings</h2>
+        <h2 className="text-xl font-semibold mb-4">Latest news</h2>
         <div className="grid gap-6 md:grid-cols-2">
-          {items.map((a: any, i: number) => {
-            const cat = String(a.category || "").toLowerCase();
-            const slug = a.slug ? normalize(a.slug) : normalize(a.title);
+  {items.map((a: any, i: number) => {
+    const slug = (a.slug ?? a.title).toLowerCase()
+      .replace(/[^a-z0-9\s-_]/g, "")
+      .replace(/[\s_]+/g, "-")
+      .replace(/-+/g, "-");
 
-            // Interne Ziele deterministisch bauen (nicht a.url blind nutzen)
-            let href = "#";
-            if (cat === "education") href = `/education/${slug}`;
-            else if (cat === "guides" || cat === "guide") href = `/guides/${slug}`;
-            else if (cat === "news") {
-              href = a.url && String(a.url).startsWith("http") ? a.url : `/news/${slug}`;
-            } else {
-              href = a.url || "#";
-            }
+    // immer intern auf /news/<slug> verlinken
+    const href = `/news/${slug}`;
 
-            const isExternal = href.startsWith("http");
+    return (
+      <a
+        key={i}
+        href={href}
+        className="block rounded-2xl border p-4 hover:shadow"
+      >
+        <div className="text-xs uppercase tracking-wide text-gray-500">{a.category}</div>
+        <h3 className="mt-1 font-semibold text-lg">{a.title}</h3>
+        <p className="mt-2 text-sm text-gray-700 line-clamp-3">{a.summary}</p>
+        <div className="mt-3 text-xs text-gray-500">{a.date}</div>
+      </a>
+    );
+  })}
+</div>
 
-            return (
-              <a
-                key={i}
-                href={href}
-                className="block rounded-2xl border p-4 hover:shadow"
-                target={isExternal ? "_blank" : undefined}
-                rel={isExternal ? "noopener noreferrer" : undefined}
-              >
-                <div className="text-xs uppercase tracking-wide text-gray-500">{a.category}</div>
-                <h3 className="mt-1 font-semibold text-lg">{a.title}</h3>
-                <p className="mt-2 text-sm text-gray-700 line-clamp-3">{a.summary}</p>
-                <div className="mt-3 text-xs text-gray-500">{a.date}</div>
-              </a>
-            );
-          })}
-        </div>
 
         <div className="mt-4">
           <a href="/news" className="inline-block rounded-md border px-3 py-2 text-sm hover:bg-gray-50">
