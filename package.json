@@ -3,10 +3,12 @@
   "private": true,
   "version": "0.0.2",
   "scripts": {
-    "validate:data": "node scripts/validate-data.mjs",
-    "build": "npm run validate:data && next build",
-    "dev": "next dev",
-    "start": "next start"
+  "fix:data": "node scripts/fix-data.mjs",
+  "validate:data": "node scripts/validate-data.mjs",
+  "build": "npm run validate:data && next build",
+  "dev": "next dev",
+  "start": "next start"
+}
   },
   "dependencies": {
     "next": "14.2.5",
