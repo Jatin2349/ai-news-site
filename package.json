@@ -3,8 +3,9 @@
   "private": true,
   "version": "0.0.2",
   "scripts": {
+    "validate:data": "node scripts/validate-data.mjs",
+    "build": "npm run validate:data && next build",
     "dev": "next dev",
-    "build": "next build",
     "start": "next start"
   },
   "dependencies": {
