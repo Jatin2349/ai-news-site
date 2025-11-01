@@ -8,7 +8,6 @@
     "build": "npm run fix:data && npm run validate:data && next build",
     "dev": "next dev",
     "start": "next start"
-  }
   },
   "dependencies": {
     "next": "14.2.5",
