@@ -14,18 +14,19 @@
   "file": "llms-explained.md",
   "summary": "A clear, practical explainer of large language models: how Transformers work, why prompts matter, how to ground facts, and where to set your trust boundary."
   },
-  {
-    "slug": "prompt-engineering-guide",
-    "title": "Prompt Engineering: A Practical Guide",
-    "summary": "How to get consistently better results: roles, goals, context, formats, examples, and iterative feedback.",
-    "date": "2025-10-17",
-    "content_md": "## First principle\nPrompts are **work instructions**. Make the target and constraints explicit. Work in **stages**: outline → draft → review → final.\n\n## 5-part template\n1. **Role:** \"You are a [role] for [audience].\"\n2. **Goal:** A clear, verifiable deliverable.\n3. **Context:** Facts, constraints, tone, domain.\n4. **Format & limits:** Bullets vs. prose, length, language, structure.\n5. **Examples & criteria:** 1–2 short exemplars + quality bar.\n\n**Reusable template**\n```\nRole: You are [role] for [audience].\nGoal: [deliverable]\nContext: [facts, constraints, tone]\nFormat: [e.g., 5 bullets / valid JSON with fields x,y,z]\nCriteria: [fact-checked, concise, no fluff, cite sources]\nProcess: propose an outline, wait for approval, then write the final.\n```\n\n## Iteration strategies\n- **Targeted feedback:** Call out what to keep, change, add, or remove.\n- **Variants:** Ask for 2–3 styles (concise, formal, casual) and pick the best.\n- **Self-improvement:** \"Rewrite your answer to meet criteria A/B/C\" or \"Improve my prompt for clarity and completeness.\"\n\n## Useful patterns\n- **Sketched reasoning:** \"Show your steps as bullets.\"\n- **Self-check:** \"List 3 potential errors or missing assumptions.\"\n- **Rubric prompts:** \"Score the text on A/B/C (0–5) and propose fixes.\"\n- **JSON mode:** \"Return **only** valid JSON with fields ...\"\n\n## Anti-patterns\n- Vague goals, no audience, no format.\n- Overstuffed prompts with conflicting constraints.\n- No verification for factual claims.\n\n## Mini checklist\n- [ ] Clear goal + role\n- [ ] Relevant context + examples\n- [ ] Defined output format\n- [ ] Plan for outline → draft → review\n\nApply this loop and your outputs will be predictable regardless of the model."
-  },
-  {
-    "slug": "agents-and-automation",
-    "title": "AI Agents & Automation: Thinking in Systems",
-    "summary": "What agents are, when they help, and how to start small: planning, tools, guardrails, and monitoring.",
-    "date": "2025-10-17",
-    "content_md": "## What is an agent?\nAn AI agent plans steps, calls tools/APIs, evaluates intermediate results, and iterates until a goal is met. Think of it as a **coordinator** with memory and policies—not magic.\n\n## When are agents useful?\n- Repetitive multi-tool workflows (CRM, calendar, docs).\n- Tasks with **clear success criteria** (report delivered, meeting scheduled).\n- Processes where **state** matters across steps.\n\n## High-level architecture\n- **Planner:** breaks a goal into actions.\n- **Tools:** typed functions/APIs (search, DB, email, browser).\n- **Memory/State:** short-term + optional long-term context.\n- **Guardrails:** policies, input/output filters, escalation rules.\n\n## Start small (patterns)\n1. **Single-tool agent:** one robust job (e.g., calendar entry).\n2. **Two-tool chain:** research → summarize.\n3. **Supervisor loop:** agent checks its own output against a checklist and retries if needed.\n\n## Risks & safety\n- **Hallucinations:** measure success on **outcomes**, not prompts (did the calendar event actually exist?).\n- **Security:** prompt-injection filters, output policies, rate limits.\n- **Monitoring:** logs/traces, error budgets, and cost caps.\n\n## Decision checklist\n- [ ] Clear metric of done\n- [ ] Narrow, typed tool interfaces\n- [ ] Abort/rollback path\n- [ ] Human handoff defined\n\nStart small, measure, then expand. That’s how agents move from novelty to reliable automation."
-  }
+ {
+  "slug": "prompt-engineering-practical-guide",
+  "title": "Prompt Engineering — A Practical Guide",
+  "date": "2025-10-17",
+  "file": "prompt-engineering-practical-guide.md",
+  "summary": "A repeatable system for better LLM outputs: a canonical scaffold, grounding for truth, long-form templates, and iteration patterns that raise quality."
+},
+{
+  "slug": "ai-agents-and-automation",
+  "title": "AI Agents & Automation — Thinking in Systems",
+  "date": "2025-10-17",
+  "file": "ai-agents-and-automation.md",
+  "summary": "From chat to reliable workflows: typed tools, micro-planning, supervisor loops, safety guardrails, and monitoring — plus long-form blueprints you can copy."
+}
+
 ]
