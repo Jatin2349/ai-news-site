@@ -1,5 +1,7 @@
+// app/guides/[slug]/page.tsx  ← komplette Datei ersetzen
 import guides from "../../../data/guides.json";
 import ReactMarkdown from "react-markdown";
+import { loadGuideMarkdown } from "../../../lib/markdown"; // <-- neu
 
 const norm = (s: string) =>
   String(s || "")
@@ -12,7 +14,7 @@ const norm = (s: string) =>
 export default function GuidePage({ params }: { params: { slug: string } }) {
   const slug = norm(params.slug);
 
-  // Guide aus guides.json finden (Slug aus Feld oder aus Title normalisieren)
+  // Guide anhand slug finden (aus g.slug oder g.title)
   const item = (guides as any[]).find((g) => {
     const s = g.slug ? norm(g.slug) : norm(g.title);
     return s === slug;
@@ -29,6 +31,9 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
     );
   }
 
+  // <-- HIER wird die .md-Datei geladen (falls vorhanden)
+  const md = item.file ? loadGuideMarkdown(item.file) : null;
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-10">
       <p className="text-xs uppercase opacity-60">Guide</p>
@@ -36,8 +41,12 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
       <div className="mt-1 text-sm opacity-70">{item.date}</div>
 
       <article className="prose max-w-none mt-6">
-        {/* content_md ist die volle Anleitung im Markdown; fallback auf summary */}
-        <ReactMarkdown>{item.content_md || item.summary || ""}</ReactMarkdown>
+        {/* Wenn .md existiert → rendern; sonst Fallback auf content_md/summary */}
+        {md ? (
+          <ReactMarkdown>{md}</ReactMarkdown>
+        ) : (
+          <ReactMarkdown>{item.content_md || item.summary || ""}</ReactMarkdown>
+        )}
       </article>
     </main>
   );
