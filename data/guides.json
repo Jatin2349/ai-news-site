@@ -1,11 +1,12 @@
 [
   {
-    "slug": "using-ai-right-now",
-    "title": "Using AI Right Now — A Beginner Quick Guide",
-    "summary": "Practical, low-friction steps to become productive with AI today without overcomplicating your setup.",
-    "date": "2025-10-17",
-    "content_md": "## Why this quick guide?\nMost people wait for the perfect stack and never get started. This guide shows how to be productive with AI **today** using a lean approach you can extend later.\n\n---\n\n## 1) Pick one dependable home base\nUse **one chat model** as your default workspace. Optionally keep a **second model** for cross-checking important answers. Your goal is a single place that handles ~80% of tasks.\n\n## 2) Clear prompts → clear results\nState **goal, audience, format, and length**. Provide **context + 1–2 examples**. Ask for **steps**: outline → draft → refinement.\n\n**Prompt template**\n```\nRole: You are my [role] for [audience].\nTask: [clear deliverable]\nContext: [facts, constraints]\nFormat: [bullets/markdown/json/email tone]\nLength: [e.g., 200–300 words]\nPlease: propose an outline first, then write the final version.\n```\n\n## 3) Iterate instead of chasing perfection\nGive **specific feedback** on what worked and what’s missing. Request **variants** (concise vs. detailed, casual vs. formal). Use **checklists**: “List 5 risks or edge cases.”\n\n## 4) Ground facts when it matters\nAsk for **citations** or provide **source snippets/links** in the prompt (a light RAG approach). Critical content deserves verification.\n\n## 5) Automate small first\nSave **prompt snippets**. Copy-paste pipelines (Chat → Doc/Editor → CMS → Review) are fine to start. Add tool integrations (calendar, sheets, email) **only when pay-off is clear**.\n\n## 6) Team rules\nDefine what needs review, how AI-assisted content is labeled, and where **prompt templates** live.\n\n---\n\n## Mini checklist\n1) Choose one home-base model.\n2) Create 3–5 prompt templates.\n3) Set a weekly cadence (ideas → drafts → reviews).\n4) After 2–3 weeks, run a retro: what’s worth automating next?\n\nStart simple, ship often, expand deliberately."
+  "slug": "using-ai-right-now",
+  "title": "Using AI Right Now — A Beginner’s Field Guide",
+  "date": "2025-10-17",
+  "file": "using-ai-right-now.md",
+  "summary": "A practical, low-friction playbook for becoming productive with AI right now: one home base, reusable prompt patterns, iterative workflow, lightweight grounding, and a routine that compounds."
   },
+
   {
     "slug": "llms-explained",
     "title": "LLMs Explained: What They Are and How They Work",
