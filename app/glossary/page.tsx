@@ -1,8 +1,8 @@
 // app/glossary/page.tsx  (Server Component)
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { parseGlossaryMD, type GlossaryEntry } from "@/lib/glossary-md";
-import GlossaryClient from "@/components/GlossaryClient";
+import { parseGlossaryMD, type GlossaryEntry } from "../../lib/glossary-md";
+import GlossaryClient from "../../components/GlossaryClient";
 
 export const metadata = {
   title: "Glossary – AI Mastery Lab",
