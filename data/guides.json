@@ -1,37 +1,30 @@
 [
   {
-    "slug": "llms_primer",
-    "title": "What Are LLMs? A Fast Primer",
-    "summary": "Tokens, attention, pretraining vs. finetuning, and why scaling laws matter.",
+    "slug": "using-ai-right-now",
+    "title": "Using AI Right Now — A Beginner Quick Guide",
+    "summary": "Practical, low-friction steps to become productive with AI today without overcomplicating your setup.",
     "date": "2025-10-17",
-    "url": "/guides/llms_primer"
+    "content_md": "## Why this quick guide?\nMost people wait for the perfect stack and never get started. This guide shows how to be productive with AI **today** using a lean approach you can extend later.\n\n---\n\n## 1) Pick one dependable home base\nUse **one chat model** as your default workspace. Optionally keep a **second model** for cross-checking important answers. Your goal is a single place that handles ~80% of tasks.\n\n## 2) Clear prompts → clear results\nState **goal, audience, format, and length**. Provide **context + 1–2 examples**. Ask for **steps**: outline → draft → refinement.\n\n**Prompt template**\n```\nRole: You are my [role] for [audience].\nTask: [clear deliverable]\nContext: [facts, constraints]\nFormat: [bullets/markdown/json/email tone]\nLength: [e.g., 200–300 words]\nPlease: propose an outline first, then write the final version.\n```\n\n## 3) Iterate instead of chasing perfection\nGive **specific feedback** on what worked and what’s missing. Request **variants** (concise vs. detailed, casual vs. formal). Use **checklists**: “List 5 risks or edge cases.”\n\n## 4) Ground facts when it matters\nAsk for **citations** or provide **source snippets/links** in the prompt (a light RAG approach). Critical content deserves verification.\n\n## 5) Automate small first\nSave **prompt snippets**. Copy-paste pipelines (Chat → Doc/Editor → CMS → Review) are fine to start. Add tool integrations (calendar, sheets, email) **only when pay-off is clear**.\n\n## 6) Team rules\nDefine what needs review, how AI-assisted content is labeled, and where **prompt templates** live.\n\n---\n\n## Mini checklist\n1) Choose one home-base model.\n2) Create 3–5 prompt templates.\n3) Set a weekly cadence (ideas → drafts → reviews).\n4) After 2–3 weeks, run a retro: what’s worth automating next?\n\nStart simple, ship often, expand deliberately."
   },
   {
-    "slug": "rag_when_to_use",
-    "title": "RAG in Practice: When to Use It",
-    "summary": "Use RAG when facts change or must be verifiable; finetune for stable style or private skills.",
+    "slug": "llms-explained",
+    "title": "LLMs Explained: What They Are and How They Work",
+    "summary": "A clear overview of large language models: training, context windows, strengths, and limits.",
     "date": "2025-10-17",
-    "url": "/guides/rag_when_to_use"
+    "content_md": "## What is an LLM?\nA Large Language Model predicts the next token in a sequence. Trained on vast text corpora, it learns patterns of language, reasoning shortcuts, and stylistic conventions. It doesn’t “know” like a human; it estimates likely continuations based on its training distribution.\n\n## How LLMs are built\n- **Pretraining:** The model sees text and learns to reconstruct masked/next tokens by minimizing a **loss** (typically cross-entropy). This stage teaches broad language competence.\n- **Fine-tuning & alignment:** The base model is adapted to tasks or safety goals (e.g., supervised fine-tuning and RLHF). This shapes helpful, harmless behavior.\n\n## Architecture basics\n- **Transformer & attention:** Attention lets the model weigh which tokens matter for each prediction.\n- **Context window:** The maximum tokens the model can “see” at once. Larger windows support long documents and multi-turn chats.\n- **Decoding:** Parameters like **temperature**, **top-p**, or **top-k** trade creativity for determinism.\n\n## Strengths\n- Versatile **text generation** (summaries, emails, drafts, code snippets).\n- Strong **generalization** from broad training data.\n- As a **workbench**, LLMs become far more capable when connected to tools (search, databases, code, function calling).\n\n## Limits\n- **Hallucinations:** Confident but wrong statements; ground with sources for critical tasks.\n- **Recency:** Without retrieval or browsing, knowledge is bounded by the training cutoff.\n- **Privacy/IP:** Use private deployments or strict policies for sensitive data.\n\n## Practical tips\n- **Provide context** (key paragraphs, tables, constraints) in the prompt.\n- **Specify output format** (bullets, markdown, or JSON) for easy downstream use.\n- **Cross-check** high-stakes answers with another source/model.\n\nWith these mental models you’ll know when LLMs are enough, and when to add retrieval, tools, or human review."
   },
   {
-    "slug": "prompt_engineering_checklist",
-    "title": "Prompt Engineering: A Mini-Checklist",
-    "summary": "Keep prompts simple, set role & goal, add 1–2 examples, specify outputs, and test edge cases.",
+    "slug": "prompt-engineering-guide",
+    "title": "Prompt Engineering: A Practical Guide",
+    "summary": "How to get consistently better results: roles, goals, context, formats, examples, and iterative feedback.",
     "date": "2025-10-17",
-    "url": "/guides/prompt_engineering_checklist"
+    "content_md": "## First principle\nPrompts are **work instructions**. Make the target and constraints explicit. Work in **stages**: outline → draft → review → final.\n\n## 5-part template\n1. **Role:** \"You are a [role] for [audience].\"\n2. **Goal:** A clear, verifiable deliverable.\n3. **Context:** Facts, constraints, tone, domain.\n4. **Format & limits:** Bullets vs. prose, length, language, structure.\n5. **Examples & criteria:** 1–2 short exemplars + quality bar.\n\n**Reusable template**\n```\nRole: You are [role] for [audience].\nGoal: [deliverable]\nContext: [facts, constraints, tone]\nFormat: [e.g., 5 bullets / valid JSON with fields x,y,z]\nCriteria: [fact-checked, concise, no fluff, cite sources]\nProcess: propose an outline, wait for approval, then write the final.\n```\n\n## Iteration strategies\n- **Targeted feedback:** Call out what to keep, change, add, or remove.\n- **Variants:** Ask for 2–3 styles (concise, formal, casual) and pick the best.\n- **Self-improvement:** \"Rewrite your answer to meet criteria A/B/C\" or \"Improve my prompt for clarity and completeness.\"\n\n## Useful patterns\n- **Sketched reasoning:** \"Show your steps as bullets.\"\n- **Self-check:** \"List 3 potential errors or missing assumptions.\"\n- **Rubric prompts:** \"Score the text on A/B/C (0–5) and propose fixes.\"\n- **JSON mode:** \"Return **only** valid JSON with fields ...\"\n\n## Anti-patterns\n- Vague goals, no audience, no format.\n- Overstuffed prompts with conflicting constraints.\n- No verification for factual claims.\n\n## Mini checklist\n- [ ] Clear goal + role\n- [ ] Relevant context + examples\n- [ ] Defined output format\n- [ ] Plan for outline → draft → review\n\nApply this loop and your outputs will be predictable regardless of the model."
   },
   {
-    "slug": "agents_101",
-    "title": "Agents 101: Planning, Tools, Memory",
-    "summary": "Start narrow, add tool use carefully, track state, and enforce guardrails.",
+    "slug": "agents-and-automation",
+    "title": "AI Agents & Automation: Thinking in Systems",
+    "summary": "What agents are, when they help, and how to start small: planning, tools, guardrails, and monitoring.",
     "date": "2025-10-17",
-    "url": "/guides/agents_101"
-  },
-  {
-    "slug": "evals_quickstart",
-    "title": "Evaluations Quickstart",
-    "summary": "Golden sets, rubrics, pairwise comparisons, and regression dashboards for safe iterations.",
-    "date": "2025-10-17",
-    "url": "/guides/evals_quickstart"
+    "content_md": "## What is an agent?\nAn AI agent plans steps, calls tools/APIs, evaluates intermediate results, and iterates until a goal is met. Think of it as a **coordinator** with memory and policies—not magic.\n\n## When are agents useful?\n- Repetitive multi-tool workflows (CRM, calendar, docs).\n- Tasks with **clear success criteria** (report delivered, meeting scheduled).\n- Processes where **state** matters across steps.\n\n## High-level architecture\n- **Planner:** breaks a goal into actions.\n- **Tools:** typed functions/APIs (search, DB, email, browser).\n- **Memory/State:** short-term + optional long-term context.\n- **Guardrails:** policies, input/output filters, escalation rules.\n\n## Start small (patterns)\n1. **Single-tool agent:** one robust job (e.g., calendar entry).\n2. **Two-tool chain:** research → summarize.\n3. **Supervisor loop:** agent checks its own output against a checklist and retries if needed.\n\n## Risks & safety\n- **Hallucinations:** measure success on **outcomes**, not prompts (did the calendar event actually exist?).\n- **Security:** prompt-injection filters, output policies, rate limits.\n- **Monitoring:** logs/traces, error budgets, and cost caps.\n\n## Decision checklist\n- [ ] Clear metric of done\n- [ ] Narrow, typed tool interfaces\n- [ ] Abort/rollback path\n- [ ] Human handoff defined\n\nStart small, measure, then expand. That’s how agents move from novelty to reliable automation."
   }
 ]
