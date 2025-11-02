@@ -8,11 +8,11 @@
   },
 
   {
-    "slug": "llms-explained",
-    "title": "LLMs Explained: What They Are and How They Work",
-    "summary": "A clear overview of large language models: training, context windows, strengths, and limits.",
-    "date": "2025-10-17",
-    "content_md": "## What is an LLM?\nA Large Language Model predicts the next token in a sequence. Trained on vast text corpora, it learns patterns of language, reasoning shortcuts, and stylistic conventions. It doesn’t “know” like a human; it estimates likely continuations based on its training distribution.\n\n## How LLMs are built\n- **Pretraining:** The model sees text and learns to reconstruct masked/next tokens by minimizing a **loss** (typically cross-entropy). This stage teaches broad language competence.\n- **Fine-tuning & alignment:** The base model is adapted to tasks or safety goals (e.g., supervised fine-tuning and RLHF). This shapes helpful, harmless behavior.\n\n## Architecture basics\n- **Transformer & attention:** Attention lets the model weigh which tokens matter for each prediction.\n- **Context window:** The maximum tokens the model can “see” at once. Larger windows support long documents and multi-turn chats.\n- **Decoding:** Parameters like **temperature**, **top-p**, or **top-k** trade creativity for determinism.\n\n## Strengths\n- Versatile **text generation** (summaries, emails, drafts, code snippets).\n- Strong **generalization** from broad training data.\n- As a **workbench**, LLMs become far more capable when connected to tools (search, databases, code, function calling).\n\n## Limits\n- **Hallucinations:** Confident but wrong statements; ground with sources for critical tasks.\n- **Recency:** Without retrieval or browsing, knowledge is bounded by the training cutoff.\n- **Privacy/IP:** Use private deployments or strict policies for sensitive data.\n\n## Practical tips\n- **Provide context** (key paragraphs, tables, constraints) in the prompt.\n- **Specify output format** (bullets, markdown, or JSON) for easy downstream use.\n- **Cross-check** high-stakes answers with another source/model.\n\nWith these mental models you’ll know when LLMs are enough, and when to add retrieval, tools, or human review."
+  "slug": "llms-explained",
+  "title": "LLMs Explained — What They Are, How They Work, and When to Trust Them",
+  "date": "2025-10-17",
+  "file": "llms-explained.md",
+  "summary": "A clear, practical explainer of large language models: how Transformers work, why prompts matter, how to ground facts, and where to set your trust boundary."
   },
   {
     "slug": "prompt-engineering-guide",
