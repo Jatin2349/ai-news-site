@@ -13,7 +13,7 @@ export default function Icon() {
           height: 32,
           borderRadius: 8,
           background: "#0A0B0F",
-          display: "flex",              // <- grid -> flex
+          display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
