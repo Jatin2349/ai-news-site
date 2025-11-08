@@ -1,8 +1,16 @@
 // app/robots.ts
-export default function robots() {
-  const base = 'https://ai-news-site-bswt.vercel.app' // später Domain setzen
+import type { MetadataRoute } from "next";
+
+export default function robots(): MetadataRoute.Robots {
+  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-news-site-alpha.vercel.app";
+
   return {
-    rules: { userAgent: '*', allow: '/' },
-    sitemap: `${base}/sitemap.xml`
-  }
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+      },
+    ],
+    sitemap: `${base}/sitemap.xml`,
+  };
 }
