@@ -49,7 +49,7 @@ function Nav() {
     <header className="sticky top-0 z-40 border-b border-white/5 backdrop-blur supports-[backdrop-filter]:bg-black/40">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.svg" alt="AI Mastery Lab" width={36} height={36} />
+          <Image src="/logo-aml.png" alt="AI Mastery Lab" width={36} height={36} />
           <span className="font-semibold tracking-tight">AI Mastery Lab</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -99,7 +99,7 @@ function Hero() {
           <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-indigo-500/20 via-fuchsia-500/20 to-emerald-400/20 blur-2xl" />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="grid place-items-center rounded-3xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur">
-              <Image src="/logo.svg" alt="AI Mastery Lab Logo" width={160} height={160} className="opacity-95" />
+              <Image src="/logo-aml.png" alt="AI Mastery Lab Logo" width={160} height={160} className="opacity-95" />
               <p className="mt-4 text-center text-xs uppercase tracking-[0.2em] text-zinc-300">Learn • Build • Automate</p>
             </div>
           </div>
