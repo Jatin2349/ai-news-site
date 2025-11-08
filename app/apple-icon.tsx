@@ -13,7 +13,7 @@ export default function AppleIcon() {
           height: 180,
           borderRadius: 32,
           background: "#0A0B0F",
-          display: "flex",              // <- grid -> flex
+          display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -26,7 +26,7 @@ export default function AppleIcon() {
             background: "rgba(255,255,255,0.06)",
             border: "2px solid rgba(255,255,255,0.18)",
             position: "relative",
-            display: "flex",             // center inner triangle/dot
+            display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}
