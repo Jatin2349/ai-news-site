@@ -98,9 +98,11 @@ function Hero() {
         <div className="relative mx-auto aspect-square w-72 md:w-[28rem]">
           <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-indigo-500/20 via-fuchsia-500/20 to-emerald-400/20 blur-2xl" />
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative mx-auto w-72 md:w-[28rem] flex items-center justify-center py-6 md:py-10">
-              <Image src="/logo-aml.png" alt="AI Mastery Lab Logo" width={240} height={240} className="rounded-2xl" sizes="(min-width: 768px) 240px, 180px" />
-              <p className="mt-4 text-center text-xs uppercase tracking-[0.2em] text-zinc-300">Learn • Build • Automate</p>
+            <div className="relative mx-auto w-72 md:w-[32rem] h-[20rem] md:h-[28rem] flex flex-col items-center justify-center">
+              <Image src="/logo-aml.png" alt="AI Mastery Lab Logo" width={260} height={260} className="rounded-2xl" sizes="(min-width: 768px) 240px, 180px" />
+              <p className="mt-4 text-center text-xs uppercase tracking-[0.2em] text-zinc-300">
+                Learn • Build • Automate
+              </p>
             </div>
           </div>
         </div>
