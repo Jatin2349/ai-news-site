@@ -3,8 +3,31 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 
-// Decorative FX nur clientseitig laden (keine SSR)
-const BackgroundFXNoSSR = dynamic(() => import("./components/BackgroundFX"), { ssr: false });
+// --- Decorative FX inline als Client-Only, ohne separate Datei:
+function BackgroundFX() {
+  return (
+    <>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-1/4 -top-1/3 h-[40rem] w-[40rem] rounded-full bg-fuchsia-500/20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-[-20%] top-1/4 h-[36rem] w-[36rem] rounded-full bg-indigo-500/20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute bottom-[-20%] left-1/3 h-[28rem] w-[28rem] rounded-full bg-emerald-400/20 blur-3xl"
+      />
+    </>
+  );
+}
+
+// Wichtig: dynamic erwartet ein Modul mit default-Export
+const BackgroundFXNoSSR = dynamic(
+  () => Promise.resolve({ default: BackgroundFX }),
+  { ssr: false }
+);
 
 export default function HomePage() {
   return (
@@ -222,9 +245,8 @@ function Benefit({ children }: { children: React.ReactNode }) {
 }
 
 function ShapeCluster() {
-  // Just some floating shapes for visual interest
   return (
-    <div aria-hidden={true} className="pointer-events-none absolute inset-0">
+    <div aria-hidden className="pointer-events-none absolute inset-0">
       <span className="absolute -left-4 top-6 h-16 w-16 rounded-2xl border border-white/10 bg-white/5" />
       <span className="absolute bottom-6 right-8 h-10 w-10 rounded-full border border-white/10 bg-white/5" />
       <span className="absolute left-20 bottom-10 h-6 w-24 rounded-full border border-white/10 bg-white/5" />
