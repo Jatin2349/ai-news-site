@@ -7,6 +7,7 @@ export const contentType = "image/png";
 export default function OG() {
   return new ImageResponse(
     (
+      // ROOT: hat 3 Kinder → display:flex + column
       <div
         style={{
           width: 1200,
@@ -16,11 +17,10 @@ export default function OG() {
           flexDirection: "column",
           padding: 64,
           color: "white",
-          fontFamily:
-            "ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto",
+          fontFamily: "ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto",
         }}
       >
-        {/* Header-Zeile: genau 2 Kinder → display:flex */}
+        {/* HEADER: genau 2 Kinder → display:flex */}
         <div
           style={{
             display: "flex",
@@ -31,7 +31,7 @@ export default function OG() {
             fontSize: 28,
           }}
         >
-          {/* Mini-Logo-Box (ein Kind, darin ein relativer Kreis mit Dreieck) */}
+          {/* LOGO-BOX: 1 Kind → okay */}
           <div
             style={{
               width: 44,
@@ -44,6 +44,7 @@ export default function OG() {
               border: "1px solid rgba(255,255,255,0.15)",
             }}
           >
+            {/* KREIS: 1 Kind → okay */}
             <div
               style={{
                 width: 20,
@@ -51,16 +52,14 @@ export default function OG() {
                 borderRadius: 9999,
                 background: "rgba(255,255,255,0.06)",
                 border: "1px solid rgba(255,255,255,0.16)",
-                position: "relative",
-                display: "block",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
+              {/* DREIECK als Block, NICHT absolut */}
               <div
                 style={{
-                  position: "absolute",
-                  left: 5,
-                  right: 5,
-                  top: 2,
                   width: 0,
                   height: 0,
                   borderLeft: "6px solid transparent",
@@ -70,14 +69,15 @@ export default function OG() {
               />
             </div>
           </div>
-          <span>AI Mastery Lab</span>
+
+          {/* LABEL */}
+          <div>AI Mastery Lab</div>
         </div>
 
-        {/* Titel + Untertitel: 2 Geschwister → der Wrapper bekommt display:flex + column */}
+        {/* CONTENT: 2 Kinder → display:flex + column */}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              // H1 als DIV, um nur erlaubte CSS zu nutzen
               fontSize: 72,
               lineHeight: 1.05,
               margin: 0,
@@ -99,7 +99,7 @@ export default function OG() {
           </div>
         </div>
 
-        {/* Footer-Zeile: 2 Kinder → display:flex */}
+        {/* FOOTER: 2 Kinder → display:flex */}
         <div
           style={{
             marginTop: "auto",
@@ -110,8 +110,8 @@ export default function OG() {
             color: "#A1A1AA",
           }}
         >
-          <span>ai-news-site-alpha.vercel.app</span>
-          <span>Learn • Build • Automate</span>
+          <div>ai-news-site-alpha.vercel.app</div>
+          <div>Learn • Build • Automate</div>
         </div>
       </div>
     ),
