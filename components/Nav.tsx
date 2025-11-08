@@ -1,51 +1,64 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 const LINKS = [
   { href: '/news', label: 'News' },
   { href: '/guides', label: 'Guides' },
-  { href: '/education', label: 'Education'},
+  { href: '/education', label: 'Education' },
   { href: '/glossary', label: 'Glossary' },
   { href: '/tools', label: 'Tools' },
   { href: '/newsletter', label: 'Newsletter' },
-]
+];
 
-// Styles für aktive vs. normale Links
+// 🔧 Robust: vermeidet false positives (z. B. /news vs /newsletter)
+function isActive(pathname: string, href: string) {
+  if (pathname === href) return true;
+  return pathname.startsWith(href + '/');
+}
+
 function navClass(active: boolean) {
   return [
     'px-2 py-1 rounded-md text-sm transition-colors',
-    active ? 'bg-gray-900 text-white' : 'text-gray-700 hover:bg-gray-100',
-  ].join(' ')
+    active
+      ? 'bg-white/10 text-white'
+      : 'text-zinc-300 hover:bg-white/10 hover:text-white',
+  ].join(' ');
 }
 
 export default function Nav() {
-  const pathname = usePathname()
-  const [open, setOpen] = useState(false)
+  const pathname = usePathname() || '/';
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/40 backdrop-blur supports-[backdrop-filter]:bg-black/40 text-zinc-100">
+      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-6">
         {/* Logo + Title */}
-        <Link href="/" className="flex items-center gap-2 font-semibold" onClick={() => setOpen(false)}>
+        <Link
+          href="/"
+          className="flex items-center gap-2 font-semibold"
+          onClick={() => setOpen(false)}
+        >
+          {/* ✅ Schritt B: Logo + kein Umbruch */}
           <Image
-            src="/icon.png"
+            src="/logo.svg"                // <— statt /icon.png
             alt="AI Mastery Lab"
             width={28}
             height={28}
-            className="rounded-md"
             priority
+            className="shrink-0"
           />
-          <span>AI Mastery Lab</span>
+          <span className="tracking-tight whitespace-nowrap">AI Mastery Lab</span>
         </Link>
 
         {/* Mobile Toggle */}
         <button
-          className="ml-auto inline-flex items-center rounded-md p-2 text-gray-600 hover:bg-gray-100 md:hidden"
-          aria-label="Open menu"
+          className="ml-auto inline-flex items-center rounded-md p-2 text-zinc-300 hover:bg-white/10 md:hidden"
+          aria-label="Toggle menu"
+          aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
         >
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -54,17 +67,17 @@ export default function Nav() {
         </button>
 
         {/* Desktop Nav */}
-        <div className="hidden gap-2 md:flex">
+        <div className="hidden items-center gap-2 md:flex">
           {LINKS.map((l) => (
-            <Link key={l.href} href={l.href} className={navClass(pathname.startsWith(l.href))}>
+            <Link key={l.href} href={l.href} className={navClass(isActive(pathname, l.href))}>
               {l.label}
             </Link>
           ))}
 
-          {/* Kleiner CTA */}
+          {/* CTA */}
           <Link
             href="/newsletter"
-            className="ml-2 rounded-md bg-black px-3 py-1.5 text-sm font-medium text-white hover:opacity-90"
+            className="ml-2 rounded-md bg-white px-3 py-1.5 text-sm font-medium text-black hover:bg-zinc-200"
           >
             Subscribe
           </Link>
@@ -73,13 +86,13 @@ export default function Nav() {
 
       {/* Mobile Drawer */}
       {open && (
-        <div className="border-t bg-white md:hidden">
-          <div className="mx-auto grid max-w-6xl gap-1 px-4 py-3">
+        <div className="border-t border-white/10 bg-black/60 backdrop-blur md:hidden">
+          <div className="mx-auto grid max-w-7xl gap-1 px-4 py-3 md:px-6">
             {LINKS.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className={navClass(pathname.startsWith(l.href))}
+                className={navClass(isActive(pathname, l.href))}
                 onClick={() => setOpen(false)}
               >
                 {l.label}
@@ -87,7 +100,7 @@ export default function Nav() {
             ))}
             <Link
               href="/newsletter"
-              className="mt-2 rounded-md bg-black px-3 py-2 text-center text-sm font-medium text-white"
+              className="mt-2 rounded-md bg-white px-3 py-2 text-center text-sm font-medium text-black hover:bg-zinc-200"
               onClick={() => setOpen(false)}
             >
               Subscribe
@@ -96,5 +109,5 @@ export default function Nav() {
         </div>
       )}
     </header>
-  )
+  );
 }
