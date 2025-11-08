@@ -18,6 +18,7 @@ export default function Icon() {
           justifyContent: "center",
         }}
       >
+        {/* exakt EIN Kind für dieses div */}
         <div
           style={{
             width: 18,
@@ -26,8 +27,12 @@ export default function Icon() {
             background: "rgba(255,255,255,0.06)",
             border: "1px solid rgba(255,255,255,0.16)",
             position: "relative",
+            display: "flex",            // falls später noch etwas dazukommt
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
+          {/* zweites Kind ist absolut positioniert → bleibt 1 „sichtbares“ Kind */}
           <div
             style={{
               position: "absolute",
