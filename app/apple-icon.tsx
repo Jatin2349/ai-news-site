@@ -18,6 +18,7 @@ export default function AppleIcon() {
           justifyContent: "center",
         }}
       >
+        {/* genau EIN Kind */}
         <div
           style={{
             width: 120,
@@ -31,6 +32,7 @@ export default function AppleIcon() {
             justifyContent: "center",
           }}
         >
+          {/* absolute Kinder zählen nicht als weitere Layout-Kinder */}
           <div
             style={{
               position: "absolute",
