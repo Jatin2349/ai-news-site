@@ -46,8 +46,8 @@ export default function Nav() {
           <Image
           src="/logo-aml.png"     // <— neu: dein PNG
           alt="AI Mastery Lab"
-          width={28}
-          height={28}
+          width={32}
+          height={32}
           priority
           className="shrink-0 rounded-[6px]"   // optional: leichte Abrundung
           />
