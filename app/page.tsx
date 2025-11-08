@@ -35,7 +35,6 @@ export default function HomePage() {
       {/* Decorative gradients (client-only) */}
       <BackgroundFXNoSSR />
 
-      <Nav />
       <Hero />
       <Values />
       <WhatYouGet />
