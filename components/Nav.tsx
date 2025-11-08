@@ -44,13 +44,14 @@ export default function Nav() {
         >
           {/* ✅ Schritt B: Logo + kein Umbruch */}
           <Image
-            src="/logo.svg"                // <— statt /icon.png
-            alt="AI Mastery Lab"
-            width={28}
-            height={28}
-            priority
-            className="shrink-0"
+          src="/logo-aml.png"     // <— neu: dein PNG
+          alt="AI Mastery Lab"
+          width={28}
+          height={28}
+          priority
+          className="shrink-0 rounded-[6px]"   // optional: leichte Abrundung
           />
+
           <span className="tracking-tight whitespace-nowrap">AI Mastery Lab</span>
         </Link>
 
