@@ -4,7 +4,7 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 
 // Decorative FX nur clientseitig laden (keine SSR)
-const BackgroundFXNoSSR = dynamic(() => import("./_components/BackgroundFX"), { ssr: false });
+const BackgroundFXNoSSR = dynamic(() => import("./components/BackgroundFX"), { ssr: false });
 
 export default function HomePage() {
   return (
