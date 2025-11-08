@@ -103,7 +103,6 @@ function Hero() {
               <p className="mt-4 text-center text-xs uppercase tracking-[0.2em] text-zinc-300">Learn • Build • Automate</p>
             </div>
           </div>
-          <ShapeCluster />
         </div>
       </div>
     </section>
@@ -243,12 +242,4 @@ function Benefit({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ShapeCluster() {
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-0">
-      <span className="absolute -left-4 top-6 h-16 w-16 rounded-2xl border border-white/10 bg-white/5" />
-      <span className="absolute bottom-6 right-8 h-10 w-10 rounded-full border border-white/10 bg-white/5" />
-      <span className="absolute left-20 bottom-10 h-6 w-24 rounded-full border border-white/10 bg-white/5" />
-    </div>
-  );
-}
+
