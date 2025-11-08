@@ -1,1 +1,8 @@
-<Image src="/logo.svg" alt="AI Mastery Lab" width={36} height={36} />
+<!-- public/logo.svg -->
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="160" rx="28" fill="#0A0B0F"/>
+  <circle cx="80" cy="80" r="52" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.16)"/>
+  <path d="M60 96 L80 40 L100 96 Z" fill="#ffffff"/>
+  <circle cx="80" cy="112" r="6" fill="#ffffff"/>
+  <title>AI Mastery Lab</title>
+</svg>
