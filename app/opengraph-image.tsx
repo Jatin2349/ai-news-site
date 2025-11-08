@@ -9,10 +9,13 @@ export default function OG() {
     (
       <div
         style={{
-          width: 1200, height: 630,
+          width: 1200,
+          height: 630,
           background: "#0A0B0F",
-          display: "flex", flexDirection: "column",
-          padding: 64, color: "white",
+          display: "flex",
+          flexDirection: "column",
+          padding: 64,
+          color: "white",
           fontFamily: "ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto",
         }}
       >
@@ -20,36 +23,47 @@ export default function OG() {
           <div style={{
             position: "absolute", top: -80, left: -80, width: 500, height: 500,
             background: "radial-gradient(closest-side, rgba(236,72,153,0.25), transparent)",
-            borderRadius: "50%", filter: "blur(4px)"
+            borderRadius: "50%"
           }}/>
           <div style={{
             position: "absolute", bottom: -120, right: -80, width: 600, height: 600,
             background: "radial-gradient(closest-side, rgba(99,102,241,0.25), transparent)",
-            borderRadius: "50%", filter: "blur(6px)"
+            borderRadius: "50%"
           }}/>
-          <div style={{ position: "relative", zIndex: 10 }}>
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 12,
-              fontSize: 28, color: "#D4D4D8", marginBottom: 16,
-            }}>
+          <div style={{ position: "relative" }}>
+            <div
+              style={{
+                // zuvor inline-flex -> flex (inline-flex ist nicht erlaubt)
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                fontSize: 28,
+                color: "#D4D4D8",
+                marginBottom: 16,
+              }}
+            >
               <div style={{
                 width: 40, height: 40, borderRadius: 12, background: "#0A0B0F",
-                display: "grid", placeItems: "center", border: "1px solid rgba(255,255,255,0.15)"
+                display: "flex", alignItems: "center", justifyContent: "center",
+                border: "1px solid rgba(255,255,255,0.15)"
               }}>
                 <div style={{
                   width: 18, height: 18, borderRadius: 9999,
-                  background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.16)",
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.16)",
                   position: "relative",
                 }}>
                   <div style={{
                     position: "absolute", left: 4, right: 4, top: 2,
                     width: 0, height: 0, borderLeft: "6px solid transparent",
-                    borderRight: "6px solid transparent", borderBottom: "12px solid white"
+                    borderRight: "6px solid transparent",
+                    borderBottom: "12px solid white"
                   }}/>
                 </div>
               </div>
               AI Mastery Lab
             </div>
+
             <h1 style={{
               fontSize: 72, lineHeight: 1.05, margin: 0,
               backgroundImage: "linear-gradient(135deg, #fff, #d4d4d8 70%)",
