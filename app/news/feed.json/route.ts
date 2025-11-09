@@ -7,7 +7,7 @@ export async function GET() {
   const items = (news as any[]).slice(0, 20).map((n) => {
     const slug = n.slug ?? "";
     return {
-      id: n.id ?? slug || String(n.title ?? Math.random()),
+      id: String(n.id ?? (slug || n.title) ?? Math.random()),
       url: `${BASE}/news/${slug}`,
       title: n.title ?? "Untitled",
       content_text: n.summary ?? "",
