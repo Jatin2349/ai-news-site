@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import news from "@/data/news.json";
+import news from "../../../data/news.json";
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-news-site-alpha.vercel.app";
 
