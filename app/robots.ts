@@ -1,16 +1,9 @@
-// app/robots.ts
-import type { MetadataRoute } from "next";
+import type { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-news-site-alpha.vercel.app";
-
+  const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-news-site-alpha.vercel.app'
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-      },
-    ],
-    sitemap: `${base}/sitemap.xml`,
-  };
+    rules: { userAgent: '*', allow: '/' },
+    sitemap: `${BASE}/sitemap.xml`,
+  }
 }
