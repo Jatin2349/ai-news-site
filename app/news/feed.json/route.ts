@@ -1,28 +1,29 @@
-// app/news/feed.json/route.ts
-// JSON Feed v1 – später echte News einspielen.
-export const dynamic = "force-static";
+import { NextResponse } from "next/server";
+import news from "@/data/news.json";
+
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-news-site-alpha.vercel.app";
 
 export async function GET() {
-  const base =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ai-news-site-alpha.vercel.app";
+  const items = (news as any[]).slice(0, 20).map((n) => {
+    const slug = n.slug ?? "";
+    return {
+      id: n.id ?? slug || String(n.title ?? Math.random()),
+      url: `${BASE}/news/${slug}`,
+      title: n.title ?? "Untitled",
+      content_text: n.summary ?? "",
+      date_published: new Date(n.date ?? Date.now()).toISOString(),
+    };
+  });
 
-  const feed = {
+  const body = {
     version: "https://jsonfeed.org/version/1",
     title: "AI Mastery Lab — News",
-    home_page_url: `${base}/news`,
-    feed_url: `${base}/news/feed.json`,
-    items: [
-      {
-        id: "welcome",
-        url: `${base}/news`,
-        title: "Welcome to AI Mastery Lab",
-        content_text: "High-signal AI news.",
-        date_published: new Date().toISOString(),
-      },
-    ],
+    home_page_url: `${BASE}/news`,
+    feed_url: `${BASE}/news/feed.json`,
+    items,
   };
 
-  return new Response(JSON.stringify(feed), {
-    headers: { "Content-Type": "application/feed+json; charset=utf-8" },
+  return NextResponse.json(body, {
+    headers: { "Cache-Control": "public, max-age=300, s-maxage=300" },
   });
 }
