@@ -1,30 +1,14 @@
-// app/sitemap.ts
-import type { MetadataRoute } from "next";
+import type { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://ai-news-site-alpha.vercel.app";
-
-  // Füge hier weitere wichtige Routen hinzu, wenn du neue Seiten anlegst
-  const routes = [
-    "/",
-    "/news",
-    "/guides",
-    "/education",
-    "/tools",
-    "/glossary",
-    "/newsletter",
-    "/about",
-    "/contact",
-    "/privacy",
-  ];
-
-  const now = new Date().toISOString();
+  const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-news-site-alpha.vercel.app'
+  const now = new Date().toISOString()
+  const routes = ['', 'news', 'guides', 'education', 'glossary', 'tools', 'newsletter', 'about', 'contact', 'privacy']
 
   return routes.map((p) => ({
-    url: `${base}${p}`,
+    url: `${BASE}/${p}`.replace(/\/+$/, '').replace(/([^:]\/)\/+/g, '$1'),
     lastModified: now,
-    changeFrequency: "weekly",
-    priority: p === "/" ? 1 : 0.6,
-  }));
+    changeFrequency: p === '' ? 'weekly' : 'weekly',
+    priority: p === '' ? 1 : 0.7,
+  }))
 }
