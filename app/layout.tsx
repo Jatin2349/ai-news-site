@@ -6,30 +6,26 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import SocialBar from "../components/SocialBar";
 
+const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-news-site-alpha.vercel.app';
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://ai-news-site-alpha.vercel.app"),
-  title: {
-    default: "AI Mastery Lab — News & Guides",
-    template: "%s | AI Mastery Lab",
-  },
-  description:
-    "Daily AI news summaries, practical guides from beginner to advanced, and a concise A–Z glossary.",
+  metadataBase: new URL(BASE),
+  title: { default: 'AI Mastery Lab — News & Guides', template: '%s | AI Mastery Lab' },
+  description: 'Daily AI news summaries, practical guides from beginner to advanced, and a concise A–Z glossary.',
   openGraph: {
-    title: "AI Mastery Lab — News & Guides",
-    description:
-      "Curated AI news & education: quick summaries, deep-dive guides, and a concise glossary.",
-    url: "/",
-    siteName: "AI Mastery Lab",
-    images: [{ url: "/opengraph-image.png", width: 1200, height: 630 }],
-    locale: "en_US",
-    type: "website",
+    title: 'AI Mastery Lab — News & Guides',
+    description: 'Curated AI news & education: quick summaries, deep-dive guides, and a concise glossary.',
+    url: BASE,
+    siteName: 'AI Mastery Lab',
+    images: [{ url: '/opengraph-image.png', width: 1200, height: 630 }],
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "AI Mastery Lab — News & Guides",
-    description:
-      "Curated AI news & education: quick summaries, deep-dive guides, and a concise glossary.",
-    images: ["/opengraph-image.png"],
+    card: 'summary_large_image',
+    title: 'AI Mastery Lab — News & Guides',
+    description: 'Curated AI news & education: quick summaries, deep-dive guides, and a concise glossary.',
+    images: ['/opengraph-image.png'],
   },
 };
 
