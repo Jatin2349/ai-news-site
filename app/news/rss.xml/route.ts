@@ -1,16 +1,14 @@
 import { NextResponse } from "next/server";
 import news from "../../../data/news.json";
 
-// Basis-URL aus Env (fällt zurück auf Vercel-URL)
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || "https://ai-news-site-alpha.vercel.app";
 
-// Hilfsfunktion: XML escapen
+// XML escapen
 function escapeXml(s = "") {
   return s.replace(/[<>&'"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", '"': "&quot;" }[c]!));
 }
 
 export async function GET() {
-  // Nimm die neuesten Einträge (max 20)
   const itemsXml = (news as any[])
     .slice(0, 20)
     .map((n) => {
@@ -43,6 +41,9 @@ export async function GET() {
 </rss>`.trim();
 
   return new NextResponse(xml, {
-    headers: { "Content-Type": "application/xml; charset=utf-8", "Cache-Control": "public, max-age=300, s-maxage=300" },
+    headers: {
+      "Content-Type": "application/xml; charset=utf-8",
+      "Cache-Control": "public, max-age=300, s-maxage=300",
+    },
   });
 }
