@@ -3,9 +3,11 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
-import Parser from 'rss-parser';
-import { JSDOM } from 'jsdom';
-import { Readability } from '@mozilla/readability';
+// KEINE Top-Level-ESM-Imports von jsdom/readability!
+// import { JSDOM } from 'jsdom';
+// import { Readability } from '@mozilla/readability';
+// rss-parser auch dynamisch laden, um ESM-Konflikte zu vermeiden
+// import Parser from 'rss-parser';
 
 import { db } from '@/lib/db';
 import { summarizeDynamic } from '@/lib/llm';
@@ -17,22 +19,22 @@ import { SOURCES } from '@/lib/sources';
 const UA = 'AI-Mastery-LabBot/1.0 (+https://example.com)';
 
 async function fetchReadable(url: string): Promise<{ text: string; image: string | null }> {
+  // 1) Versuch mit jsdom/readability (ESM) – dynamisch laden
   try {
-    const res = await fetch(url, { headers: { 'User-Agent': UA } });
+    const { JSDOM } = await import('jsdom');
+    const { Readability } = await import('@mozilla/readability');
+
+    const res = await fetch(url, { headers: { 'User-Agent': UA }, cache: 'no-store' });
     if (!res.ok) return { text: '', image: null };
 
     const html = await res.text();
     const dom = new JSDOM(html, { url });
     const doc = dom.window.document;
 
-    // Readability-Artikel extrahieren
     const reader = new Readability(doc);
     const article = reader.parse();
-
-    // Fallback-Text, falls Readability nichts liefert
     const text = (article?.textContent || '').trim();
 
-    // Bild: erst OG/Twitter, dann erstes <img> aus dem Artikelinhalt
     const ogImage =
       doc.querySelector('meta[property="og:image"]')?.getAttribute('content') ||
       doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content') ||
@@ -45,30 +47,45 @@ async function fetchReadable(url: string): Promise<{ text: string; image: string
         const imgEl = articleDom.window.document.querySelector('img');
         firstImg = imgEl?.getAttribute('src') || null;
       } catch {
-        // ignore
+        /* ignore */
       }
     }
 
     const image = ogImage || firstImg || null;
     return { text, image };
   } catch {
-    return { text: '', image: null };
+    // 2) Fallback ohne jsdom: grobes HTML -> Text
+    try {
+      const res = await fetch(url, { headers: { 'User-Agent': UA }, cache: 'no-store' });
+      if (!res.ok) return { text: '', image: null };
+      const html = await res.text();
+      const text = html
+        .replace(/<script[\s\S]*?<\/script>/gi, '')
+        .replace(/<style[\s\S]*?<\/style>/gi, '')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      return { text, image: null };
+    } catch {
+      return { text: '', image: null };
+    }
   }
 }
 
 export async function GET(req: Request) {
   try {
+    // rss-parser dynamisch importieren, um ESM-Probleme zu vermeiden
+    const Parser = (await import('rss-parser')).default;
     const parser = new Parser({ timeout: 10000 });
+
     let created = 0;
 
     for (const src of SOURCES) {
       try {
-        // rudimentär erkennen, ob wirklich ein Feed vorliegt
         const looksLikeFeed =
           /\.(xml|rss)$/i.test(src.feed) || src.feed.includes('/rss') || src.feed.includes('feeds');
 
         if (!looksLikeFeed) {
-          // Nur als „Quelle“ verlinken, keine Items parsen
           const uhash = urlHash(src.feed);
           const exists = await db.newsItem.findUnique({ where: { urlHash: uhash } });
           if (!exists) {
@@ -96,7 +113,6 @@ export async function GET(req: Request) {
           continue;
         }
 
-        // Feed parsen
         const feed = await parser.parseURL(src.feed);
 
         for (const item of (feed.items ?? []).slice(0, 8)) {
@@ -109,12 +125,10 @@ export async function GET(req: Request) {
 
           const publishedAt = item.isoDate ? new Date(item.isoDate) : new Date();
 
-          // Artikeltext holen
           const { text, image } = await fetchReadable(url);
           const baseText = (text || item.contentSnippet || item.content || title).toString().trim();
           const words = baseText.split(/\s+/).length;
 
-          // Duplicate-Check (ähnliche Titel am gleichen Tag)
           const dayStart = new Date(publishedAt);
           dayStart.setHours(0, 0, 0, 0);
           const sameDay = await db.newsItem.findMany({
@@ -147,10 +161,8 @@ export async function GET(req: Request) {
             continue;
           }
 
-          // Zusammenfassung (LLM)
           const sum = await summarizeDynamic({ title, text: baseText, url });
 
-          // Tagging (Regel + LLM, robust gemerged)
           const basic = ruleCategory({ title, text: baseText });
           let refined: any = null;
           try {
@@ -165,7 +177,6 @@ export async function GET(req: Request) {
             12,
           );
 
-          // Speichern
           await db.newsItem.create({
             data: {
               title,
@@ -198,10 +209,7 @@ export async function GET(req: Request) {
   } catch (err: any) {
     console.error(err);
     return NextResponse.json(
-      {
-        error: String(err?.message || err),
-        stack: err?.stack,
-      },
+      { error: String(err?.message || err), stack: err?.stack },
       { status: 500 },
     );
   }
