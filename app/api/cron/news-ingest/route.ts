@@ -1,216 +1,163 @@
-// app/api/cron/news-ingest/route.ts
+// app/api/news/daily/route.ts
+import { NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-import { NextResponse } from 'next/server';
-// KEINE Top-Level-ESM-Imports von jsdom/readability!
-// import { JSDOM } from 'jsdom';
-// import { Readability } from '@mozilla/readability';
-// rss-parser auch dynamisch laden, um ESM-Konflikte zu vermeiden
-// import Parser from 'rss-parser';
+type BucketKey = 'trends' | 'tools' | 'bigtech' | 'research';
 
-import { db } from '@/lib/db';
-import { summarizeDynamic } from '@/lib/llm';
-import { ruleCategory } from '@/lib/tagging';
-import { refineTags } from '@/lib/tagging-llm';
-import { urlHash, titleSimilarity, domainOf } from '@/lib/text';
-import { SOURCES } from '@/lib/sources';
+const DAILY_BUCKETS: { key: BucketKey; label: string }[] = [
+  { key: 'trends',  label: 'Latest AI Trends' },
+  { key: 'tools',   label: 'New AI Tools' },
+  { key: 'bigtech', label: 'Big AI Companies' },
+  { key: 'research',label: 'Research & Innovation' },
+];
 
-const UA = 'AI-Mastery-LabBot/1.0 (+https://example.com)';
+const BIG_TECH = ['openai','google','deepmind','anthropic','meta','microsoft','xai','amazon','apple','nvidia'];
 
-async function fetchReadable(url: string): Promise<{ text: string; image: string | null }> {
-  // 1) Versuch mit jsdom/readability (ESM) – dynamisch laden
-  try {
-    const { JSDOM } = await import('jsdom');
-    const { Readability } = await import('@mozilla/readability');
+type Row = {
+  id: string;
+  title: string | null;
+  sourceName: string | null;
+  sourceUrl: string;
+  sourceDomain?: string | null;
+  publishedAt: Date | string | null;
+  category: string | null;
+  tags: string[] | null;
+  summary: string | null;
+  createdAt?: Date | string | null;
+};
 
-    const res = await fetch(url, { headers: { 'User-Agent': UA }, cache: 'no-store' });
-    if (!res.ok) return { text: '', image: null };
-
-    const html = await res.text();
-    const dom = new JSDOM(html, { url });
-    const doc = dom.window.document;
-
-    const reader = new Readability(doc);
-    const article = reader.parse();
-    const text = (article?.textContent || '').trim();
-
-    const ogImage =
-      doc.querySelector('meta[property="og:image"]')?.getAttribute('content') ||
-      doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content') ||
-      null;
-
-    let firstImg: string | null = null;
-    if (article?.content) {
-      try {
-        const articleDom = new JSDOM(article.content);
-        const imgEl = articleDom.window.document.querySelector('img');
-        firstImg = imgEl?.getAttribute('src') || null;
-      } catch {
-        /* ignore */
-      }
-    }
-
-    const image = ogImage || firstImg || null;
-    return { text, image };
-  } catch {
-    // 2) Fallback ohne jsdom: grobes HTML -> Text
-    try {
-      const res = await fetch(url, { headers: { 'User-Agent': UA }, cache: 'no-store' });
-      if (!res.ok) return { text: '', image: null };
-      const html = await res.text();
-      const text = html
-        .replace(/<script[\s\S]*?<\/script>/gi, '')
-        .replace(/<style[\s\S]*?<\/style>/gi, '')
-        .replace(/<[^>]+>/g, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-      return { text, image: null };
-    } catch {
-      return { text: '', image: null };
-    }
-  }
+function toText(a: Row): string {
+  const title = a.title ?? '';
+  const src   = a.sourceName ?? '';
+  const tags  = Array.isArray(a.tags) ? a.tags.join(' ') : '';
+  const dom   = a.sourceDomain ?? '';
+  return `${title} ${src} ${tags} ${dom}`.toLowerCase();
 }
 
-export async function GET(req: Request) {
-  try {
-    // rss-parser dynamisch importieren, um ESM-Probleme zu vermeiden
-    const Parser = (await import('rss-parser')).default;
-    const parser = new Parser({ timeout: 10000 });
+function inferBucket(a: Row): BucketKey {
+  const t = toText(a);
+  if (BIG_TECH.some(s => t.includes(s))) return 'bigtech';
+  if (t.includes('arxiv') || t.includes('paper') || t.includes('research') || t.includes('study')) return 'research';
+  if (t.includes('tool') || t.includes('plugin') || t.includes('model release') || t.includes('sdk')) return 'tools';
+  return 'trends';
+}
 
-    let created = 0;
+function score(a: Row): number {
+  const tsRaw = a.publishedAt ?? a.createdAt;
+  const ts = tsRaw ? new Date(tsRaw).getTime() : Date.now();
+  const ageHours = Math.max(1, (Date.now() - ts) / (1000 * 60 * 60));
+  let s = 1000 / ageHours;
+  const txt = toText(a);
+  if (BIG_TECH.some(b => txt.includes(b))) s += 2;
+  if ((a.summary?.length ?? 0) > 200) s += 1;
+  return s;
+}
 
-    for (const src of SOURCES) {
-      try {
-        const looksLikeFeed =
-          /\.(xml|rss)$/i.test(src.feed) || src.feed.includes('/rss') || src.feed.includes('feeds');
+export async function GET() {
+  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-        if (!looksLikeFeed) {
-          const uhash = urlHash(src.feed);
-          const exists = await db.newsItem.findUnique({ where: { urlHash: uhash } });
-          if (!exists) {
-            await db.newsItem.create({
-              data: {
-                title: src.name,
-                sourceUrl: src.feed,
-                sourceName: src.name,
-                sourceDomain: domainOf(src.feed),
-                publishedAt: new Date(),
-                summary: 'Visit source for latest updates.',
-                keypoints: [],
-                category: 'CURRENT_NEWS',
-                tags: ['source'],
-                keywords: [],
-                imageUrl: null,
-                lang: 'en',
-                words: 0,
-                urlHash: uhash,
-                status: 'PUBLISHED',
-              },
-            });
-            created++;
-          }
-          continue;
-        }
+  // 1) Letzte 24h
+  let pool = await db.newsItem.findMany({
+    where: { publishedAt: { gte: since24h } },
+    orderBy: { publishedAt: 'desc' },
+    take: 120,
+    select: {
+      id: true,
+      title: true,
+      sourceName: true,
+      sourceUrl: true,
+      sourceDomain: true,
+      publishedAt: true,
+      category: true,
+      tags: true,
+      summary: true,
+      createdAt: true,
+    },
+  });
 
-        const feed = await parser.parseURL(src.feed);
-
-        for (const item of (feed.items ?? []).slice(0, 8)) {
-          const url = (item.link || '').trim();
-          const title = (item.title || '').trim();
-          if (!url || !title) continue;
-
-          const uhash = urlHash(url);
-          if (await db.newsItem.findUnique({ where: { urlHash: uhash } })) continue;
-
-          const publishedAt = item.isoDate ? new Date(item.isoDate) : new Date();
-
-          const { text, image } = await fetchReadable(url);
-          const baseText = (text || item.contentSnippet || item.content || title).toString().trim();
-          const words = baseText.split(/\s+/).length;
-
-          const dayStart = new Date(publishedAt);
-          dayStart.setHours(0, 0, 0, 0);
-          const sameDay = await db.newsItem.findMany({
-            where: { publishedAt: { gte: dayStart } },
-            orderBy: { publishedAt: 'desc' },
-            take: 50,
-          });
-          const dup = sameDay.find((x) => titleSimilarity(x.title, title) >= 0.92);
-          if (dup) {
-            await db.newsItem.create({
-              data: {
-                title,
-                sourceUrl: url,
-                sourceName: src.name,
-                sourceDomain: domainOf(url),
-                publishedAt,
-                summary: 'Duplicate of another item.',
-                keypoints: [],
-                category: 'CURRENT_NEWS',
-                tags: ['duplicate'],
-                keywords: [],
-                imageUrl: image,
-                lang: 'en',
-                words,
-                urlHash: uhash,
-                isDuplicateOf: dup.id,
-                status: 'PUBLISHED',
-              },
-            });
-            continue;
-          }
-
-          const sum = await summarizeDynamic({ title, text: baseText, url });
-
-          const basic = ruleCategory({ title, text: baseText });
-          let refined: any = null;
-          try {
-            refined = await refineTags({ title, text: baseText });
-          } catch {}
-          const category = (refined?.category || basic.category) as any;
-          const tags = Array.from(
-            new Set([...(basic.tags || []), ...((refined?.tags as string[]) || [])]),
-          );
-          const keywords = Array.from(new Set(((refined?.keywords as string[]) || []))).slice(
-            0,
-            12,
-          );
-
-          await db.newsItem.create({
-            data: {
-              title,
-              sourceUrl: url,
-              sourceName: src.name,
-              sourceDomain: domainOf(url),
-              publishedAt,
-              summary: sum.summary,
-              keypoints: sum.keypoints || [],
-              category,
-              tags,
-              keywords,
-              imageUrl: image,
-              lang: 'en',
-              words,
-              urlHash: uhash,
-              status: 'PUBLISHED',
-            },
-          });
-
-          created++;
-        }
-      } catch (err) {
-        console.warn('Source failed:', src.name, err);
-        continue;
-      }
-    }
-
-    return NextResponse.json({ ok: true, created });
-  } catch (err: any) {
-    console.error(err);
-    return NextResponse.json(
-      { error: String(err?.message || err), stack: err?.stack },
-      { status: 500 },
-    );
+  // 2) Fallback 72h
+  if (pool.length < 6) {
+    const since72h = new Date(Date.now() - 72 * 60 * 60 * 1000);
+    const fallback = await db.newsItem.findMany({
+      where: { publishedAt: { gte: since72h } },
+      orderBy: { publishedAt: 'desc' },
+      take: 120,
+      select: {
+        id: true,
+        title: true,
+        sourceName: true,
+        sourceUrl: true,
+        sourceDomain: true,
+        publishedAt: true,
+        category: true,
+        tags: true,
+        summary: true,
+        createdAt: true,
+      },
+    });
+    pool = fallback;
   }
+
+  // 3) Buckets + Score  (hier casten wir einmalig, um TS zufrieden zu stellen)
+  const enriched = (pool as unknown as Row[]).map((a) => ({
+    ...a,
+    _bucket: (a.category ? String(a.category).toLowerCase() : inferBucket(a)) as BucketKey,
+    _score: score(a),
+  }));
+
+  // 4) Top 1 je Bucket
+  const chosen: {
+    id: string;
+    bucket: string;
+    title: string | null;
+    sourceName: string | null;
+    sourceUrl: string;
+    publishedAt: Date | string | null;
+    summary: string | null;
+  }[] = [];
+
+  for (const bucket of DAILY_BUCKETS) {
+    const inBucket = enriched
+      .filter(r => r._bucket === bucket.key)
+      .sort((r1, r2) => r2._score - r1._score);
+
+    if (inBucket[0]) {
+      const top = inBucket[0];
+      chosen.push({
+        id: top.id,
+        bucket: bucket.label,
+        title: top.title,
+        sourceName: top.sourceName,
+        sourceUrl: top.sourceUrl,
+        publishedAt: top.publishedAt,
+        summary: top.summary,
+      });
+    }
+  }
+
+  // 5) Auffüllen bis 4
+  if (chosen.length < DAILY_BUCKETS.length) {
+    const picked = new Set(chosen.map(x => x.id));
+    const trends = enriched
+      .filter(r => !picked.has(r.id))
+      .sort((r1, r2) => r2._score - r1._score);
+
+    for (const t of trends) {
+      if (chosen.length >= DAILY_BUCKETS.length) break;
+      chosen.push({
+        id: t.id,
+        bucket: 'Latest AI Trends',
+        title: t.title,
+        sourceName: t.sourceName,
+        sourceUrl: t.sourceUrl,
+        publishedAt: t.publishedAt,
+        summary: t.summary,
+      });
+    }
+  }
+
+  return NextResponse.json(chosen);
 }
