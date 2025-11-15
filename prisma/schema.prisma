@@ -1,0 +1,45 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model NewsItem {
+  id            String     @id @default(cuid())
+  title         String
+  sourceUrl     String     @unique
+  sourceName    String
+  sourceDomain  String?
+  publishedAt   DateTime
+  summary       String
+  keypoints     Json       // JSON-Array (z. B. string[])
+  category      Category
+  tags          Json?      // optional JSON-Array
+  keywords      Json?      // optional JSON-Array
+  imageUrl      String?
+  lang          String     @default("en")
+  words         Int?
+  urlHash       String     @unique
+  isDuplicateOf String?
+  status        NewsStatus @default(PUBLISHED)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+enum Category {
+  CURRENT_NEWS
+  NEW_TOOLS
+  MODEL_INFRA_UPDATES
+  POLICY_SAFETY
+  RESEARCH
+  BUSINESS_MARKET
+}
+
+enum NewsStatus {
+  DRAFT
+  PUBLISHED
+}
