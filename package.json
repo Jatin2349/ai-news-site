@@ -7,7 +7,9 @@
     "validate:data": "node scripts/validate-data.mjs",
     "build": "npm run fix:data && npm run validate:data && next build",
     "dev": "next dev",
-    "start": "next start"
+    "start": "next start",
+    "vercel-build": "npm run fix:data && npm run validate:data && prisma migrate deploy && prisma generate && next build",
+    "deploy": "vercel deploy --prod"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
