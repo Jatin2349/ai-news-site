@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "functions": {
-    "app/api/**/route.ts": { "runtime": "nodejs18.x" }
-  },
   "crons": [
     { "path": "/api/cron/news-ingest", "schedule": "0 6 * * *" }
   ]
