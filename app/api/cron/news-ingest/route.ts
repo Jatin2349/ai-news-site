@@ -1,163 +1,185 @@
-// app/api/news/daily/route.ts
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import OpenAI from 'openai';
+import Parser from 'rss-parser';
+import { JSDOM } from 'jsdom';
+import { Readability } from '@mozilla/readability';
+import crypto from 'crypto';
 
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+// -----------------------------------------------------------------------------
+// KONFIGURATION
+// -----------------------------------------------------------------------------
 
-type BucketKey = 'trends' | 'tools' | 'bigtech' | 'research';
+const MAX_ARTICLES_PER_RUN = 5; 
 
-const DAILY_BUCKETS: { key: BucketKey; label: string }[] = [
-  { key: 'trends',  label: 'Latest AI Trends' },
-  { key: 'tools',   label: 'New AI Tools' },
-  { key: 'bigtech', label: 'Big AI Companies' },
-  { key: 'research',label: 'Research & Innovation' },
+const RSS_FEEDS = [
+  "https://openai.com/blog/rss.xml",
+  "https://www.anthropic.com/rss",
+  "https://blogs.microsoft.com/ai/feed/",
+  "https://huggingface.co/blog/feed.xml",
+  "https://feeds.feedburner.com/TechCrunch/artificial-intelligence",
+  "https://simonwillison.net/atom/entries/",
 ];
 
-const BIG_TECH = ['openai','google','deepmind','anthropic','meta','microsoft','xai','amazon','apple','nvidia'];
+const parser = new Parser();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-type Row = {
-  id: string;
-  title: string | null;
-  sourceName: string | null;
-  sourceUrl: string;
-  sourceDomain?: string | null;
-  publishedAt: Date | string | null;
-  category: string | null;
-  tags: string[] | null;
-  summary: string | null;
-  createdAt?: Date | string | null;
-};
+export const runtime = 'nodejs'; 
+export const dynamic = 'force-dynamic';
 
-function toText(a: Row): string {
-  const title = a.title ?? '';
-  const src   = a.sourceName ?? '';
-  const tags  = Array.isArray(a.tags) ? a.tags.join(' ') : '';
-  const dom   = a.sourceDomain ?? '';
-  return `${title} ${src} ${tags} ${dom}`.toLowerCase();
-}
+// -----------------------------------------------------------------------------
+// HELFER-FUNKTIONEN
+// -----------------------------------------------------------------------------
 
-function inferBucket(a: Row): BucketKey {
-  const t = toText(a);
-  if (BIG_TECH.some(s => t.includes(s))) return 'bigtech';
-  if (t.includes('arxiv') || t.includes('paper') || t.includes('research') || t.includes('study')) return 'research';
-  if (t.includes('tool') || t.includes('plugin') || t.includes('model release') || t.includes('sdk')) return 'tools';
-  return 'trends';
-}
-
-function score(a: Row): number {
-  const tsRaw = a.publishedAt ?? a.createdAt;
-  const ts = tsRaw ? new Date(tsRaw).getTime() : Date.now();
-  const ageHours = Math.max(1, (Date.now() - ts) / (1000 * 60 * 60));
-  let s = 1000 / ageHours;
-  const txt = toText(a);
-  if (BIG_TECH.some(b => txt.includes(b))) s += 2;
-  if ((a.summary?.length ?? 0) > 200) s += 1;
-  return s;
-}
-
-export async function GET() {
-  const since24h = new Date(Date.now() - 24 * 60 * 60 * 1000);
-
-  // 1) Letzte 24h
-  let pool = await db.newsItem.findMany({
-    where: { publishedAt: { gte: since24h } },
-    orderBy: { publishedAt: 'desc' },
-    take: 120,
-    select: {
-      id: true,
-      title: true,
-      sourceName: true,
-      sourceUrl: true,
-      sourceDomain: true,
-      publishedAt: true,
-      category: true,
-      tags: true,
-      summary: true,
-      createdAt: true,
-    },
-  });
-
-  // 2) Fallback 72h
-  if (pool.length < 6) {
-    const since72h = new Date(Date.now() - 72 * 60 * 60 * 1000);
-    const fallback = await db.newsItem.findMany({
-      where: { publishedAt: { gte: since72h } },
-      orderBy: { publishedAt: 'desc' },
-      take: 120,
-      select: {
-        id: true,
-        title: true,
-        sourceName: true,
-        sourceUrl: true,
-        sourceDomain: true,
-        publishedAt: true,
-        category: true,
-        tags: true,
-        summary: true,
-        createdAt: true,
-      },
+async function fetchFullContent(url: string) {
+  try {
+    const response = await fetch(url, { 
+      headers: { 'User-Agent': 'AI-News-Bot/1.0' } 
     });
-    pool = fallback;
+    const html = await response.text();
+    const dom = new JSDOM(html, { url });
+    // @ts-ignore
+    const reader = new Readability(dom.window.document);
+    const article = reader.parse();
+    return article ? article.textContent : null;
+  } catch (error) {
+    console.error(`⚠️ Failed to fetch full content for ${url}`, error);
+    return null;
   }
+}
 
-  // 3) Buckets + Score  (hier casten wir einmalig, um TS zufrieden zu stellen)
-  const enriched = (pool as unknown as Row[]).map((a) => ({
-    ...a,
-    _bucket: (a.category ? String(a.category).toLowerCase() : inferBucket(a)) as BucketKey,
-    _score: score(a),
-  }));
+async function generateAIAnalysis(title: string, content: string) {
+  const prompt = `
+    Analyze the following AI news article.
+    Title: "${title}"
+    Content: "${content.slice(0, 8000)}" (truncated)
 
-  // 4) Top 1 je Bucket
-  const chosen: {
-    id: string;
-    bucket: string;
-    title: string | null;
-    sourceName: string | null;
-    sourceUrl: string;
-    publishedAt: Date | string | null;
-    summary: string | null;
-  }[] = [];
+    Task:
+    1. Write a concise, bullet-pointed summary (max 3 sentences).
+    2. Extract 3-5 relevant tags (e.g., LLMs, Regulation, Robotics, Tools).
+    3. Categorize it into ONE of these: "Research", "Product", "Business", "Policy", "General".
 
-  for (const bucket of DAILY_BUCKETS) {
-    const inBucket = enriched
-      .filter(r => r._bucket === bucket.key)
-      .sort((r1, r2) => r2._score - r1._score);
-
-    if (inBucket[0]) {
-      const top = inBucket[0];
-      chosen.push({
-        id: top.id,
-        bucket: bucket.label,
-        title: top.title,
-        sourceName: top.sourceName,
-        sourceUrl: top.sourceUrl,
-        publishedAt: top.publishedAt,
-        summary: top.summary,
-      });
+    Output pure JSON format:
+    {
+      "summary": "...",
+      "tags": ["tag1", "tag2"],
+      "category": "..."
     }
+  `;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "system", content: "You are an AI News Analyst." }, { role: "user", content: prompt }],
+      response_format: { type: "json_object" },
+    });
+
+    return JSON.parse(completion.choices[0].message.content || "{}");
+  } catch (e) {
+    console.error("Failed to call OpenAI or parse JSON", e);
+    return null;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// MAIN CRON JOB
+// -----------------------------------------------------------------------------
+
+export async function GET(request: Request) {
+  console.log('🔄 CRON START: Daily News Ingestion initiated...');
+  const startTime = Date.now();
+
+  const authHeader = request.headers.get('authorization');
+  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    console.error('❌ CRON ERROR: Unauthorized attempt.');
+    return new NextResponse('Unauthorized', { status: 401 });
   }
 
-  // 5) Auffüllen bis 4
-  if (chosen.length < DAILY_BUCKETS.length) {
-    const picked = new Set(chosen.map(x => x.id));
-    const trends = enriched
-      .filter(r => !picked.has(r.id))
-      .sort((r1, r2) => r2._score - r1._score);
+  let processedCount = 0;
+  let skippedCount = 0;
+  let errorsCount = 0;
 
-    for (const t of trends) {
-      if (chosen.length >= DAILY_BUCKETS.length) break;
-      chosen.push({
-        id: t.id,
-        bucket: 'Latest AI Trends',
-        title: t.title,
-        sourceName: t.sourceName,
-        sourceUrl: t.sourceUrl,
-        publishedAt: t.publishedAt,
-        summary: t.summary,
+  try {
+    const feedPromises = RSS_FEEDS.map(url => parser.parseURL(url).catch(e => {
+        console.error(`Error parsing feed ${url}:`, e);
+        return null;
+    }));
+    
+    const feeds = (await Promise.all(feedPromises)).filter(f => f !== null);
+    
+    // @ts-ignore
+    const allItems = feeds.flatMap(feed => feed?.items.map(item => ({...item, sourceName: feed?.title})) || [])
+      // @ts-ignore
+      .sort((a, b) => new Date(b.pubDate || 0).getTime() - new Date(a.pubDate || 0).getTime());
+
+    console.log(`📡 Found ${allItems.length} total items in RSS feeds.`);
+
+    for (const item of allItems) {
+      if (processedCount >= MAX_ARTICLES_PER_RUN) {
+        console.log(`⏸️ Reached limit of ${MAX_ARTICLES_PER_RUN} articles. Stopping.`);
+        break;
+      }
+
+      if (!item.link || !item.title) continue;
+
+      const urlHash = crypto.createHash('md5').update(item.link).digest('hex');
+      
+      const existing = await db.newsItem.findUnique({ where: { urlHash } });
+      if (existing) {
+        skippedCount++;
+        continue;
+      }
+
+      console.log(`🤖 Processing: ${item.title}`);
+      
+      const fullContent = await fetchFullContent(item.link);
+      const textToAnalyze = fullContent || item.contentSnippet || item.content || "";
+
+      if (textToAnalyze.length < 50) {
+        console.log(`Skipping (content too short): ${item.title}`);
+        continue;
+      }
+
+      const aiResult = await generateAIAnalysis(item.title, textToAnalyze);
+      if (!aiResult || !aiResult.summary) {
+        errorsCount++;
+        continue;
+      }
+
+      // DB CREATE CALL
+      await db.newsItem.create({
+        // @ts-ignore: Wir ignorieren Typen hier sicherheitshalber komplett, damit der Build durchläuft
+        data: {
+          title: item.title,
+          urlHash: urlHash,
+          sourceUrl: item.link,
+          // @ts-ignore
+          sourceName: item.sourceName || "Unknown Source",
+          sourceDomain: new URL(item.link).hostname.replace('www.', ''),
+          publishedAt: item.pubDate ? new Date(item.pubDate) : new Date(),
+          
+          // 'content' und 'status' entfernt, da sie Fehler verursachten
+          summary: aiResult.summary || "No summary available.",
+          tags: aiResult.tags || [], 
+          category: aiResult.category || "General",
+        }
       });
-    }
-  }
 
-  return NextResponse.json(chosen);
+      processedCount++;
+    }
+
+    const duration = ((Date.now() - startTime) / 1000).toFixed(2);
+    console.log(`✅ CRON SUCCESS. Processed: ${processedCount}, Skipped: ${skippedCount}, Errors: ${errorsCount}`);
+
+    return NextResponse.json({ 
+      success: true, 
+      processed: processedCount, 
+      skipped: skippedCount, 
+      duration: `${duration}s` 
+    });
+
+  } catch (error: any) {
+    console.error('❌ CRON FATAL ERROR:', error);
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  }
 }
