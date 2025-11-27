@@ -10,7 +10,6 @@ import crypto from 'crypto';
 
 const MAX_ARTICLES_PER_RUN = 15; 
 
-// Deine erweiterte Quellen-Liste
 const RSS_FEEDS = [
   "https://openai.com/blog/rss.xml",
   "https://www.anthropic.com/rss",
@@ -34,6 +33,20 @@ export const dynamic = 'force-dynamic';
 // HELFER
 // -----------------------------------------------------------------------------
 
+// Übersetzt KI-Antworten in deine Datenbank-Enums
+function mapCategory(aiCategory: string): string {
+  const cat = aiCategory.toLowerCase();
+  
+  // WICHTIG: Diese Strings müssen exakt mit deinem Prisma Enum übereinstimmen!
+  if (cat.includes('business') || cat.includes('market')) return 'BUSINESS_MARKET';
+  if (cat.includes('research') || cat.includes('paper')) return 'RESEARCH';
+  if (cat.includes('policy') || cat.includes('safety') || cat.includes('regulation')) return 'POLICY_SAFETY';
+  if (cat.includes('tool') || cat.includes('product') || cat.includes('app')) return 'NEW_TOOLS';
+  if (cat.includes('model') || cat.includes('infra') || cat.includes('compute')) return 'MODEL_INFRA_UPDATES';
+  
+  return 'CURRENT_NEWS';
+}
+
 async function generateAIAnalysis(openai: OpenAI, title: string, content: string) {
   const safeContent = content ? content.slice(0, 2000) : "No content available";
 
@@ -45,7 +58,7 @@ async function generateAIAnalysis(openai: OpenAI, title: string, content: string
     Task:
     1. Summary (max 3 sentences).
     2. Extract 3-5 tags.
-    3. Category: "Research", "Product", "Business", "Policy", "General".
+    3. Category. Choose ONE that fits best: "Business", "Research", "Policy", "Tools", "Model Updates", "News".
     4. Keypoints: Extract exactly 3 short key takeaways (array of strings).
 
     Output pure JSON:
@@ -75,24 +88,25 @@ async function generateAIAnalysis(openai: OpenAI, title: string, content: string
 // -----------------------------------------------------------------------------
 
 export async function GET(request: Request) {
-  console.log('🔄 CRON START (Final Keypoints Fix)...');
+  console.log('🔄 CRON START (Category Type Fix)...');
   
   try {
-      // 1. Auth Check
       const authHeader = request.headers.get('authorization');
       if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
         return new NextResponse('Unauthorized', { status: 401 });
       }
 
-      // 2. OpenAI Init
       if (!process.env.OPENAI_API_KEY) throw new Error("Missing OPENAI_API_KEY");
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
       let processedCount = 0;
       let skippedCount = 0;
 
-      // 3. Feeds laden
-      const feedPromises = RSS_FEEDS.map(url => parser.parseURL(url).catch(e => null));
+      const feedPromises = RSS_FEEDS.map(url => parser.parseURL(url).catch(e => {
+        console.warn(`Feed Error (${url}):`, e.message);
+        return null;
+      }));
+      
       const feeds = (await Promise.all(feedPromises)).filter(f => f !== null);
       
       // @ts-ignore
@@ -102,14 +116,12 @@ export async function GET(request: Request) {
 
       console.log(`📡 Found ${allItems.length} total items.`);
 
-      // 4. Verarbeiten
       for (const item of allItems) {
         if (processedCount >= MAX_ARTICLES_PER_RUN) break;
         if (!item.link || !item.title) continue;
 
         const urlHash = crypto.createHash('md5').update(item.link).digest('hex');
         
-        // Dubletten-Check
         const existing = await db.newsItem.findUnique({ where: { urlHash } });
         if (existing) {
             skippedCount++;
@@ -125,8 +137,10 @@ export async function GET(request: Request) {
         const aiResult = await generateAIAnalysis(openai, item.title, textToAnalyze);
         
         if (aiResult?.summary) {
+            // Kategorie bestimmen
+            const finalCategory = mapCategory(aiResult.category || "");
+
             await db.newsItem.create({
-              // @ts-ignore
               data: {
                 title: item.title,
                 urlHash: urlHash,
@@ -136,13 +150,12 @@ export async function GET(request: Request) {
                 sourceDomain: new URL(item.link).hostname.replace('www.', ''),
                 publishedAt: item.pubDate ? new Date(item.pubDate) : new Date(),
                 
-                // KEIN 'content' Feld (da nicht in DB)
-                
                 summary: aiResult.summary,
                 tags: aiResult.tags || [], 
-                category: aiResult.category || "General",
+                
+                // ✅ HIER IST DER FIX: 'as any' zwingt TypeScript, den String zu akzeptieren
+                category: finalCategory as any,
 
-                // ✅ HIER IST DER FIX: Keypoints werden jetzt übergeben!
                 keypoints: aiResult.keypoints || [], 
               }
             });
