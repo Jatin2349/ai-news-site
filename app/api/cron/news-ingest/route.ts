@@ -8,29 +8,20 @@ import crypto from 'crypto';
 // KONFIGURATION
 // -----------------------------------------------------------------------------
 
-// Wir erhöhen das Limit leicht, da wir jetzt mehr Quellen haben.
-// Bei 10 Quellen x 1 neuer Artikel sind das 10 Artikel.
-// Vercel schafft das meistens in 10-15 Sekunden.
 const MAX_ARTICLES_PER_RUN = 15; 
 
-// ERWEITERTE QUELLEN-LISTE
 const RSS_FEEDS = [
-  // --- BIG TECH & LABS ---
   "https://openai.com/blog/rss.xml",
   "https://www.anthropic.com/rss",
-  "https://blog.google/technology/ai/rss/", // Google DeepMind / AI Updates
+  "https://blog.google/technology/ai/rss/",
   "https://blogs.microsoft.com/ai/feed/",
   "https://aws.amazon.com/blogs/machine-learning/feed/",
   "https://blogs.nvidia.com/blog/category/deep-learning/feed/",
-  
-  // --- TECH & COMMUNITY ---
   "https://huggingface.co/blog/feed.xml",
-  "https://simonwillison.net/atom/entries/", // Exzellente Analysen
-  "https://www.kdnuggets.com/feed",          // Data Science & AI
-
-  // --- NEWS & RESEARCH ---
+  "https://simonwillison.net/atom/entries/",
+  "https://www.kdnuggets.com/feed",
   "https://feeds.feedburner.com/TechCrunch/artificial-intelligence",
-  "https://news.mit.edu/rss/topic/artificial-intelligence2", // MIT Forschung
+  "https://news.mit.edu/rss/topic/artificial-intelligence2",
 ];
 
 const parser = new Parser();
@@ -43,7 +34,6 @@ export const dynamic = 'force-dynamic';
 // -----------------------------------------------------------------------------
 
 async function generateAIAnalysis(openai: OpenAI, title: string, content: string) {
-  // Sicherheit: Inhalt kürzen
   const safeContent = content ? content.slice(0, 2000) : "No content available";
 
   const prompt = `
@@ -55,8 +45,15 @@ async function generateAIAnalysis(openai: OpenAI, title: string, content: string
     1. Summary (max 3 sentences).
     2. Extract 3-5 tags.
     3. Category: "Research", "Product", "Business", "Policy", "General".
+    4. Keypoints: Extract 3 distinct key takeaways (array of strings).
 
-    Output JSON: {"summary": "...", "tags": [], "category": "..."}
+    Output pure JSON: 
+    {
+      "summary": "...", 
+      "tags": ["..."], 
+      "category": "...",
+      "keypoints": ["...", "..."]
+    }
   `;
 
   try {
@@ -77,31 +74,27 @@ async function generateAIAnalysis(openai: OpenAI, title: string, content: string
 // -----------------------------------------------------------------------------
 
 export async function GET(request: Request) {
-  console.log('🔄 CRON START (Extended Sources)...');
+  console.log('🔄 CRON START (Final Fix)...');
   
   try {
-      // 1. Auth Check
       const authHeader = request.headers.get('authorization');
       if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
         return new NextResponse('Unauthorized', { status: 401 });
       }
 
-      // 2. OpenAI Check
       if (!process.env.OPENAI_API_KEY) throw new Error("Missing OPENAI_API_KEY");
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
       let processedCount = 0;
       let skippedCount = 0;
 
-      // 3. Feeds laden (Parallel)
       const feedPromises = RSS_FEEDS.map(url => parser.parseURL(url).catch(e => {
-        console.warn(`Feed Error (${url}):`, e.message); // Nur Warnung, kein Abbruch
+        console.warn(`Feed Error (${url}):`, e.message);
         return null;
       }));
       
       const feeds = (await Promise.all(feedPromises)).filter(f => f !== null);
       
-      // Flatten & Sortieren
       // @ts-ignore
       const allItems = feeds.flatMap(feed => feed?.items.map(item => ({...item, sourceName: feed?.title})) || [])
         // @ts-ignore
@@ -109,14 +102,12 @@ export async function GET(request: Request) {
 
       console.log(`📡 Found ${allItems.length} total items.`);
 
-      // 4. Verarbeiten
       for (const item of allItems) {
         if (processedCount >= MAX_ARTICLES_PER_RUN) break;
         if (!item.link || !item.title) continue;
 
         const urlHash = crypto.createHash('md5').update(item.link).digest('hex');
         
-        // Dubletten-Check
         const existing = await db.newsItem.findUnique({ where: { urlHash } });
         if (existing) {
             skippedCount++;
@@ -137,18 +128,20 @@ export async function GET(request: Request) {
               data: {
                 title: item.title,
                 urlHash: urlHash,
-                
-                // HIER IST DER LINK FÜR DEN LESER:
-                sourceUrl: item.link, 
-                
+                sourceUrl: item.link,
                 // @ts-ignore
                 sourceName: item.sourceName || "Unknown",
                 sourceDomain: new URL(item.link).hostname.replace('www.', ''),
                 publishedAt: item.pubDate ? new Date(item.pubDate) : new Date(),
-                // content: textToAnalyze, // ENTFERNT: Verursacht Fehler, da Feld in DB fehlt
+                
+                // ✅ CONTENT ENTFERNT (Feld existiert nicht in DB)
+                
                 summary: aiResult.summary,
                 tags: aiResult.tags || [], 
                 category: aiResult.category || "General",
+                
+                // ✅ KEYPOINTS HINZUGEFÜGT (Feld existiert in DB)
+                keypoints: aiResult.keypoints || [], 
               }
             });
             processedCount++;
@@ -158,8 +151,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ 
           success: true, 
           processed: processedCount, 
-          skipped: skippedCount,
-          sources: RSS_FEEDS.length 
+          skipped: skippedCount
       });
 
   } catch (error: any) {
