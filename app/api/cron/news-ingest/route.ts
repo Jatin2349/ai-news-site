@@ -10,6 +10,7 @@ import crypto from 'crypto';
 
 const MAX_ARTICLES_PER_RUN = 15; 
 
+// Deine erweiterte Quellen-Liste
 const RSS_FEEDS = [
   "https://openai.com/blog/rss.xml",
   "https://www.anthropic.com/rss",
@@ -45,12 +46,12 @@ async function generateAIAnalysis(openai: OpenAI, title: string, content: string
     1. Summary (max 3 sentences).
     2. Extract 3-5 tags.
     3. Category: "Research", "Product", "Business", "Policy", "General".
-    4. Keypoints: Extract 3 distinct key takeaways (array of strings).
+    4. Keypoints: Extract exactly 3 short key takeaways (array of strings).
 
-    Output pure JSON: 
+    Output pure JSON:
     {
-      "summary": "...", 
-      "tags": ["..."], 
+      "summary": "...",
+      "tags": ["..."],
       "category": "...",
       "keypoints": ["...", "..."]
     }
@@ -74,25 +75,24 @@ async function generateAIAnalysis(openai: OpenAI, title: string, content: string
 // -----------------------------------------------------------------------------
 
 export async function GET(request: Request) {
-  console.log('🔄 CRON START (Final Fix)...');
+  console.log('🔄 CRON START (Final Keypoints Fix)...');
   
   try {
+      // 1. Auth Check
       const authHeader = request.headers.get('authorization');
       if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
         return new NextResponse('Unauthorized', { status: 401 });
       }
 
+      // 2. OpenAI Init
       if (!process.env.OPENAI_API_KEY) throw new Error("Missing OPENAI_API_KEY");
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
       let processedCount = 0;
       let skippedCount = 0;
 
-      const feedPromises = RSS_FEEDS.map(url => parser.parseURL(url).catch(e => {
-        console.warn(`Feed Error (${url}):`, e.message);
-        return null;
-      }));
-      
+      // 3. Feeds laden
+      const feedPromises = RSS_FEEDS.map(url => parser.parseURL(url).catch(e => null));
       const feeds = (await Promise.all(feedPromises)).filter(f => f !== null);
       
       // @ts-ignore
@@ -102,12 +102,14 @@ export async function GET(request: Request) {
 
       console.log(`📡 Found ${allItems.length} total items.`);
 
+      // 4. Verarbeiten
       for (const item of allItems) {
         if (processedCount >= MAX_ARTICLES_PER_RUN) break;
         if (!item.link || !item.title) continue;
 
         const urlHash = crypto.createHash('md5').update(item.link).digest('hex');
         
+        // Dubletten-Check
         const existing = await db.newsItem.findUnique({ where: { urlHash } });
         if (existing) {
             skippedCount++;
@@ -134,13 +136,13 @@ export async function GET(request: Request) {
                 sourceDomain: new URL(item.link).hostname.replace('www.', ''),
                 publishedAt: item.pubDate ? new Date(item.pubDate) : new Date(),
                 
-                // ✅ CONTENT ENTFERNT (Feld existiert nicht in DB)
+                // KEIN 'content' Feld (da nicht in DB)
                 
                 summary: aiResult.summary,
                 tags: aiResult.tags || [], 
                 category: aiResult.category || "General",
-                
-                // ✅ KEYPOINTS HINZUGEFÜGT (Feld existiert in DB)
+
+                // ✅ HIER IST DER FIX: Keypoints werden jetzt übergeben!
                 keypoints: aiResult.keypoints || [], 
               }
             });
