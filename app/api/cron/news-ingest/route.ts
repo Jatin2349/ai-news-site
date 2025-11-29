@@ -33,11 +33,9 @@ export const dynamic = 'force-dynamic';
 // HELFER
 // -----------------------------------------------------------------------------
 
-// Übersetzt KI-Antworten in deine Datenbank-Enums
 function mapCategory(aiCategory: string): string {
   const cat = aiCategory.toLowerCase();
   
-  // WICHTIG: Diese Strings müssen exakt mit deinem Prisma Enum übereinstimmen!
   if (cat.includes('business') || cat.includes('market')) return 'BUSINESS_MARKET';
   if (cat.includes('research') || cat.includes('paper')) return 'RESEARCH';
   if (cat.includes('policy') || cat.includes('safety') || cat.includes('regulation')) return 'POLICY_SAFETY';
@@ -50,15 +48,19 @@ function mapCategory(aiCategory: string): string {
 async function generateAIAnalysis(openai: OpenAI, title: string, content: string) {
   const safeContent = content ? content.slice(0, 2000) : "No content available";
 
+  // HIER IST DAS UPDATE: Besserer Prompt für natürlichere Sprache
   const prompt = `
     Analyze this AI news snippet.
     Title: "${title}"
     Content: "${safeContent}"
 
     Task:
-    1. Summary (max 3 sentences).
+    1. Summary (max 3 sentences). 
+       - CRITICAL: Do NOT start with "The article", "This post", "The author", or "It says".
+       - Start directly with the subject (e.g., "Microsoft launched...", "New research reveals...", "AI safety experts warn...").
+       - Use an engaging, journalistic tone.
     2. Extract 3-5 tags.
-    3. Category. Choose ONE that fits best: "Business", "Research", "Policy", "Tools", "Model Updates", "News".
+    3. Category. Choose ONE: "Business", "Research", "Policy", "Tools", "Model Updates", "News".
     4. Keypoints: Extract exactly 3 short key takeaways (array of strings).
 
     Output pure JSON:
@@ -73,7 +75,7 @@ async function generateAIAnalysis(openai: OpenAI, title: string, content: string
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "system", content: "AI News Bot." }, { role: "user", content: prompt }],
+      messages: [{ role: "system", content: "You are a professional tech journalist." }, { role: "user", content: prompt }],
       response_format: { type: "json_object" },
     });
     return JSON.parse(completion.choices[0].message.content || "{}");
@@ -88,7 +90,7 @@ async function generateAIAnalysis(openai: OpenAI, title: string, content: string
 // -----------------------------------------------------------------------------
 
 export async function GET(request: Request) {
-  console.log('🔄 CRON START (Category Type Fix)...');
+  console.log('🔄 CRON START (Improved Prompt)...');
   
   try {
       const authHeader = request.headers.get('authorization');
@@ -137,7 +139,6 @@ export async function GET(request: Request) {
         const aiResult = await generateAIAnalysis(openai, item.title, textToAnalyze);
         
         if (aiResult?.summary) {
-            // Kategorie bestimmen
             const finalCategory = mapCategory(aiResult.category || "");
 
             await db.newsItem.create({
@@ -152,10 +153,7 @@ export async function GET(request: Request) {
                 
                 summary: aiResult.summary,
                 tags: aiResult.tags || [], 
-                
-                // ✅ HIER IST DER FIX: 'as any' zwingt TypeScript, den String zu akzeptieren
                 category: finalCategory as any,
-
                 keypoints: aiResult.keypoints || [], 
               }
             });
