@@ -30,6 +30,47 @@ model NewsItem {
   updatedAt     DateTime   @updatedAt
 }
 
+// Neue Modelle für die Webseite
+
+model Guide {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  summary     String?
+  description String?
+  content     String?  @db.Text // Für langen Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Education {
+  id        String   @id @default(uuid())
+  title     String
+  content   String?  @db.Text
+  order     Int?     @default(0) // Für die Sortierung der Lektionen
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tool {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  url         String
+  pricing     String?  // z.B. "Free", "Paid", "Freemium"
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model GlossaryEntry {
+  id         String   @id @default(uuid())
+  term       String   @unique
+  definition String   @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 enum Category {
   CURRENT_NEWS
   NEW_TOOLS

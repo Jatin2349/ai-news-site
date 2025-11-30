@@ -1,52 +1,63 @@
-import news from "../../data/news.json";
-import Link from "next/link";
+import { db } from '@/lib/db';
 
-const normalize = (s: string) =>
-  String(s || "")
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-_]/g, "")
-    .replace(/[\s_]+/g, "-")
-    .replace(/-+/g, "-");
+export const revalidate = 0;
 
-export const metadata = {
-  title: "Education – AI Mastery Lab",
-  description: "Curated learning bites on LLMs, RAG, agents, safety, and more.",
-};
+function AcademicIcon({ className }: { className?: string }) {
+  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+}
 
-export default function EducationIndex() {
-  const items = [...(news as any[])]
-    .filter((n) => String(n.category || "").toLowerCase() === "education")
-    .sort((a, b) => (a.date < b.date ? 1 : -1));
+export default async function EducationPage() {
+  const lessons = await db.education?.findMany({ take: 20 }) || [];
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-10">
-      <h1 className="text-3xl font-semibold">Education</h1>
-      <p className="mt-2 text-gray-600">
-        Curated learning bites on LLMs, RAG, agents, safety, and more.
-      </p>
+    <main className="min-h-screen bg-[#0A0B0F] text-zinc-100 selection:bg-violet-500/30">
+      
+      <div className="relative border-b border-white/5 bg-black/20 py-16 backdrop-blur-xl">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
+              AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">Academy</span>
+            </h1>
+            <p className="mt-4 text-lg text-zinc-400">
+              Master the fundamentals. Clear lessons on LLMs, RAG, and Agents.
+            </p>
+          </div>
+        </div>
+      </div>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-2">
-        {items.map((a, i) => {
-          const slug = a.slug ? normalize(a.slug) : normalize(a.title);
-          const href = `/education/${slug}`;
-          return (
-            <Link
-              key={i}
-              href={href}
-              className="block rounded-2xl border p-4 hover:shadow"
-            >
-              <div className="text-xs uppercase tracking-wide text-gray-500">
-                {a.category}
+      <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
+        {lessons.length === 0 ? (
+          <div className="flex h-64 flex-col items-center justify-center rounded-3xl border border-white/10 bg-white/5 p-6 text-center">
+            <AcademicIcon className="mb-4 h-10 w-10 text-zinc-600" />
+            <p className="text-zinc-500">Curriculum under construction.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {lessons.map((lesson: any) => (
+              <div key={lesson.id} className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30 hover:bg-zinc-900/80 hover:shadow-2xl hover:shadow-violet-900/20">
+                <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-500/10 blur-3xl transition-all group-hover:bg-violet-500/20" />
+                
+                <div>
+                  <div className="mb-4 inline-flex items-center rounded-full bg-violet-500/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-violet-300">
+                    Module {lesson.order || "1"}
+                  </div>
+                  <h2 className="mb-3 text-xl font-bold text-white transition-colors group-hover:text-violet-300">
+                    {lesson.title}
+                  </h2>
+                  <p className="text-sm leading-relaxed text-zinc-400 line-clamp-3">
+                    {lesson.content || "Start your learning journey here."}
+                  </p>
+                </div>
+                
+                <div className="mt-6">
+                   <button className="w-full rounded-xl bg-white/5 py-3 text-sm font-semibold text-white transition-colors hover:bg-white/10 hover:text-violet-300 border border-white/5 hover:border-violet-500/30">
+                     Start Lesson
+                   </button>
+                </div>
               </div>
-              <h3 className="mt-1 font-semibold text-lg">{a.title}</h3>
-              <p className="mt-2 text-sm text-gray-700 line-clamp-3">
-                {a.summary}
-              </p>
-              <div className="mt-3 text-xs text-gray-500">{a.date}</div>
-            </Link>
-          );
-        })}
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
