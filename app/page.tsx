@@ -31,13 +31,8 @@ export default function HomePage() {
         <div className="pointer-events-none absolute right-0 top-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[100px]" />
 
         <div className="mx-auto max-w-7xl px-4 text-center md:px-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-zinc-300 backdrop-blur-md mb-8">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-            </span>
-            Updated Daily with AI
-          </div>
+          
+          {/* BADGE IST HIER ENTFERNT */}
           
           <h1 className="mx-auto max-w-4xl text-5xl font-bold tracking-tight text-white md:text-7xl lg:text-8xl">
             Master AI. <br />
