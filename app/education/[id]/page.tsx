@@ -67,12 +67,10 @@ export default async function LessonPage({ params }: { params: { id: string } })
           </ReactMarkdown>
         </article>
 
-        {/* Footer Navigation */}
-        <div className="mt-24 border-t border-white/10 pt-12 flex justify-between items-center">
+        <div className="mt-24 border-t border-white/10 pt-12 flex justify-center">
           <Link href="/education" className="text-zinc-500 hover:text-white transition-colors">
-            ← Course Overview
+            ← Back to Course Overview
           </Link>
-          {/* Hier könnte man Logik für "Next Lesson" einbauen */}
         </div>
       </div>
     </main>
