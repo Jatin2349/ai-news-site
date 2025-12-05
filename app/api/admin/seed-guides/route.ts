@@ -5,15 +5,15 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    console.log("📚 Starting Master-Class Guide Seeding...");
+    console.log("📚 Starting Guide Seeding (No Numbers)...");
 
-    // 1. ALLES LÖSCHEN (Damit die Nummerierung stimmt und keine Duplikate entstehen)
+    // 1. ALLES LÖSCHEN (Clean Slate)
     await db.guide.deleteMany({});
 
     const guides = [
       {
-        title: "1. The Absolute Beginner's Guide to LLMs",
-        slug: "1-beginners-guide-to-llms",
+        title: "The Absolute Beginner's Guide to LLMs",
+        slug: "beginners-guide-to-llms",
         summary: "Understand how Large Language Models actually work. We strip away the hype and explain tokens, probabilities, and the 'next word prediction' mechanism.",
         content: `
 # Demystifying Large Language Models
@@ -52,8 +52,8 @@ LLMs are powerful tools for reasoning and generation, but they are not knowledge
         `
       },
       {
-        title: "2. Prompt Engineering Mastery: The CO-STAR Framework",
-        slug: "2-prompt-engineering-mastery",
+        title: "Prompt Engineering Mastery: The CO-STAR Framework",
+        slug: "prompt-engineering-mastery",
         summary: "Stop asking lazy questions. Learn the industry-standard CO-STAR framework to force the AI to give you senior-level outputs every time.",
         content: `
 # The Art of Talking to Machines
@@ -105,8 +105,8 @@ This forces the model to generate its reasoning path before the final answer, re
         `
       },
       {
-        title: "3. RAG Explained: How to Chat with Your Own Data",
-        slug: "3-rag-explained",
+        title: "RAG Explained: How to Chat with Your Own Data",
+        slug: "rag-explained",
         summary: "LLMs don't know your company data. RAG (Retrieval-Augmented Generation) is the architecture that bridges the gap between AI and your private documents.",
         content: `
 # The Knowledge Cutoff Problem
@@ -142,8 +142,8 @@ RAG is the architecture behind almost every "Chat with PDF" or "Enterprise AI Se
         `
       },
       {
-        title: "4. AI Agents: From Chatbots to Autonomous Workers",
-        slug: "4-ai-agents-explained",
+        title: "AI Agents: From Chatbots to Autonomous Workers",
+        slug: "ai-agents-explained",
         summary: "A chatbot waits for you to type. An Agent acts on its own. Learn how Agents use 'Tools' to browse the web, write files, and automate jobs.",
         content: `
 # Beyond Conversation
@@ -181,8 +181,8 @@ They talk to each other in a chat loop until the software is built. This is the 
         `
       },
       {
-        title: "5. Vector Databases & Embeddings: The Memory of AI",
-        slug: "5-vector-databases",
+        title: "Vector Databases & Embeddings: The Memory of AI",
+        slug: "vector-databases",
         summary: "How do computers understand that 'King' - 'Man' + 'Woman' = 'Queen'? Understanding vectors is crucial for building modern AI apps.",
         content: `
 # How Computers "Understand" Meaning
@@ -215,8 +215,8 @@ This technology is the backbone of RAG and recommendation systems (like Netflix 
         `
       },
       {
-        title: "6. Fine-Tuning vs. RAG: Which one do you need?",
-        slug: "6-fine-tuning-vs-rag",
+        title: "Fine-Tuning vs. RAG: Which one do you need?",
+        slug: "fine-tuning-vs-rag",
         summary: "A common misconception: 'I need to train my own model to learn my data.' Usually, you don't. Learn the difference between teaching a model NEW knowledge vs. NEW behavior.",
         content: `
 # The Great Debate
@@ -250,8 +250,8 @@ RAG is like letting the model take an open-book exam. It doesn't memorize the te
         `
       },
       {
-        title: "7. Running Local LLMs: Privacy and Power",
-        slug: "7-local-llms",
+        title: "Running Local LLMs: Privacy and Power",
+        slug: "local-llms",
         summary: "You don't always need OpenAI. Learn how to run powerful models like Llama 3 or Mistral directly on your laptop using Ollama. Free and private.",
         content: `
 # Why Local AI?
@@ -283,8 +283,8 @@ Open Source models have caught up significantly.
         `
       },
       {
-        title: "8. The Modern AI Stack: What Developers Need to Learn",
-        slug: "8-modern-ai-stack",
+        title: "The Modern AI Stack: What Developers Need to Learn",
+        slug: "modern-ai-stack",
         summary: "If you want to become an AI Engineer, knowing Python isn't enough anymore. Here are the tools and frameworks that define the modern AI landscape.",
         content: `
 # The New Tech Stack
@@ -318,8 +318,8 @@ How do you know why your AI said something weird?
         `
       },
       {
-        title: "9. Multimodality: Seeing, Hearing, and Speaking",
-        slug: "9-multimodality",
+        title: "Multimodality: Seeing, Hearing, and Speaking",
+        slug: "multimodality",
         summary: "Text is just the beginning. Modern models like GPT-4o are 'native multimodal', meaning they understand pixels and audio waves as fluently as text.",
         content: `
 # Beyond Text
@@ -347,8 +347,8 @@ We are moving from "Text In / Text Out" to "Reality In / Reality Out".
         `
       },
       {
-        title: "10. AI Ethics: Hallucinations, Bias, and Safety",
-        slug: "10-ai-ethics-safety",
+        title: "AI Ethics: Hallucinations, Bias, and Safety",
+        slug: "ai-ethics-safety",
         summary: "With great power comes great responsibility. Understanding the risks of AI—from biased hiring bots to prompt injection attacks—is crucial for deployment.",
         content: `
 # The Dark Side of AI
@@ -376,8 +376,8 @@ As an AI engineer, safety isn't an afterthought. It's the first step.
         `
       },
       {
-        title: "11. Building Your First AI App: A Roadmap",
-        slug: "11-building-first-ai-app",
+        title: "Building Your First AI App: A Roadmap",
+        slug: "building-first-ai-app",
         summary: "Stop reading and start coding. A practical roadmap to build a 'Chat with your PDF' application in one weekend.",
         content: `
 # The "Hello World" of AI Engineering
@@ -417,8 +417,8 @@ Congratulations. You just built a tool that companies pay thousands of dollars f
         `
       },
       {
-        title: "12. The Future of Work: Adapting to the AI Age",
-        slug: "12-future-of-work",
+        title: "The Future of Work: Adapting to the AI Age",
+        slug: "future-of-work",
         summary: "Will AI replace you? Probably not. But a person using AI will. Here is how to position yourself in the changing job market.",
         content: `
 # The Shift
