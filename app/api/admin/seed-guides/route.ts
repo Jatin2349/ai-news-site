@@ -5,10 +5,11 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    console.log("📚 Starting Premium Guides Seeding...");
+    console.log("📚 Starting Premium Guides Seeding (Clean Slate)...");
 
-    // Optional: Alte Guides löschen, um Duplikate zu vermeiden
-    // await db.guide.deleteMany({});
+    // 1. ALLES LÖSCHEN (Clean Slate)
+    // Damit die alten Test-Guides verschwinden und die Nummerierung stimmt.
+    await db.guide.deleteMany({});
 
     const guides = [
       {
@@ -424,18 +425,13 @@ You are no longer the bricklayer; you are the architect. Embrace the leverage.
       }
     ];
 
-    // Erstellen der Guides (update wenn vorhanden)
-    for (const guide of guides) {
-      await db.guide.upsert({
-        where: { slug: guide.slug },
-        update: guide,
-        create: guide,
-      });
-    }
+    await db.guide.createMany({
+      data: guides,
+    });
 
     return NextResponse.json({ 
       success: true, 
-      message: `Successfully seeded ${guides.length} premium guides.` 
+      message: `Successfully deleted old guides and seeded ${guides.length} premium guides.` 
     });
 
   } catch (error: any) {

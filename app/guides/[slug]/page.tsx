@@ -1,53 +1,89 @@
-// app/guides/[slug]/page.tsx  ← komplette Datei ersetzen
-import guides from "../../../data/guides.json";
-import ReactMarkdown from "react-markdown";
-import { loadGuideMarkdown } from "../../../lib/markdown"; // <-- neu
+import { db } from '@/lib/db';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import ReactMarkdown from 'react-markdown'; // Für schöne Text-Formatierung
 
-const norm = (s: string) =>
-  String(s || "")
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-_]/g, "")
-    .replace(/[\s_]+/g, "-")
-    .replace(/-+/g, "-");
+export const revalidate = 0;
 
-export default function GuidePage({ params }: { params: { slug: string } }) {
-  const slug = norm(params.slug);
+function BackIcon({ className }: { className?: string }) {
+  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
+}
 
-  // Guide anhand slug finden (aus g.slug oder g.title)
-  const item = (guides as any[]).find((g) => {
-    const s = g.slug ? norm(g.slug) : norm(g.title);
-    return s === slug;
+function CalendarIcon({ className }: { className?: string }) {
+  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+}
+
+// Daten holen
+async function getGuide(slug: string) {
+  const guide = await db.guide.findUnique({
+    where: { slug },
   });
+  return guide;
+}
 
-  if (!item) {
-    return (
-      <main className="mx-auto max-w-3xl px-4 py-10">
-        <h1 className="text-2xl font-semibold">Guide not found</h1>
-        <p className="text-sm text-gray-600 mt-2">
-          We couldn’t find a guide for “{slug}”.
-        </p>
-      </main>
-    );
+export default async function GuideDetailPage({ params }: { params: { slug: string } }) {
+  const guide = await getGuide(params.slug);
+
+  if (!guide) {
+    return notFound();
   }
 
-  // <-- HIER wird die .md-Datei geladen (falls vorhanden)
-  const md = item.file ? loadGuideMarkdown(item.file) : null;
-
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10">
-      <p className="text-xs uppercase opacity-60">Guide</p>
-      <h1 className="mt-1 text-3xl font-semibold">{item.title}</h1>
-      <div className="mt-1 text-sm opacity-70">{item.date}</div>
+    <main className="min-h-screen bg-[#0A0B0F] text-zinc-100 selection:bg-cyan-500/30">
+      
+      {/* --- HEADER --- */}
+      <div className="relative border-b border-white/5 bg-black/20 py-12 backdrop-blur-xl">
+        {/* Background Glow */}
+        <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[100px]" />
 
-      <article className="prose max-w-none mt-6">
-        {/* Wenn .md existiert → rendern; sonst Fallback auf content_md/summary */}
-        {md ? (
-          <ReactMarkdown>{md}</ReactMarkdown>
-        ) : (
-          <ReactMarkdown>{item.content_md || item.summary || ""}</ReactMarkdown>
-        )}
-      </article>
+        <div className="mx-auto max-w-3xl px-4 md:px-6">
+          {/* Back Button */}
+          <Link href="/guides" className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/5 px-4 py-1.5 text-sm font-medium text-zinc-400 transition-all hover:bg-white/10 hover:text-white">
+            <BackIcon className="h-4 w-4" />
+            Back to Guides
+          </Link>
+
+          {/* Title & Meta */}
+          <h1 className="text-3xl font-bold tracking-tight text-white md:text-5xl lg:text-5xl leading-tight">
+            {guide.title}
+          </h1>
+          
+          <div className="mt-6 flex items-center gap-4 text-sm text-zinc-500">
+            <div className="flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4" />
+              <span>{new Date(guide.createdAt).toLocaleDateString()}</span>
+            </div>
+            <span className="h-1 w-1 rounded-full bg-zinc-700" />
+            <span className="text-cyan-400">AI Mastery Guide</span>
+          </div>
+        </div>
+      </div>
+
+      {/* --- CONTENT --- */}
+      <div className="mx-auto max-w-3xl px-4 py-16 md:px-6">
+        <article className="prose prose-invert prose-zinc max-w-none 
+          prose-headings:text-white prose-headings:font-bold 
+          prose-h1:text-3xl prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h2:text-cyan-100
+          prose-h3:text-xl prose-h3:text-white/90
+          prose-p:text-zinc-300 prose-p:leading-relaxed prose-p:mb-6
+          prose-strong:text-cyan-400 prose-strong:font-semibold
+          prose-ul:my-6 prose-li:text-zinc-300 prose-li:marker:text-cyan-500
+          prose-code:text-cyan-300 prose-code:bg-cyan-500/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+          prose-pre:bg-zinc-900/50 prose-pre:border prose-pre:border-white/10 prose-pre:p-6 prose-pre:rounded-2xl
+        ">
+          {/* Fallback, falls react-markdown fehlt, aber wir nutzen es hier */}
+          <ReactMarkdown>
+            {guide.content || guide.summary || "No content yet."}
+          </ReactMarkdown>
+        </article>
+
+        {/* Footer Navigation */}
+        <div className="mt-16 border-t border-white/10 pt-12">
+          <Link href="/guides" className="text-zinc-400 hover:text-white transition-colors">
+            ← Browse more guides
+          </Link>
+        </div>
+      </div>
     </main>
   );
 }
