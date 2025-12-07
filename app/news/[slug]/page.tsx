@@ -7,8 +7,19 @@ const norm = (s: string) =>
     .replace(/[\s_]+/g, "-")
     .replace(/-+/g, "-");
 
-export default function NewsDetail({ params }: { params: { slug: string } }) {
-  const slug = norm(params.slug);
+// 1. Typ-Definition für Next.js 15 (params ist ein Promise)
+type Props = {
+  params: Promise<{ slug: string }>
+}
+
+// 2. Die Funktion muss "async" sein
+export default async function NewsDetail({ params }: Props) {
+  
+  // 3. Wir warten auf die params und holen den rohen slug heraus
+  const { slug: rawSlug } = await params;
+  
+  // Jetzt normalisieren wir den geholten slug
+  const slug = norm(rawSlug);
 
   const item = (news as any[]).find(n => {
     const catOk = String(n.category || "").toLowerCase() === "news";

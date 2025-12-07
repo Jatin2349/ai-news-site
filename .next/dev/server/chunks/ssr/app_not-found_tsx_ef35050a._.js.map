@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///workspaces/ai-news-site/app/not-found.tsx"],"sourcesContent":["export default function NotFound() {\n  return (\n    <div className=\"prose\">\n      <h1>Page not found</h1>\n      <p>Looks like this page moved or never existed.</p>\n      <p><a href=\"/\">← Back to Home</a></p>\n    </div>\n  )\n}\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;;0BACb,8OAAC;0BAAG;;;;;;0BACJ,8OAAC;0BAAE;;;;;;0BACH,8OAAC;0BAAE,cAAA,8OAAC;oBAAE,MAAK;8BAAI;;;;;;;;;;;;;;;;;AAGrB"}}]
+}

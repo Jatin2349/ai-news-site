@@ -17,8 +17,19 @@ async function getLesson(id: string) {
   return lesson;
 }
 
-export default async function LessonPage({ params }: { params: { id: string } }) {
-  const lesson = await getLesson(params.id);
+// 1. Hier definieren wir den neuen Typ für Next.js 15
+type Props = {
+  params: Promise<{ id: string }>
+}
+
+// 2. Wir nutzen den neuen Typ "Props" hier
+export default async function LessonPage({ params }: Props) {
+  
+  // 3. WICHTIG: Hier warten wir auf die Parameter
+  const { id } = await params;
+
+  // 4. Jetzt nutzen wir die Variable "id" (statt params.id)
+  const lesson = await getLesson(id);
 
   if (!lesson) {
     return notFound();

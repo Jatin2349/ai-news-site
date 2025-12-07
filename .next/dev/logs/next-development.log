@@ -1,0 +1,63 @@
+[00:00:00.803] Server  LOG     
+[00:00:00.804] Server  LOG        We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+[00:00:00.804] Server  LOG        The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+[00:00:00.804] Server  LOG        	- allowJs was set to true
+[00:00:00.804] Server  LOG        	- include was updated to add '.next/dev/types/**/*.ts'
+[00:00:00.804] Server  LOG        	- plugins was updated to add { name: 'next' }
+[00:00:00.804] Server  LOG     
+[00:00:00.805] Server  LOG        The following mandatory changes were made to your tsconfig.json:
+
+[00:00:00.805] Server  LOG        	- isolatedModules was set to true (requirement for SWC / Babel)
+[00:00:00.805] Server  LOG        	- jsx was set to react-jsx (next.js uses the React automatic runtime)
+[00:00:00.805] Server  LOG     
+[00:00:01.257] Server  LOG      ✓ Ready in 979ms
+[00:02:36.432] Server  LOG      ○ Compiling / ...
+[00:02:42.134] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:03:09.171] Server  WARN    Error: Route "/education/[id]" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:03:09.350] Server  ERROR    ⨯ PrismaClientValidationError: 
+Invalid `{imported module ./lib/db.ts}["db"].education.findUnique()` invocation in
+/workspaces/ai-news-site/.next/dev/server/chunks/ssr/[root-of-the-server]__a636d508._.js:147:148
+
+  144 }
+  145 // Daten holen
+  146 async function getLesson(id) {
+→ 147     const lesson = await {imported module ./lib/db.ts}["db"].education.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: EducationWhereInput | EducationWhereInput[],
+          ?   OR?: EducationWhereInput[],
+          ?   NOT?: EducationWhereInput | EducationWhereInput[],
+          ?   title?: StringFilter | String,
+          ?   content?: StringNullableFilter | String | Null,
+          ?   order?: IntNullableFilter | Int | Null,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type EducationWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+[00:03:09.516] Browser ERROR   uncaughtError: PrismaClientValidationError: 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"].education.findUnique()` invocation in
+/workspaces/ai-news-site/.next/dev/server/chunks/ssr/[root-of-the-server]__a636d508._.js:147:148
+
+  144 }
+  145 // Daten holen
+  146 async function getLesson(id) {
+→ 147     const lesson = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"].education.findUnique({
+            where: {
+              id: undefined,
+          ?   AND?: EducationWhereInput | EducationWhereInput[],
+          ?   OR?: EducationWhereInput[],
+          ?   NOT?: EducationWhereInput | EducationWhereInput[],
+          ?   title?: StringFilter | String,
+          ?   content?: StringNullableFilter | String | Null,
+          ?   order?: IntNullableFilter | Int | Null,
+          ?   createdAt?: DateTimeFilter | DateTime,
+          ?   updatedAt?: DateTimeFilter | DateTime
+            }
+          })
+
+Argument `where` of type EducationWhereUniqueInput needs at least one of `id` arguments. Available options are marked with ?.
+[00:13:19.282] Server  LOG      ✓ Compiled in 368ms
+[00:13:21.834] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
