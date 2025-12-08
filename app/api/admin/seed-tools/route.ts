@@ -12,22 +12,17 @@ export async function GET() {
     const fileContent = fs.readFileSync(filePath, 'utf8');
     const tools = JSON.parse(fileContent);
 
-    console.log(`Gefunden: ${tools.length} Tools. Starte Import...`);
+    console.log(`Lösche alte Tools...`);
+    
+    // SCHRITT A: Alles löschen, um Duplikate zu entfernen!
+    await prisma.tool.deleteMany({}); 
 
-    // 3. Datenbank befüllen
-    // Wir nutzen "upsert", damit keine Duplikate entstehen (basierend auf der URL)
+    console.log(`Gefunden: ${tools.length} neue Tools. Starte Import...`);
+
+    // SCHRITT B: Neu befüllen
     for (const tool of tools) {
-      await prisma.tool.upsert({
-        where: { url: tool.url },
-        update: {
-          name: tool.name,
-          category: tool.category,
-          pricing: tool.pricing,
-          affiliate_code: tool.affiliate_code,
-          rating: tool.rating,
-          summary: tool.summary,
-        },
-        create: {
+      await prisma.tool.create({
+        data: {
           name: tool.name,
           url: tool.url,
           category: tool.category,
@@ -41,7 +36,7 @@ export async function GET() {
 
     return NextResponse.json({ 
       success: true, 
-      message: `${tools.length} Tools wurden erfolgreich importiert/aktualisiert.` 
+      message: `Datenbank bereinigt. ${tools.length} Tools wurden frisch importiert.` 
     });
 
   } catch (error: any) {

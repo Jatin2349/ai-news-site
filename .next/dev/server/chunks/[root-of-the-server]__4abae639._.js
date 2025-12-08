@@ -100,23 +100,14 @@ async function GET() {
         // 2. Datei einlesen
         const fileContent = __TURBOPACK__imported__module__$5b$externals$5d2f$fs__$5b$external$5d$__$28$fs$2c$__cjs$29$__["default"].readFileSync(filePath, 'utf8');
         const tools = JSON.parse(fileContent);
-        console.log(`Gefunden: ${tools.length} Tools. Starte Import...`);
-        // 3. Datenbank befüllen
-        // Wir nutzen "upsert", damit keine Duplikate entstehen (basierend auf der URL)
+        console.log(`Lösche alte Tools...`);
+        // SCHRITT A: Alles löschen, um Duplikate zu entfernen!
+        await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].tool.deleteMany({});
+        console.log(`Gefunden: ${tools.length} neue Tools. Starte Import...`);
+        // SCHRITT B: Neu befüllen
         for (const tool of tools){
-            await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].tool.upsert({
-                where: {
-                    url: tool.url
-                },
-                update: {
-                    name: tool.name,
-                    category: tool.category,
-                    pricing: tool.pricing,
-                    affiliate_code: tool.affiliate_code,
-                    rating: tool.rating,
-                    summary: tool.summary
-                },
-                create: {
+            await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$prisma$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__["prisma"].tool.create({
+                data: {
                     name: tool.name,
                     url: tool.url,
                     category: tool.category,
@@ -129,7 +120,7 @@ async function GET() {
         }
         return __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$server$2e$js__$5b$app$2d$route$5d$__$28$ecmascript$29$__["NextResponse"].json({
             success: true,
-            message: `${tools.length} Tools wurden erfolgreich importiert/aktualisiert.`
+            message: `Datenbank bereinigt. ${tools.length} Tools wurden frisch importiert.`
         });
     } catch (error) {
         console.error("Fehler beim Seeding:", error);
