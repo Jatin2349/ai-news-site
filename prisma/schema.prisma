@@ -53,14 +53,17 @@ model Education {
 }
 
 model Tool {
-  id          String   @id @default(uuid())
-  name        String
-  description String?
-  url         String
-  pricing     String?  // z.B. "Free", "Paid", "Freemium"
-  category    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id             String   @id @default(uuid())
+  name           String
+  url            String   @unique        // WICHTIG: Damit upsert funktioniert
+  summary        String?                 // Hieß bei dir "description", JSON nutzt aber "summary"
+  pricing        String?
+  category       String?
+  affiliate_code String?                 // Neu
+  rating         Int?                    // Neu (als Zahl)
+  
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model GlossaryEntry {
