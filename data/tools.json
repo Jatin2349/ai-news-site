@@ -6,7 +6,7 @@
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "API for powerful language and multimodal models, including tool use and safety moderation."
+    "summary": "The industry standard for AI models. OpenAI provides the powerful GPT-4 API for complex reasoning, coding, and multimodal tasks, enabling developers to build sophisticated AI applications with state-of-the-art safety features."
   },
   {
     "name": "ChatGPT",
@@ -15,7 +15,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "The leading conversational AI interface by OpenAI, capable of writing, coding, and multimodal interaction."
+    "summary": "The most versatile AI assistant available. ChatGPT excels at writing, coding, data analysis, and creative brainstorming. Its multimodal capabilities allow it to see, hear, and speak, making it the perfect daily driver for productivity."
   },
   {
     "name": "Google Gemini",
@@ -24,16 +24,16 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "Google's native multimodal AI assistant integrated deeply with the Google Workspace ecosystem."
+    "summary": "Google's native multimodal AI assistant that integrates deeply with the Workspace ecosystem. Gemini processes vast amounts of information quickly and connects directly with Google Docs, Drive, and Gmail to streamline your workflow."
   },
   {
-    "name": "Anthropic",
+    "name": "Anthropic (Claude)",
     "url": "https://www.anthropic.com",
     "category": "Models",
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "Claude models focused on helpfulness, safety, reliability, and multi-step tool use."
+    "summary": "Known for having the largest context window and highly steerable models. Claude 3.5 Sonnet is currently a top-tier model for coding and nuanced writing, focusing on safety and reduced hallucinations compared to competitors."
   },
   {
     "name": "DeepSeek",
@@ -42,25 +42,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Strong open-source coding and reasoning models, offering high performance at lower costs."
-  },
-  {
-    "name": "Cohere",
-    "url": "https://cohere.com",
-    "category": "Models",
-    "pricing": "Paid",
-    "affiliate_code": "",
-    "rating": 4,
-    "summary": "Enterprise-grade LLMs with classification, embeddings, and RAG-friendly workflows."
-  },
-  {
-    "name": "Mistral",
-    "url": "https://mistral.ai",
-    "category": "Models",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 4,
-    "summary": "Fast, efficient models (open & hosted) good for cost-sensitive workloads."
+    "summary": "A powerful open-source alternative for coding and reasoning. DeepSeek offers high-performance models that rival top proprietary LLMs but at a fraction of the inference cost, making it ideal for budget-conscious developers."
   },
   {
     "name": "Perplexity AI",
@@ -69,106 +51,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "AI-powered answer engine that searches the web to provide cited, real-time responses."
-  },
-  {
-    "name": "n8n",
-    "url": "https://n8n.io",
-    "category": "Automation",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 5,
-    "summary": "Workflow automation tool with strong AI capabilities, allowing self-hosted LLM chains and agents."
-  },
-  {
-    "name": "Make",
-    "url": "https://www.make.com",
-    "category": "Automation",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 5,
-    "summary": "Visual platform for building complex automation workflows with extensive AI module integrations."
-  },
-  {
-    "name": "Zapier",
-    "url": "https://zapier.com",
-    "category": "Automation",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 5,
-    "summary": "Leading automation platform connecting thousands of apps, featuring 'Zapier Central' for AI logic."
-  },
-  {
-    "name": "GitHub Copilot",
-    "url": "https://github.com/features/copilot",
-    "category": "Coding",
-    "pricing": "Paid",
-    "affiliate_code": "",
-    "rating": 5,
-    "summary": "AI pair programmer integrated into IDEs to suggest code and entire functions in real-time."
-  },
-  {
-    "name": "Cursor",
-    "url": "https://www.cursor.com",
-    "category": "Coding",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 5,
-    "summary": "AI-first code editor (VS Code fork) that understands entire codebases for smart refactoring and generation."
-  },
-  {
-    "name": "v0",
-    "url": "https://v0.dev",
-    "category": "Coding",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 5,
-    "summary": "Generative UI tool by Vercel that turns text prompts into copy-paste React and Tailwind CSS code."
-  },
-  {
-    "name": "Jasper AI",
-    "url": "https://www.jasper.ai",
-    "category": "Copywriting",
-    "pricing": "Paid",
-    "affiliate_code": "",
-    "rating": 4,
-    "summary": "AI content platform tailored for enterprise marketing teams to maintain brand voice."
-  },
-  {
-    "name": "Copy.ai",
-    "url": "https://www.copy.ai",
-    "category": "Copywriting",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 4,
-    "summary": "Marketing-focused AI writing tool for generating blog posts, social media content, and ad copy."
-  },
-  {
-    "name": "Grammarly",
-    "url": "https://www.grammarly.com",
-    "category": "Writing Assistant",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 5,
-    "summary": "Writing assistant that corrects grammar, improves tone, and generates text via GrammarlyGO."
-  },
-  {
-    "name": "QuillBot",
-    "url": "https://quillbot.com",
-    "category": "Writing Assistant",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 4,
-    "summary": "Paraphrasing and summarizing tool designed to enhance writing clarity and fluency."
-  },
-  {
-    "name": "Canva",
-    "url": "https://www.canva.com",
-    "category": "Design",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 5,
-    "summary": "Design platform featuring 'Magic Studio' for AI image generation, editing, and layout creation."
+    "summary": "Replaces traditional Google search with AI-curated answers. Perplexity scans the live web to provide accurate, cited summaries for complex questions, saving you hours of research time by filtering out SEO spam."
   },
   {
     "name": "Midjourney",
@@ -177,7 +60,7 @@
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "High-fidelity AI image generator known for artistic quality and photorealism via Discord."
+    "summary": "The gold standard for AI image generation. Midjourney produces artistically stunning and photorealistic visuals that are currently unmatched in quality. Perfect for designers, marketers, and creatives needing high-fidelity assets."
   },
   {
     "name": "Runway",
@@ -186,7 +69,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Creative suite for AI video generation and editing, pioneering text-to-video technology."
+    "summary": "A full-stack AI creative suite for video. Runway pioneered text-to-video generation (Gen-2/Gen-3) and offers powerful tools like inpainting and motion brush, giving filmmakers complete control over AI-generated scenes."
   },
   {
     "name": "ElevenLabs",
@@ -195,7 +78,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "Leading AI voice generator offering realistic text-to-speech and voice cloning capabilities."
+    "summary": "The most realistic AI voice generator on the market. ElevenLabs offers emotional, human-like text-to-speech and instant voice cloning, widely used for content creation, audiobooks, and dubbing in multiple languages."
   },
   {
     "name": "Suno AI",
@@ -204,25 +87,97 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "AI music creation tool capable of generating full songs with lyrics and vocals from prompts."
+    "summary": "Generates radio-quality songs with full vocals and lyrics from simple text prompts. Suno is revolutionizing music creation, allowing anyone to produce tracks in any genre without musical training."
   },
   {
-    "name": "Otter.ai",
-    "url": "https://otter.ai",
-    "category": "Productivity",
+    "name": "n8n",
+    "url": "https://n8n.io",
+    "category": "Automation",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "The ultimate workflow automation tool for technical users. n8n offers a fair-code model that you can self-host, featuring deep AI integration to build autonomous agents and complex logic chains without vendor lock-in."
+  },
+  {
+    "name": "Make",
+    "url": "https://www.make.com",
+    "category": "Automation",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "A visual powerhouse for connecting apps. Make allows you to build complex, branching automation scenarios with a drag-and-drop interface, perfect for connecting your AI models to thousands of other apps like Slack, Gmail, and Airtable."
+  },
+  {
+    "name": "Zapier",
+    "url": "https://zapier.com",
+    "category": "Automation",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "The most accessible automation platform with the largest app ecosystem. Zapier's new AI features allow you to describe a workflow in plain English and have it built automatically, making automation accessible to everyone."
+  },
+  {
+    "name": "Cursor",
+    "url": "https://www.cursor.com",
+    "category": "Coding",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "An AI-first code editor built on VS Code. Cursor understands your entire codebase, allowing for incredibly accurate code generation, smart refactoring, and bug fixing. It is widely considered the best editor for AI-assisted programming."
+  },
+  {
+    "name": "v0",
+    "url": "https://v0.dev",
+    "category": "Coding",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "Vercel's generative UI tool. Describe an interface, and v0 generates production-ready React and Tailwind CSS code instantly. It speeds up the frontend prototyping process significantly."
+  },
+  {
+    "name": "GitHub Copilot",
+    "url": "https://github.com/features/copilot",
+    "category": "Coding",
+    "pricing": "Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "The original AI pair programmer. Integrated directly into your IDE, Copilot suggests code completions in real-time, helping you write boilerplate faster and discover new APIs without leaving your editor."
+  },
+  {
+    "name": "Jasper AI",
+    "url": "https://www.jasper.ai",
+    "category": "Copywriting",
+    "pricing": "Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "An AI marketing platform designed for enterprise teams. Jasper learns your brand voice and style guide to generate on-brand blog posts, social media captions, and marketing emails that sound like you."
+  },
+  {
+    "name": "Copy.ai",
+    "url": "https://www.copy.ai",
+    "category": "Copywriting",
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "AI meeting assistant that records audio, writes notes, and generates summaries."
+    "summary": "A versatile AI writing tool focused on sales and marketing workflows. Copy.ai excels at generating high-converting ad copy, cold outreach emails, and social media content at scale."
   },
   {
-    "name": "Fireflies.ai",
-    "url": "https://fireflies.ai",
-    "category": "Productivity",
+    "name": "Grammarly",
+    "url": "https://www.grammarly.com",
+    "category": "Writing Assistant",
     "pricing": "Free+Paid",
     "affiliate_code": "",
-    "rating": 4,
-    "summary": "AI notetaker that joins meetings to transcribe, summarize, and analyze voice conversations."
+    "rating": 5,
+    "summary": "More than just a spell checker. Grammarly's AI analyzes tone, clarity, and delivery to make your writing sharper and more professional across email, Slack, and documents."
+  },
+  {
+    "name": "Canva",
+    "url": "https://www.canva.com",
+    "category": "Design",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 5,
+    "summary": "The all-in-one design platform now powered by 'Magic Studio'. Canva allows non-designers to generate images, remove backgrounds, and resize content instantly using AI, making professional design accessible to all."
   },
   {
     "name": "Notion AI",
@@ -231,16 +186,25 @@
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Integrated AI assistant within Notion for writing, summarizing, and database management."
+    "summary": "AI integrated directly into your workspace. Notion AI can summarize messy notes, generate action items from meeting transcripts, and brainstorm ideas without you ever leaving your document."
   },
   {
-    "name": "OpenRouter",
-    "url": "https://openrouter.ai",
-    "category": "Ecosystem",
+    "name": "Otter.ai",
+    "url": "https://otter.ai",
+    "category": "Productivity",
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Unified API for many model providers with routing, logging, and price/latency comparison."
+    "summary": "Your AI meeting assistant. Otter joins your Zoom, Teams, or Google Meet calls to record audio, transcribe conversations in real-time, and generate automatic summaries and action items."
+  },
+  {
+    "name": "Fireflies.ai",
+    "url": "https://fireflies.ai",
+    "category": "Productivity",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "A powerful AI notetaker that creates a searchable knowledge base from your voice conversations. It analyzes sentiment, speaker talk time, and key topics from your meetings."
   },
   {
     "name": "Hugging Face",
@@ -249,7 +213,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 5,
-    "summary": "Models, datasets, Spaces, and inference — the central open-source AI ecosystem."
+    "summary": "The GitHub of AI. Hugging Face is the central hub for the open-source community, hosting hundreds of thousands of models and datasets, making it the go-to place for discovering and testing new AI technology."
   },
   {
     "name": "LangChain",
@@ -258,16 +222,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Framework for LLM apps: chains, tools, agents, memory, evaluations, and tracing."
-  },
-  {
-    "name": "LlamaIndex",
-    "url": "https://www.llamaindex.ai",
-    "category": "RAG",
-    "pricing": "Free+Paid",
-    "affiliate_code": "",
-    "rating": 4,
-    "summary": "RAG building blocks: data ingestion, indices, routers, and evaluation utilities."
+    "summary": "The leading framework for building LLM applications. LangChain provides the tools to connect models to data sources, manage memory, and create complex chains of reasoning for building your own AI apps."
   },
   {
     "name": "Pinecone",
@@ -276,7 +231,43 @@
     "pricing": "Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Managed, scalable vector database for production-grade RAG and similarity search."
+    "summary": "A managed vector database built for scale. Pinecone is essential for building RAG (Retrieval Augmented Generation) applications, allowing AI models to search through your own data with high speed and accuracy."
+  },
+  {
+    "name": "Mistral",
+    "url": "https://mistral.ai",
+    "category": "Models",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "Europe's leading AI lab providing highly efficient open-weight models. Mistral models are known for punching above their weight class in performance while being small enough to run cheaply or locally."
+  },
+  {
+    "name": "Cohere",
+    "url": "https://cohere.com",
+    "category": "Models",
+    "pricing": "Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "Enterprise-focused AI models specialized in business tasks. Cohere excels at search (embeddings) and classification, providing RAG-ready solutions that are secure and reliable for corporate use."
+  },
+  {
+    "name": "OpenRouter",
+    "url": "https://openrouter.ai",
+    "category": "Ecosystem",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "A unified interface for almost every LLM. OpenRouter allows you to access models from OpenAI, Anthropic, Google, and Meta through a single standardized API, often at the best prices."
+  },
+  {
+    "name": "LlamaIndex",
+    "url": "https://www.llamaindex.ai",
+    "category": "RAG",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "The data framework for LLMs. LlamaIndex specializes in ingesting, structuring, and accessing private data so that your AI applications can actually 'read' and understand your documents."
   },
   {
     "name": "Qdrant",
@@ -285,7 +276,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Open-source vector database with a hosted cloud, strong filtering, and popular SDKs."
+    "summary": "A high-performance open-source vector search engine. Qdrant is Rust-based, fast, and reliable, offering a great balance of filtering capabilities and vector similarity search for modern AI apps."
   },
   {
     "name": "Weaviate",
@@ -294,7 +285,7 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Vector database with modular stack, hybrid search (BM25 + vector), and a managed cloud."
+    "summary": "An AI-native vector database. Weaviate stores both objects and vectors, allowing for hybrid search (keyword + semantic) to ensure your AI apps find the most relevant context every time."
   },
   {
     "name": "Milvus",
@@ -303,6 +294,15 @@
     "pricing": "Free+Paid",
     "affiliate_code": "",
     "rating": 4,
-    "summary": "Highly scalable open-source vector database for large-scale embeddings."
+    "summary": "Built for massive scale. Milvus is a cloud-native vector database designed to handle billions of vectors, making it the choice for large enterprises with enormous datasets."
+  },
+  {
+    "name": "QuillBot",
+    "url": "https://quillbot.com",
+    "category": "Writing Assistant",
+    "pricing": "Free+Paid",
+    "affiliate_code": "",
+    "rating": 4,
+    "summary": "The ultimate paraphrasing tool. QuillBot helps you rewrite sentences to improve fluency, avoid plagiarism, or simplify complex text, making it an essential companion for students and writers."
   }
 ]
