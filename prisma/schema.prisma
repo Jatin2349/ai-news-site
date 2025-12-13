@@ -87,3 +87,9 @@ enum NewsStatus {
   DRAFT
   PUBLISHED
 }
+model Subscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  active    Boolean  @default(true)
+}
