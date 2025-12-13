@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 
 // Client Component wegen Interaktivität (useState)
 export default function NewsletterPage() {
@@ -31,10 +30,10 @@ export default function NewsletterPage() {
   };
 
   const benefits = [
-    "Weekly AI Trends & Analysis",
-    "Curated Tools & Libraries",
-    "Exclusive Tutorials & Guides",
-    "No Spam, Unsubscribe Anytime"
+    "Early Access to AI Tools",
+    "Exclusive Launch Content",
+    "Founder Updates",
+    "Priority Support"
   ];
 
   return (
@@ -45,10 +44,10 @@ export default function NewsletterPage() {
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="max-w-3xl">
             <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
-              AI Mastery <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400">Brief</span>
+              Something big is <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-fuchsia-400">coming.</span>
             </h1>
             <p className="mt-4 text-lg text-zinc-400">
-              Join developers and engineers staying ahead of the AI curve. One email per week, zero fluff.
+              We are building the ultimate AI education platform. Join the waiting list to get early access before we launch to the public.
             </p>
           </div>
         </div>
@@ -67,9 +66,9 @@ export default function NewsletterPage() {
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-8 w-8 text-indigo-400"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               </div>
 
-              <h2 className="text-2xl font-bold text-white">Subscribe to the Newsletter</h2>
+              <h2 className="text-2xl font-bold text-white">Join the Waiting List</h2>
               <p className="mt-2 text-zinc-400">
-                Get the signal, skip the noise.
+                Be the first to know when AI Mastery Lab goes live.
               </p>
 
               <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-zinc-300">
@@ -85,7 +84,7 @@ export default function NewsletterPage() {
               <div className="mt-10 w-full max-w-md">
                 {status === 'success' ? (
                   <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4 text-emerald-400 font-medium">
-                    🎉 You're in! Welcome to the club.
+                    🎉 You're on the list! We'll be in touch soon.
                   </div>
                 ) : (
                   <div className="relative flex items-center">
@@ -102,7 +101,7 @@ export default function NewsletterPage() {
                       disabled={status === 'loading'}
                       className="absolute right-1.5 rounded-lg bg-white px-4 py-1.5 text-sm font-bold text-black transition-colors hover:bg-zinc-200 disabled:opacity-50"
                     >
-                      {status === 'loading' ? '...' : 'Join'}
+                      {status === 'loading' ? '...' : 'Join List'}
                     </button>
                   </div>
                 )}
