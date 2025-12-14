@@ -1,7 +1,8 @@
 import { db } from '@/lib/db';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import ReactMarkdown from 'react-markdown'; // Für schöne Text-Formatierung
+import ReactMarkdown from 'react-markdown';
+import { Metadata } from 'next';
 
 export const revalidate = 0;
 
@@ -13,7 +14,7 @@ function CalendarIcon({ className }: { className?: string }) {
   return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
 }
 
-// Daten holen
+// 1. Daten-Holer Funktion (wiederverwendbar für Metadata & Page)
 async function getGuide(slug: string) {
   const guide = await db.guide.findUnique({
     where: { slug },
@@ -21,6 +22,29 @@ async function getGuide(slug: string) {
   return guide;
 }
 
+// 2. SEO MAGIE: Dynamische Metadaten generieren
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const guide = await getGuide(params.slug);
+
+  if (!guide) {
+    return {
+      title: 'Guide Not Found',
+    };
+  }
+
+  return {
+    title: guide.title, // Wird zu "Guide Titel | AI Mastery Lab"
+    description: guide.summary,
+    openGraph: {
+      title: guide.title,
+      description: guide.summary || "Deep dive guide on AI Mastery Lab.",
+      type: 'article',
+      publishedTime: guide.createdAt.toISOString(),
+    },
+  };
+}
+
+// 3. Die eigentliche Seite
 export default async function GuideDetailPage({ params }: { params: { slug: string } }) {
   const guide = await getGuide(params.slug);
 
@@ -31,19 +55,16 @@ export default async function GuideDetailPage({ params }: { params: { slug: stri
   return (
     <main className="min-h-screen bg-[#0A0B0F] text-zinc-100 selection:bg-cyan-500/30">
       
-      {/* --- HEADER --- */}
+      {/* Header */}
       <div className="relative border-b border-white/5 bg-black/20 py-12 backdrop-blur-xl">
-        {/* Background Glow */}
         <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-500/10 blur-[100px]" />
 
         <div className="mx-auto max-w-3xl px-4 md:px-6">
-          {/* Back Button */}
           <Link href="/guides" className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/5 bg-white/5 px-4 py-1.5 text-sm font-medium text-zinc-400 transition-all hover:bg-white/10 hover:text-white">
             <BackIcon className="h-4 w-4" />
             Back to Guides
           </Link>
 
-          {/* Title & Meta */}
           <h1 className="text-3xl font-bold tracking-tight text-white md:text-5xl lg:text-5xl leading-tight">
             {guide.title}
           </h1>
@@ -59,7 +80,7 @@ export default async function GuideDetailPage({ params }: { params: { slug: stri
         </div>
       </div>
 
-      {/* --- CONTENT --- */}
+      {/* Content */}
       <div className="mx-auto max-w-3xl px-4 py-16 md:px-6">
         <article className="prose prose-invert prose-zinc max-w-none 
           prose-headings:text-white prose-headings:font-bold 
@@ -71,13 +92,11 @@ export default async function GuideDetailPage({ params }: { params: { slug: stri
           prose-code:text-cyan-300 prose-code:bg-cyan-500/10 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
           prose-pre:bg-zinc-900/50 prose-pre:border prose-pre:border-white/10 prose-pre:p-6 prose-pre:rounded-2xl
         ">
-          {/* Fallback, falls react-markdown fehlt, aber wir nutzen es hier */}
           <ReactMarkdown>
             {guide.content || guide.summary || "No content yet."}
           </ReactMarkdown>
         </article>
 
-        {/* Footer Navigation */}
         <div className="mt-16 border-t border-white/10 pt-12">
           <Link href="/guides" className="text-zinc-400 hover:text-white transition-colors">
             ← Browse more guides

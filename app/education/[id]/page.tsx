@@ -2,6 +2,7 @@ import { db } from '@/lib/db';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
+import { Metadata } from 'next';
 
 export const revalidate = 0;
 
@@ -9,7 +10,7 @@ function BackIcon({ className }: { className?: string }) {
   return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
 }
 
-// Daten holen
+// 1. Daten holen
 async function getLesson(id: string) {
   const lesson = await db.education.findUnique({
     where: { id },
@@ -17,19 +18,23 @@ async function getLesson(id: string) {
   return lesson;
 }
 
-// 1. Hier definieren wir den neuen Typ für Next.js 15
-type Props = {
-  params: Promise<{ id: string }>
+// 2. SEO: Metadata generieren
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const lesson = await getLesson(params.id);
+
+  if (!lesson) {
+    return { title: 'Lesson Not Found' };
+  }
+
+  return {
+    title: `Module ${lesson.order}: ${lesson.title}`,
+    description: `Learn about ${lesson.title} in our AI Academy.`,
+  };
 }
 
-// 2. Wir nutzen den neuen Typ "Props" hier
-export default async function LessonPage({ params }: Props) {
-  
-  // 3. WICHTIG: Hier warten wir auf die Parameter
-  const { id } = await params;
-
-  // 4. Jetzt nutzen wir die Variable "id" (statt params.id)
-  const lesson = await getLesson(id);
+// 3. Seite rendern
+export default async function LessonPage({ params }: { params: { id: string } }) {
+  const lesson = await getLesson(params.id);
 
   if (!lesson) {
     return notFound();
@@ -38,7 +43,6 @@ export default async function LessonPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-[#0A0B0F] text-zinc-100 selection:bg-violet-500/30">
       
-      {/* Header */}
       <div className="relative border-b border-white/5 bg-black/20 py-12 backdrop-blur-xl">
         <div className="pointer-events-none absolute right-0 top-0 -z-10 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-violet-500/10 blur-[100px]" />
 
@@ -60,7 +64,6 @@ export default async function LessonPage({ params }: Props) {
         </div>
       </div>
 
-      {/* Content */}
       <div className="mx-auto max-w-4xl px-4 py-16 md:px-6">
         <article className="prose prose-invert prose-zinc max-w-none 
           prose-headings:text-white prose-headings:font-bold 
