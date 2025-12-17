@@ -1,4 +1,4 @@
-'use client'; // WICHTIG: Macht die Komponente interaktiv
+'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -7,7 +7,7 @@ import { Logo } from './Logo';
 
 export function Navbar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false); // State für das Mobile Menü
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigation = [
     { name: 'News', href: '/news' },
@@ -21,15 +21,16 @@ export function Navbar() {
     <nav className="fixed top-0 z-50 w-full border-b border-white/5 bg-[#0A0B0F]/80 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
         
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <Link href="/" onClick={() => setIsOpen(false)}>
+        {/* Logo - HIER WAR DER FEHLER */}
+        <div className="flex items-center">
+          <Link href="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2">
+            {/* Das Logo enthält bereits Icon UND Text */}
             <Logo className="h-8 w-8" />
           </Link>
-          <span className="hidden font-bold text-white sm:block">AI Mastery Lab</span>
+          {/* Ich habe den doppelten <span> Text hier entfernt */}
         </div>
 
-        {/* Desktop Navigation (Hidden on Mobile) */}
+        {/* Desktop Navigation */}
         <div className="hidden md:flex md:gap-8">
           {navigation.map((item) => {
             const isActive = pathname.startsWith(item.href);
@@ -57,30 +58,24 @@ export function Navbar() {
           </Link>
         </div>
 
-        {/* MOBILE MENU BUTTON (Hamburger) */}
+        {/* Mobile Menu Button */}
         <div className="flex md:hidden">
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-zinc-400 hover:text-white"
-            onClick={() => setIsOpen(!isOpen)} // Hier passiert die Magie
+            onClick={() => setIsOpen(!isOpen)}
           >
             <span className="sr-only">Open main menu</span>
             {isOpen ? (
-              // X Icon (Schließen)
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
             ) : (
-              // Hamburger Icon (Öffnen)
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-              </svg>
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
             )}
           </button>
         </div>
       </div>
 
-      {/* MOBILE MENU DROPDOWN (Wird nur angezeigt wenn isOpen === true) */}
+      {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div className="md:hidden border-b border-white/5 bg-[#0A0B0F]">
           <div className="space-y-1 px-4 pb-3 pt-2">
@@ -90,7 +85,7 @@ export function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  onClick={() => setIsOpen(false)} // Menü schließen beim Klicken
+                  onClick={() => setIsOpen(false)}
                   className={`block rounded-md px-3 py-2 text-base font-medium ${
                     isActive ? 'bg-white/10 text-white' : 'text-zinc-400 hover:bg-white/5 hover:text-white'
                   }`}
