@@ -1,18 +1,24 @@
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma'; // 1. Korrigierter Import (prisma statt db)
 import Link from 'next/link';
+import type { Metadata } from 'next';  // 2. WICHTIG: Metadata Import hinzugefügt
 
 export const revalidate = 0;
+
+export const metadata: Metadata = {
+  title: 'AI Academy - Senior Engineer Curriculum',
+  description: 'Structured educational modules on LLMs, Embeddings, Agents, and the modern AI development stack. From zero to AI expert.',
+};
 
 function AcademicIcon({ className }: { className?: string }) {
   return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
 }
 
 export default async function EducationPage() {
-  // Sortiere nach 'order', damit die Lektionen 1-9 in der richtigen Reihenfolge kommen
-  const lessons = await db.education?.findMany({ 
+  // 3. prisma.education statt db.education nutzen
+  const lessons = await prisma.education.findMany({ 
     take: 50,
     orderBy: { order: 'asc' } 
-  }) || [];
+  });
 
   return (
     <main className="min-h-screen bg-[#0A0B0F] text-zinc-100 selection:bg-violet-500/30">
@@ -39,7 +45,6 @@ export default async function EducationPage() {
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {lessons.map((lesson: any) => (
-              /* HIER IST DER FIX: Link um die ganze Karte */
               <Link key={lesson.id} href={`/education/${lesson.id}`} className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30 hover:bg-zinc-900/80 hover:shadow-2xl hover:shadow-violet-900/20">
                 <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-violet-500/10 blur-3xl transition-all group-hover:bg-violet-500/20" />
                 
@@ -51,7 +56,7 @@ export default async function EducationPage() {
                     {lesson.title}
                   </h2>
                   <p className="text-sm leading-relaxed text-zinc-400 line-clamp-3">
-                    {/* Kurze Vorschau generieren */}
+                    {/* Fallback, falls kein Inhalt da ist */}
                     {lesson.content ? lesson.content.substring(0, 100).replace(/#/g, '') + "..." : "Start learning now."}
                   </p>
                 </div>

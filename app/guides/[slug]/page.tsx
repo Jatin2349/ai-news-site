@@ -5,6 +5,10 @@ import ReactMarkdown from 'react-markdown';
 import { Metadata } from 'next';
 
 export const revalidate = 0;
+export const metadata: Metadata = {
+  title: 'AI Guides & Tutorials',
+  description: 'Deep-dive guides and step-by-step tutorials to master AI workflows, from advanced Prompt Engineering to building your first RAG application.',
+};
 
 function BackIcon({ className }: { className?: string }) {
   return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>

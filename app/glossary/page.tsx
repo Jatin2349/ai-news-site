@@ -1,13 +1,19 @@
-import { db } from '@/lib/db';
-import { GlossaryList } from '@/components/GlossaryList'; // Wir importieren die neue Komponente
+import { prisma } from '@/lib/prisma'; // 1. Korrigierter Import (prisma statt db)
+import { GlossaryList } from '@/components/GlossaryList';
+import type { Metadata } from 'next';  // 2. Import für Metadata hinzugefügt
 
 export const revalidate = 0;
 
+export const metadata: Metadata = {
+  title: 'AI Glossary - A-Z Dictionary of AI Terms',
+  description: 'Find definitions for complex AI terminology including RAG, Hallucination, Transformer, and Alignment. Essential for clarity.',
+};
+
 export default async function GlossaryPage() {
-  // Wir laden ALLES (für client-side filtering)
-  const terms = await db.glossaryEntry?.findMany({
+  // 3. prisma.glossaryEntry statt db.glossaryEntry nutzen
+  const terms = await prisma.glossaryEntry.findMany({
     orderBy: { term: 'asc' },
-  }) || [];
+  });
 
   return (
     <main className="min-h-screen bg-[#0A0B0F] text-zinc-100 selection:bg-rose-500/30">
@@ -27,7 +33,7 @@ export default async function GlossaryPage() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
-        {/* Hier binden wir die interaktive Liste ein und übergeben die Daten */}
+        {/* Wir übergeben die Daten an die Client-Komponente */}
         <GlossaryList initialTerms={terms} />
       </div>
     </main>

@@ -1,8 +1,14 @@
 import { db } from '@/lib/db';
 import Link from 'next/link';
+import { Metadata } from 'next'; // Import hinzufügen
 
-// Verhindert Caching, damit News immer aktuell sind
-export const revalidate = 0; 
+export const revalidate = 0;
+
+// HIER IST DAS SEO-UPDATE
+export const metadata: Metadata = {
+  title: 'Daily AI News & Analysis',
+  description: 'Your curated daily brief on the latest in Artificial Intelligence. We filter the noise and summarize breakthroughs from Big Tech, Research, and Community.',
+};
 
 // --- Icons als kleine Komponenten (damit wir keine externen Pakete brauchen) ---
 function ExternalLinkIcon({ className }: { className?: string }) {
