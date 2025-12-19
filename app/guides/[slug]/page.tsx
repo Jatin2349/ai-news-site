@@ -1,14 +1,13 @@
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma'; // 1. KORREKTUR: prisma statt db
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
 import { Metadata } from 'next';
 
 export const revalidate = 0;
-export const metadata: Metadata = {
-  title: 'AI Guides & Tutorials',
-  description: 'Deep-dive guides and step-by-step tutorials to master AI workflows, from advanced Prompt Engineering to building your first RAG application.',
-};
+
+// 2. KORREKTUR: "export const metadata = ..." WURDE GELÖSCHT.
+// (Es darf nur generateMetadata geben, da die Seite dynamisch ist)
 
 function BackIcon({ className }: { className?: string }) {
   return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m15 18-6-6 6-6"/></svg>
@@ -20,7 +19,8 @@ function CalendarIcon({ className }: { className?: string }) {
 
 // 1. Daten-Holer Funktion (wiederverwendbar für Metadata & Page)
 async function getGuide(slug: string) {
-  const guide = await db.guide.findUnique({
+  // 3. KORREKTUR: prisma statt db
+  const guide = await prisma.guide.findUnique({
     where: { slug },
   });
   return guide;
