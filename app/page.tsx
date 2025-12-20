@@ -1,9 +1,12 @@
-import Image from "next/image";
+import { prisma } from '@/lib/prisma';
+import ToolCard from '@/components/ToolCard';
 import Link from "next/link";
+import { Metadata } from "next";
 
-export const revalidate = 0;
+// ISR: Seite alle 3600 Sekunden (1 Stunde) neu bauen, damit neue News erscheinen
+export const revalidate = 3600;
 
-// --- Icons ---
+// --- Icons (Deine lokalen Definitionen) ---
 function ArrowRight({ className }: { className?: string }) {
   return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
 }
@@ -19,27 +22,36 @@ function ToolIcon({ className }: { className?: string }) {
 function BookIcon({ className }: { className?: string }) {
   return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
 }
-import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "AI Mastery Lab - Master AI. Build Leverage.",
   description: "The ultimate platform for AI. Daily news, deep-dive guides, and tools to help you stay ahead of the curve.",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  // 1. DATENBANK ABFRAGEN
+  
+  // Hole die 3 neuesten News
+  const latestNews = await prisma.news.findMany({
+    take: 3,
+    orderBy: { publishedAt: 'desc' },
+  });
+
+  // Hole 4 "Top Rated" Tools
+  const featuredTools = await prisma.tool.findMany({
+    take: 4,
+    orderBy: { rating: 'desc' },
+  });
+
   return (
     <main className="min-h-screen bg-[#0A0B0F] text-zinc-100 selection:bg-emerald-500/30">
       
       {/* --- HERO SECTION --- */}
       <section className="relative overflow-hidden pt-20 pb-32 md:pt-32 md:pb-48">
-        {/* Background Glows */}
         <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/10 blur-[100px]" />
         <div className="pointer-events-none absolute right-0 top-1/4 -z-10 h-[500px] w-[500px] rounded-full bg-emerald-500/10 blur-[100px]" />
 
         <div className="mx-auto max-w-7xl px-4 text-center md:px-6">
-          
-          {/* BADGE IST HIER ENTFERNT */}
-          
           <h1 className="mx-auto max-w-4xl text-5xl font-bold tracking-tight text-white md:text-7xl lg:text-8xl">
             Master AI. <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-400">
@@ -63,7 +75,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- VALUE PROPOSITION (Why AI?) --- */}
+      {/* --- VALUE PROPOSITION --- */}
       <section className="relative border-y border-white/5 bg-black/20 py-24 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-24 items-center">
@@ -93,7 +105,6 @@ export default function HomePage() {
               </ul>
             </div>
 
-            {/* Visual Abstract Graphic */}
             <div className="relative aspect-square md:aspect-video lg:aspect-square rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-8">
               <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20" />
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 rounded-full bg-emerald-500/20 blur-[80px]" />
@@ -114,8 +125,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --- BENTO GRID NAVIGATION (What to expect) --- */}
-      <section className="py-24">
+      {/* --- BENTO GRID NAVIGATION --- */}
+      <section className="pt-24 pb-12">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="mb-12 text-center">
             <h2 className="text-3xl font-bold text-white md:text-4xl">Everything you need to grow</h2>
@@ -124,7 +135,7 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2 h-[800px] md:h-[600px]">
             
-            {/* 1. NEWS (Large Card) */}
+            {/* 1. NEWS */}
             <Link href="/news" className="group relative col-span-1 md:col-span-2 md:row-span-2 overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/50 p-8 transition-all hover:bg-zinc-900/80 hover:border-emerald-500/30">
               <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-emerald-500/10 blur-[80px] transition-all group-hover:bg-emerald-500/20" />
               <div className="relative z-10 flex h-full flex-col justify-between">
@@ -169,7 +180,6 @@ export default function HomePage() {
 
           </div>
           
-          {/* Extra Row for Guides */}
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
              <Link href="/guides" className="group relative flex items-center justify-between overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/50 p-6 transition-all hover:bg-zinc-900/80 hover:border-cyan-500/30">
                 <div className="flex items-center gap-4">
@@ -195,9 +205,65 @@ export default function HomePage() {
                 <ArrowRight className="h-5 w-5 text-zinc-500 transition-transform group-hover:translate-x-1 group-hover:text-rose-400" />
              </Link>
           </div>
-
         </div>
       </section>
+
+      {/* --- DYNAMIC: LATEST INTELLIGENCE --- */}
+      {latestNews.length > 0 && (
+        <section className="py-16 sm:py-24 border-t border-white/5 bg-white/5">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-10">
+              <h2 className="text-2xl font-bold tracking-tight text-white">Latest Intelligence</h2>
+              <Link href="/news" className="text-sm font-medium text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                All News <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="grid gap-8 md:grid-cols-3">
+              {latestNews.map((item) => (
+                <a key={item.id} href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="group flex flex-col justify-between rounded-2xl bg-white/5 p-6 hover:bg-white/10 transition-colors border border-white/5 hover:border-emerald-500/30">
+                  <div>
+                    <div className="flex items-center gap-x-3 text-xs text-gray-400 mb-4">
+                      <time dateTime={item.publishedAt.toISOString()}>
+                        {new Date(item.publishedAt).toLocaleDateString()}
+                      </time>
+                      <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 font-medium text-emerald-400">
+                        {item.sourceName}
+                      </span>
+                    </div>
+                    <h3 className="text-lg font-semibold leading-6 text-white group-hover:text-emerald-300 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 line-clamp-3 text-sm leading-6 text-gray-400">
+                      {item.summary}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* --- DYNAMIC: FEATURED TOOLS --- */}
+      {featuredTools.length > 0 && (
+        <section className="py-16 sm:py-24 border-t border-white/5">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-10">
+              <h2 className="text-2xl font-bold tracking-tight text-white">Essential Tools</h2>
+              <Link href="/tools" className="text-sm font-medium text-amber-400 hover:text-amber-300 flex items-center gap-1">
+                View All <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {featuredTools.map((tool) => (
+                <ToolCard key={tool.id} tool={tool} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* --- NEWSLETTER CTA --- */}
       <section className="relative overflow-hidden py-24">
