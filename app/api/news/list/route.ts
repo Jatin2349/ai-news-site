@@ -24,7 +24,6 @@ export async function GET(req: Request) {
     ...r,
     keypoints: (r.keypoints as string[]) ?? [],
     tags: (r.tags as string[]) ?? [],
-    keywords: (r.keywords as string[]) ?? []
   }));
 
   return NextResponse.json({ items });

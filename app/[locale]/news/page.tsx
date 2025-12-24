@@ -38,7 +38,6 @@ export default async function NewsPage({ searchParams }:{
   const items: NewsDTO[] = (data?.items ?? []).map((r: any) => ({
     ...r,
     keypoints: Array.isArray(r?.keypoints) ? r.keypoints : [],
-    keywords: Array.isArray(r?.keywords) ? r.keywords : [],
   }));
 
   const keywordPool = Array.from(new Set(items.flatMap(n => n.keywords)));
