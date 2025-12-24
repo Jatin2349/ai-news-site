@@ -5,7 +5,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const limit = Math.min(Number(searchParams.get('limit') || 30), 100);
 
-  const rows = await db.newsItem.findMany({
+  const rows = await db.news.findMany({
     where: { status: 'PUBLISHED' },
     orderBy: { publishedAt: 'desc' },
     take: limit

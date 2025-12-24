@@ -1,0 +1,50 @@
+# Query: newsitem
+# ContextLines: 1
+
+15 Ergebnisse - 6-Dateien
+
+.next/dev/server/chunks/ssr/[root-of-the-server]__6aed7f5e._.js:
+  168      // Daten aus der DB holen (Neueste zuerst)
+  169:     const news = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"].news.findMany({
+  170          orderBy: {
+
+  228                  className: "mx-auto max-w-7xl px-4 py-12 md:px-6",
+  229:                 children: news.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+  230                      className: "flex h-64 items-center justify-center rounded-3xl border border-white/10 bg-white/5",
+
+  244                      className: "grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3",
+  245:                     children: news.map((item)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
+  246                              className: "group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/30 hover:bg-zinc-900/80 hover:shadow-2xl hover:shadow-emerald-900/20",
+
+.next/dev/server/chunks/ssr/[root-of-the-server]__6aed7f5e._.js.map:
+  5      {"offset": {"line": 40, "column": 0}, "map": {"version":3,"sources":["file:///workspaces/ai-news-site/lib/db.ts"],"sourcesContent":["import { PrismaClient } from '@prisma/client';\n\ndeclare global {\n  // eslint-disable-next-line no-var\n  var __db: PrismaClient | undefined;\n}\n\nexport const db = global.__db ?? new PrismaClient();\nif (process.env.NODE_ENV !== 'production') global.__db = db;\n"],"names":[],"mappings":";;;;AAAA;;AAOO,MAAM,KAAK,OAAO,IAAI,IAAI,IAAI,6IAAY;AACjD,wCAA2C,OAAO,IAAI,GAAG"}},
+  6: ⟪ 1293 characters skipped ⟫" y1=\"2\" y2=\"6\" />\n      <line x1=\"3\" x2=\"21\" y1=\"10\" y2=\"10\" />\n    </svg>\n  );\n}\n\nexport default async function NewsPage() {\n  // Daten aus der DB holen (Neueste zuerst)\n  const newsItems = await db.newsItem.findMany({\n    orderBy: { publishedAt: 'desc' },\n    take: 60, \n  });\n\n  return (\n    <main className=\"min-h-screen bg-[#0A0B0F] text-zinc-100 selection:bg-emerald-500/30\">\n      \n      {/* --- HEADER SECTION --- */}\n      <div className=\"relative border-b border-white/5 bg-black/20 py-16 backdrop-blur-xl\">\n        <div className=\"mx-auto max-w-7xl px-4 md:px-6\">\n          <div className=\"max-w-3xl\">\n            <h1 className=\"text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl\">\n              Latest <span className=\"text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400\">AI Insights</span>\n            </h1>\n            <p className=\"mt-4 text-lg text-zinc-400\">\n              Curated news, research papers, and industry updates. Automatically analyzed and summarized by AI.\n            </p>\n          </div>\n        </div>\n      </div>\n\n      {/* --- CONTENT GRID --- */}\n      <div className=\"mx-auto max-w-7xl px-4 py-12 md:px-6\">\n        \n        {newsItems.length === 0 ? (\n          <div className=\"flex h-64 items-center justify-center rounded-3xl border border-white/10 bg-white/5\">\n            <p className=\"text-zinc-500\">No news found in database yet.</p>\n          </div>\n        ) : (\n          <div className=\"grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3\">\n            {newsItems.map((item) => (\n              <article \n                key={item.id} \n                className=\"group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/30 hover:bg-zinc-900/80 hover:shadow-2xl hover:shadow-emerald-900/20\"\n              >\n                {/* Dekorativer Glow-Effekt im Hintergrund */}\n                <div className=\"absolute -right-10 -top-10 h-32 w-32 rounded-full bg-emerald-500/10 blur-3xl transition-all group-hover:bg-emerald-500/20\" />\n\n                <div>\n                  {/* Top Meta: Source & Date */}\n                  <div className=\"mb-4 flex items-center justify-between text-xs font-medium uppercase tracking-wider text-zinc-500\">\n                    <div className=\"flex items-center gap-2 text-emerald-400\">\n                      <span className=\"relative flex h-2 w-2\">\n                        
+  7  }
+
+app/api/news/latest/route.ts:
+  7  
+  8:   const rows = await db.news.findMany({
+  9      where: { status: 'PUBLISHED' },
+
+app/api/news/list/route.ts:
+  12  
+  13:   const rows = await db.news.findMany({
+  14      where,
+
+app/news/page.tsx:
+  36    // Daten aus der DB holen (Neueste zuerst)
+  37:   const news = await db.news.findMany({
+  38      orderBy: { publishedAt: 'desc' },
+
+  61          
+  62:         {news.length === 0 ? (
+  63            <div className="flex h-64 items-center justify-center rounded-3xl border border-white/10 bg-white/5">
+
+  67            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+  68:             {news.map((item) => (
+  69                <article 
+
+prisma/schema.prisma:
+   9  
+  10: // --- MODELS (NewsItem -> News Fix) ---
+  11  

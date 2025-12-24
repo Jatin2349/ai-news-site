@@ -1,12 +1,12 @@
 // app/api/news/daily/route.ts
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'              // <— WICHTIG
-import type { NewsItem } from '@prisma/client'
+import type { News } from '@prisma/client'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-type DailyItem = Pick<NewsItem, 'id'|'title'|'sourceName'|'sourceUrl'|'publishedAt'|'category'|'tags'|'summary'>
+type DailyItem = Pick<News, 'id'|'title'|'sourceName'|'sourceUrl'|'publishedAt'|'category'|'tags'|'summary'>
 type BucketKey = 'trends'|'tools'|'bigtech'|'research'
 const DAILY_BUCKETS = [
   { key: 'trends', label: 'Latest AI Trends' },
@@ -38,18 +38,18 @@ const score=(a:DailyItem)=>{ const ts=a.publishedAt?+new Date(a.publishedAt):Dat
 export async function GET(){
   try{
     const since24h=new Date(Date.now()-24*3600*1000)
-    let pool:DailyItem[]=await db.newsItem.findMany({
+    let pool:DailyItem[]=await db.news.findMany({
       where:{ publishedAt:{ gte: since24h } },
       orderBy:{ publishedAt:'desc' },
       take:100
     })
     if (pool.length<6){
       const since72h=new Date(Date.now()-72*3600*1000)
-      pool=await db.newsItem.findMany({ where:{ publishedAt:{ gte: since72h } }, orderBy:{ publishedAt:'desc' }, take:100 })
+      pool=await db.news.findMany({ where:{ publishedAt:{ gte: since72h } }, orderBy:{ publishedAt:'desc' }, take:100 })
     }
     if (pool.length<DAILY_BUCKETS.length){
       const since7d=new Date(Date.now()-7*24*3600*1000)
-      pool=await db.newsItem.findMany({ where:{ publishedAt:{ gte: since7d } }, orderBy:{ publishedAt:'desc' }, take:200 })
+      pool=await db.news.findMany({ where:{ publishedAt:{ gte: since7d } }, orderBy:{ publishedAt:'desc' }, take:200 })
     }
 
     const enriched = pool.map(a=>({ ...a, _bucket: (a.category?String(a.category).toLowerCase():inferBucket(a)) as BucketKey, _score: score(a)}))

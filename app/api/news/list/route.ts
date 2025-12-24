@@ -10,7 +10,7 @@ export async function GET(req: Request) {
   const where: any = { status: 'PUBLISHED' };
   if (category) where.category = category;
 
-  const rows = await db.newsItem.findMany({
+  const rows = await db.news.findMany({
     where,
     orderBy: { publishedAt: 'desc' },
     take: limit

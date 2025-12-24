@@ -34,7 +34,7 @@ function CalendarIcon({ className }: { className?: string }) {
 
 export default async function NewsPage() {
   // Daten aus der DB holen (Neueste zuerst)
-  const newsItems = await db.newsItem.findMany({
+  const news = await db.news.findMany({
     orderBy: { publishedAt: 'desc' },
     take: 60, 
   });
@@ -59,13 +59,13 @@ export default async function NewsPage() {
       {/* --- CONTENT GRID --- */}
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
         
-        {newsItems.length === 0 ? (
+        {news.length === 0 ? (
           <div className="flex h-64 items-center justify-center rounded-3xl border border-white/10 bg-white/5">
             <p className="text-zinc-500">No news found in database yet.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {newsItems.map((item) => (
+            {news.map((item) => (
               <article 
                 key={item.id} 
                 className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/50 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/30 hover:bg-zinc-900/80 hover:shadow-2xl hover:shadow-emerald-900/20"
