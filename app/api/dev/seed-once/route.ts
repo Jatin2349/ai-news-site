@@ -33,7 +33,7 @@ export async function GET() {
       category: CATEGORY_VALUE as any // Pflichtfeld erfüllen
     } as any
 
-    const item = await db.newsItem.upsert({
+    const item = await db.news.upsert({
       where: { urlHash },
       update: data,
       create: data,
