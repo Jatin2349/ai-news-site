@@ -1,95 +1,80 @@
-// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model NewsItem {
-  id            String     @id @default(cuid())
-  title         String
-  sourceUrl     String     @unique
-  sourceName    String
-  sourceDomain  String?
-  publishedAt   DateTime
-  summary       String
-  keypoints     Json       // JSON-Array (z. B. string[])
-  category      Category
-  tags          Json?      // optional JSON-Array
-  keywords      Json?      // optional JSON-Array
-  imageUrl      String?
-  lang          String     @default("en")
-  words         Int?
-  urlHash       String     @unique
+// HIER IST DER FIX: Es muss "model News" heißen, nicht "NewsItem"!
+model News {
+  id           String   @id @default(uuid())
+  title        String
+  summary      String?
+  urlHash      String   @unique
+  sourceUrl    String
+  sourceName   String
+  sourceDomain String?
+  imageUrl     String?
+  publishedAt  DateTime @default(now())
+  tags         String[] 
+  keypoints    String[]
+  category     String? 
+  lang         String   @default("en")
+  words        Int?
   isDuplicateOf String?
-  status        NewsStatus @default(PUBLISHED)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
-// Neue Modelle für die Webseite
+model Tool {
+  id             String   @id @default(uuid())
+  name           String
+  url            String   @unique
+  summary        String?
+  pricing        String?
+  category       String?
+  affiliate_code String?
+  rating         Int?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
 
 model Guide {
-  id          String   @id @default(uuid())
-  title       String
-  slug        String   @unique
-  summary     String?
-  description String?
-  content     String?  @db.Text // Für langen Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  slug      String   @unique
+  title     String
+  summary   String?
+  content   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Education {
   id        String   @id @default(uuid())
   title     String
   content   String?  @db.Text
-  order     Int?     @default(0) // Für die Sortierung der Lektionen
+  url       String?
+  order     Int      @default(0)
+  summary   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Tool {
-  id             String   @id @default(uuid())
-  name           String
-  url            String   @unique        // WICHTIG: Damit upsert funktioniert
-  summary        String?                 // Hieß bei dir "description", JSON nutzt aber "summary"
-  pricing        String?
-  category       String?
-  affiliate_code String?                 // Neu
-  rating         Int?                    // Neu (als Zahl)
-  
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-}
-
 model GlossaryEntry {
-  id         String   @id @default(uuid())
-  term       String   @unique
-  definition String   @db.Text
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id          String   @id @default(uuid())
+  term        String   @unique
+  definition  String   @db.Text
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-enum Category {
-  CURRENT_NEWS
-  NEW_TOOLS
-  MODEL_INFRA_UPDATES
-  POLICY_SAFETY
-  RESEARCH
-  BUSINESS_MARKET
-}
-
-enum NewsStatus {
-  DRAFT
-  PUBLISHED
-}
 model Subscriber {
   id        String   @id @default(uuid())
   email     String   @unique
-  createdAt DateTime @default(now())
   active    Boolean  @default(true)
+  createdAt DateTime @default(now())
 }
