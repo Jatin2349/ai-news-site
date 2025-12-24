@@ -143,7 +143,7 @@ export async function GET(request: Request) {
             const aiResult = await generateAIAnalysis(openai, item.title, textToAnalyze);
 
             // TÜRSTEHER: Ist er gut genug? (Score >= 7)
-            if (aiResult?.relevance_score >= 4) {
+            if (aiResult?.relevance_score >= 7) {
                 console.log(`🏆 WINNER found for [${categoryName}]: ${item.title}`);
                 
                 // Wir erzwingen die Kategorie passend zum Topf
