@@ -8,7 +8,7 @@
     "build": "npm run fix:data && npm run validate:data && next build",
     "dev": "next dev",
     "start": "next start",
-    "vercel-build": "npm run fix:data && npm run validate:data && (prisma migrate deploy || prisma db push) && prisma generate && next build",
+    "vercel-build": "npm run fix:data && npm run validate:data && (prisma migrate deploy || prisma db push --accept-data-loss) && prisma generate && next build",
     "deploy": "vercel deploy --prod"
   },
   "dependencies": {
