@@ -29,7 +29,6 @@ export async function GET() {
       tags: ['seed'],
       lang: 'en',
       urlHash,
-      status: 'PUBLISHED' as const,   // Enum als String ok
       category: CATEGORY_VALUE as any // Pflichtfeld erfüllen
     } as any
 
