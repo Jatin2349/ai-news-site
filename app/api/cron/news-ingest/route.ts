@@ -133,7 +133,7 @@ export async function GET(request: Request) {
 
             // Duplikat-Check
             const urlHash = crypto.createHash('md5').update(item.link).digest('hex');
-            const existing = await db.newsItem.findUnique({ where: { urlHash } });
+            const existing = await db.news.findUnique({ where: { urlHash } });
             if (existing) continue;
 
             // Analyse
@@ -149,7 +149,7 @@ export async function GET(request: Request) {
                 // Wir erzwingen die Kategorie passend zum Topf
                 const dbCategory = mapCategoryToEnum(categoryName);
 
-                await db.newsItem.create({
+                await db.news.create({
                     data: {
                         title: item.title,
                         urlHash: urlHash,
